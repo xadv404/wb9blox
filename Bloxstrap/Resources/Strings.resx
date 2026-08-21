@@ -693,6 +693,54 @@ Selecting 'No' will ignore this warning and continue installation.</value>
   <data name="Menu.Mods.Misc.CustomFont.Title" xml:space="preserve">
     <value>Use custom font</value>
   </data>
+  <data name="Menu.Mods.Misc.CustomSky.Choose" xml:space="preserve">
+    <value>Active custom sky</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Description" xml:space="preserve">
+    <value>Replace Roblox's default skybox with your own textures. Import a folder containing the six sky faces (512×512 PNG/JPG recommended).</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Down" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Front" xml:space="preserve">
+    <value>Front</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Up" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Import" xml:space="preserve">
+    <value>Import sky pack...</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.ImportPrompt" xml:space="preserve">
+    <value>Select a folder containing the six skybox face images.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Invalid" xml:space="preserve">
+    <value>The selected folder must contain all six sky faces. Name them bk, dn, ft, lf, rt and up (or back, down, front, left, right, up). PNG, JPG, DDS or TEX files are supported.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.None" xml:space="preserve">
+    <value>None (default Roblox sky)</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Remove" xml:space="preserve">
+    <value>Delete selected sky</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.RemoveConfirm" xml:space="preserve">
+    <value>Delete the custom sky pack '{0}'? This cannot be undone.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Title" xml:space="preserve">
+    <value>Custom sky</value>
+  </data>
   <data name="Menu.Mods.OpenModsFolder.Description" xml:space="preserve">
     <value>Manage custom Roblox mods here.</value>
   </data>

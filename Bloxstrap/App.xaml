@@ -39,6 +39,7 @@
             <converters:StringFormatConverter x:Key="StringFormatConverter" />
             <converters:RangeConverter x:Key="RangeConverter" />
             <converters:EnumNameConverter x:Key="EnumNameConverter" />
+            <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

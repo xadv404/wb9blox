@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 using Microsoft.Win32;
@@ -9,6 +10,7 @@ using Windows.Win32.Foundation;
 
 using CommunityToolkit.Mvvm.Input;
 
+using Bloxstrap.Models.Entities;
 using Bloxstrap.Models.SettingTasks;
 using Bloxstrap.AppData;
 
@@ -16,6 +18,18 @@ namespace Bloxstrap.UI.ViewModels.Settings
 {
     public class ModsViewModel : NotifyPropertyChangedViewModel
     {
+        public ModsViewModel()
+        {
+            ReloadSkyPacks();
+
+            string selectedId = App.Settings.Prop.SelectedCustomSkyId;
+            _selectedSkyPack = SkyPacks.FirstOrDefault(x => x.Id == selectedId) ?? SkyPacks.First();
+            UpdateSkyPreviewPaths();
+            OnPropertyChanged(nameof(SelectedSkyPack));
+            OnPropertyChanged(nameof(SkyPreviewVisibility));
+            OnPropertyChanged(nameof(DeleteCustomSkyVisibility));
+        }
+
         private void OpenModsFolder() => Process.Start("explorer.exe", Paths.Modifications);
 
         private readonly Dictionary<string, byte[]> FontHeaders = new()
@@ -57,6 +71,113 @@ namespace Bloxstrap.UI.ViewModels.Settings
             OnPropertyChanged(nameof(DeleteCustomFontVisibility));
         }
 
+        private CustomSkyPack? _selectedSkyPack;
+
+        public ObservableCollection<CustomSkyPack> SkyPacks { get; } = new();
+
+        public CustomSkyPack? SelectedSkyPack
+        {
+            get => _selectedSkyPack;
+            set
+            {
+                _selectedSkyPack = value;
+                CustomSkyTask.NewState = value?.Id ?? "";
+                App.Settings.Prop.SelectedCustomSkyId = CustomSkyTask.NewState;
+                UpdateSkyPreviewPaths();
+                OnPropertyChanged(nameof(SelectedSkyPack));
+                OnPropertyChanged(nameof(SkyPreviewVisibility));
+                OnPropertyChanged(nameof(DeleteCustomSkyVisibility));
+            }
+        }
+
+        public Visibility SkyPreviewVisibility => SelectedSkyPack is not null && !String.IsNullOrEmpty(SelectedSkyPack.Id) ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility DeleteCustomSkyVisibility => SelectedSkyPack is not null && !String.IsNullOrEmpty(SelectedSkyPack.Id) ? Visibility.Visible : Visibility.Collapsed;
+
+        public string? PreviewSkyBack { get; private set; }
+        public string? PreviewSkyDown { get; private set; }
+        public string? PreviewSkyFront { get; private set; }
+        public string? PreviewSkyLeft { get; private set; }
+        public string? PreviewSkyRight { get; private set; }
+        public string? PreviewSkyUp { get; private set; }
+
+        private void ReloadSkyPacks()
+        {
+            SkyPacks.Clear();
+            SkyPacks.Add(new CustomSkyPack { Id = "", Name = Strings.Menu_Mods_Misc_CustomSky_None });
+
+            foreach (var pack in RobloxSkybox.ListInstalledPacks())
+                SkyPacks.Add(pack);
+        }
+
+        private void UpdateSkyPreviewPaths()
+        {
+            PreviewSkyBack = SelectedSkyPack?.GetFaceImagePath("bk");
+            PreviewSkyDown = SelectedSkyPack?.GetFaceImagePath("dn");
+            PreviewSkyFront = SelectedSkyPack?.GetFaceImagePath("ft");
+            PreviewSkyLeft = SelectedSkyPack?.GetFaceImagePath("lf");
+            PreviewSkyRight = SelectedSkyPack?.GetFaceImagePath("rt");
+            PreviewSkyUp = SelectedSkyPack?.GetFaceImagePath("up");
+
+            OnPropertyChanged(nameof(PreviewSkyBack));
+            OnPropertyChanged(nameof(PreviewSkyDown));
+            OnPropertyChanged(nameof(PreviewSkyFront));
+            OnPropertyChanged(nameof(PreviewSkyLeft));
+            OnPropertyChanged(nameof(PreviewSkyRight));
+            OnPropertyChanged(nameof(PreviewSkyUp));
+        }
+
+        private void ImportCustomSky()
+        {
+            using var folderDialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                Description = Strings.Menu_Mods_Misc_CustomSky_ImportPrompt,
+                UseDescriptionForTitle = true
+            };
+
+            if (folderDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            string name = Path.GetFileName(folderDialog.SelectedPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+
+            if (String.IsNullOrWhiteSpace(name))
+                name = "Custom Sky";
+
+            if (!RobloxSkybox.TryImportSkyPack(folderDialog.SelectedPath, name, out CustomSkyPack? pack, out string? errorMessage))
+            {
+                Frontend.ShowMessageBox(errorMessage ?? Strings.Menu_Mods_Misc_CustomSky_Invalid, MessageBoxImage.Error);
+                return;
+            }
+
+            ReloadSkyPacks();
+            SelectedSkyPack = SkyPacks.FirstOrDefault(x => x.Id == pack!.Id);
+        }
+
+        private void RemoveSelectedCustomSky()
+        {
+            if (SelectedSkyPack is null || String.IsNullOrEmpty(SelectedSkyPack.Id))
+                return;
+
+            var result = Frontend.ShowMessageBox(
+                String.Format(Strings.Menu_Mods_Misc_CustomSky_RemoveConfirm, SelectedSkyPack.Name),
+                MessageBoxImage.Warning,
+                MessageBoxButton.YesNo,
+                MessageBoxResult.No
+            );
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            string packId = SelectedSkyPack.Id;
+            RobloxSkybox.DeletePack(packId);
+
+            if (CustomSkyTask.OriginalState == packId)
+                CustomSkyTask.NewState = "";
+
+            ReloadSkyPacks();
+            SelectedSkyPack = SkyPacks.First();
+        }
+
         public ICommand OpenModsFolderCommand => new RelayCommand(OpenModsFolder);
 
         public Visibility ChooseCustomFontVisibility => !String.IsNullOrEmpty(TextFontTask.NewState) ? Visibility.Collapsed : Visibility.Visible;
@@ -64,6 +185,10 @@ namespace Bloxstrap.UI.ViewModels.Settings
         public Visibility DeleteCustomFontVisibility => !String.IsNullOrEmpty(TextFontTask.NewState) ? Visibility.Visible : Visibility.Collapsed;
 
         public ICommand ManageCustomFontCommand => new RelayCommand(ManageCustomFont);
+
+        public ICommand ImportCustomSkyCommand => new RelayCommand(ImportCustomSky);
+
+        public ICommand RemoveSelectedCustomSkyCommand => new RelayCommand(RemoveSelectedCustomSky);
 
         public ICommand OpenCompatSettingsCommand => new RelayCommand(OpenCompatSettings);
 
@@ -101,6 +226,8 @@ namespace Bloxstrap.UI.ViewModels.Settings
         });
 
         public FontModPresetTask TextFontTask { get; } = new();
+
+        public CustomSkyModTask CustomSkyTask { get; } = new();
 
         private void OpenCompatSettings()
         {

@@ -3306,6 +3306,102 @@ namespace Bloxstrap.Resources {
             }
         }
         
+        public static string Menu_Mods_Misc_CustomSky_Choose {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Choose", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Description {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Description", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Face_Back {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Face.Back", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Face_Down {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Face.Down", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Face_Front {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Face.Front", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Face_Left {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Face.Left", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Face_Right {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Face.Right", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Face_Up {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Face.Up", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Import {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Import", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_ImportPrompt {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.ImportPrompt", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Invalid {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Invalid", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_None {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.None", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Preview {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Preview", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Remove {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Remove", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_RemoveConfirm {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.RemoveConfirm", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Misc_CustomSky_Title {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.Title", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Manage custom Roblox mods here..
         /// </summary>
