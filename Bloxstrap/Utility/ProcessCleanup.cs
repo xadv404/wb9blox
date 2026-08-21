@@ -1,5 +1,7 @@
 using System.Windows;
 
+using Bloxstrap.Enums;
+
 namespace Bloxstrap.Utility
 {
     static class ProcessCleanup
@@ -8,7 +10,6 @@ namespace Bloxstrap.Utility
         {
             App.RobloxPlayerAppName,
             App.RobloxStudioAppName,
-            "RobloxCrashHandler",
         };
 
         public static bool TryCleanupRunningInstances()
@@ -21,19 +22,21 @@ namespace Bloxstrap.Utility
             var angestrapProcesses = GetOtherAngestrapProcesses();
             var robloxProcesses = GetRobloxProcesses();
 
-            if (angestrapProcesses.Count == 0 && robloxProcesses.Count == 0)
+            if (angestrapProcesses.Count > 0)
+                CloseProcesses(angestrapProcesses, LOG_IDENT);
+
+            if (robloxProcesses.Count == 0)
                 return true;
 
-            if (!ConfirmCleanup(angestrapProcesses.Count, robloxProcesses.Count))
+            if (!ConfirmCleanup(robloxProcesses.Count))
             {
                 App.Logger.WriteLine(LOG_IDENT, "User cancelled process cleanup");
                 return false;
             }
 
-            CloseProcesses(angestrapProcesses, LOG_IDENT);
             CloseProcesses(robloxProcesses, LOG_IDENT);
 
-            Thread.Sleep(500);
+            Thread.Sleep(200);
             return true;
         }
 
@@ -54,6 +57,10 @@ namespace Bloxstrap.Utility
             if (App.LaunchSettings.UninstallFlag.Active)
                 return false;
 
+            // Only prompt when opening Angestrap itself — not when joining a game via protocol handler.
+            if (App.LaunchSettings.RobloxLaunchMode != LaunchMode.None)
+                return false;
+
             return true;
         }
 
@@ -72,19 +79,11 @@ namespace Bloxstrap.Utility
             return processes;
         }
 
-        static bool ConfirmCleanup(int angestrapCount, int robloxCount)
+        static bool ConfirmCleanup(int robloxCount)
         {
-            var details = new List<string>();
-
-            if (angestrapCount > 0)
-                details.Add(String.Format(Strings.Dialog_ProcessCleanup_Angestrap, angestrapCount));
-
-            if (robloxCount > 0)
-                details.Add(String.Format(Strings.Dialog_ProcessCleanup_Roblox, robloxCount));
-
             string message = String.Format(
                 Strings.Dialog_ProcessCleanup_Message,
-                String.Join("\n", details));
+                String.Format(Strings.Dialog_ProcessCleanup_Roblox, robloxCount));
 
             var result = Frontend.ShowMessageBox(
                 message,
@@ -104,7 +103,7 @@ namespace Bloxstrap.Utility
                     if (!process.HasExited && process.MainWindowHandle != IntPtr.Zero)
                         process.CloseMainWindow();
 
-                    if (!process.WaitForExit(3000))
+                    if (!process.WaitForExit(1500))
                         process.Kill(true);
 
                     App.Logger.WriteLine(logIdent, $"Closed process {process.ProcessName} (PID {process.Id})");

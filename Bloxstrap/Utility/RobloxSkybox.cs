@@ -56,11 +56,30 @@ namespace Bloxstrap.Utility
                 foreach (string relativeDirectory in SkyModRelativeDirectories)
                 {
                     string destinationPath = GetModFacePath(relativeDirectory, face);
-                    Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
-                    Filesystem.AssertReadOnly(destinationPath);
-                    File.WriteAllBytes(destinationPath, texData);
+                    WriteTexIfChanged(destinationPath, texData);
                 }
             }
+        }
+
+        static void WriteTexIfChanged(string destinationPath, byte[] texData)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
+
+            if (File.Exists(destinationPath))
+            {
+                var existingInfo = new FileInfo(destinationPath);
+
+                if (existingInfo.Length == texData.Length)
+                {
+                    byte[] existingData = File.ReadAllBytes(destinationPath);
+
+                    if (existingData.AsSpan().SequenceEqual(texData))
+                        return;
+                }
+            }
+
+            Filesystem.AssertReadOnly(destinationPath);
+            File.WriteAllBytes(destinationPath, texData);
         }
 
         public static void EnsureAppliedFromSettings()
@@ -137,7 +156,7 @@ namespace Bloxstrap.Utility
 
             if (extension is ".tex" or ".dds")
             {
-                if (ShouldConvertTexToDds(sourcePath))
+                if (ShouldConvertTexToDds(sourcePath, deepScan: false))
                     return ConvertImageFileToRobloxTex(sourcePath);
 
                 return File.ReadAllBytes(sourcePath);
@@ -233,7 +252,7 @@ namespace Bloxstrap.Utility
                 if (extension is not (".tex" or ".dds"))
                     continue;
 
-                if (ShouldConvertTexToDds(match))
+                if (ShouldConvertTexToDds(match, deepScan: true))
                     continue;
 
                 if (!TryGetDdsOffset(match, out _))
@@ -290,7 +309,7 @@ namespace Bloxstrap.Utility
                 {
                     string destinationTexPath = Path.Combine(facesDirectory, $"sky512_{pair.Key}.tex");
 
-                    if (ShouldConvertTexToDds(pair.Value))
+                    if (ShouldConvertTexToDds(pair.Value, deepScan: true))
                     {
                         File.WriteAllBytes(destinationTexPath, ConvertImageFileToRobloxTex(pair.Value));
                         continue;
@@ -404,13 +423,19 @@ namespace Bloxstrap.Utility
             return null;
         }
 
-        static bool ShouldConvertTexToDds(string sourcePath)
+        static bool ShouldConvertTexToDds(string sourcePath, bool deepScan)
         {
-            if (TryGetDdsOffset(sourcePath, out _))
+            if (HasDdsMagicInPrefix(sourcePath))
+                return false;
+
+            if (deepScan && TryGetDdsOffset(sourcePath, out _))
                 return false;
 
             if (IsDisguisedImageFile(sourcePath))
                 return true;
+
+            if (!deepScan)
+                return false;
 
             try
             {
@@ -420,6 +445,22 @@ namespace Bloxstrap.Utility
             {
                 return false;
             }
+        }
+
+        static bool HasDdsMagicInPrefix(string sourcePath, int prefixLength = 4096)
+        {
+            using var input = File.OpenRead(sourcePath);
+            int readLength = (int)Math.Min(input.Length, prefixLength);
+            byte[] buffer = new byte[readLength];
+            int bytesRead = input.Read(buffer, 0, readLength);
+
+            for (int i = 0; i <= bytesRead - DdsMagic.Length; i++)
+            {
+                if (buffer.AsSpan(i, DdsMagic.Length).SequenceEqual(DdsMagic))
+                    return true;
+            }
+
+            return false;
         }
 
         static bool IsDisguisedImageFile(string sourcePath)

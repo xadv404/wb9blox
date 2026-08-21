@@ -20,6 +20,10 @@ namespace Bloxstrap
             if (App.LaunchSettings.BackgroundUpdaterFlag.Active)
                 return false;
 
+            // Never block Roblox game launches on GitHub API / download.
+            if (App.LaunchSettings.RobloxLaunchMode != LaunchMode.None)
+                return false;
+
             return true;
         }
 
@@ -95,13 +99,20 @@ namespace Bloxstrap
 
                 Directory.CreateDirectory(downloadDirectory);
 
-                App.Logger.WriteLine(LOG_IDENT, $"Downloading {releaseInfo.TagName} to {downloadLocation}...");
+                if (!File.Exists(downloadLocation) || new FileInfo(downloadLocation).Length < 1024)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, $"Downloading {releaseInfo.TagName} to {downloadLocation}...");
 
-                var response = await App.HttpClient.GetAsync(asset.BrowserDownloadUrl);
-                response.EnsureSuccessStatusCode();
+                    var response = await App.HttpClient.GetAsync(asset.BrowserDownloadUrl);
+                    response.EnsureSuccessStatusCode();
 
-                await using (var fileStream = new FileStream(downloadLocation, FileMode.Create, FileAccess.Write))
-                    await response.Content.CopyToAsync(fileStream);
+                    await using (var fileStream = new FileStream(downloadLocation, FileMode.Create, FileAccess.Write))
+                        await response.Content.CopyToAsync(fileStream);
+                }
+                else
+                {
+                    App.Logger.WriteLine(LOG_IDENT, $"Using cached download at {downloadLocation}");
+                }
 #endif
 
                 App.Logger.WriteLine(LOG_IDENT, $"Starting {version}...");

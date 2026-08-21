@@ -19,7 +19,7 @@
             const string LOG_IDENT = "Logger::Initialize";
 
             string directory = useTempDir ? Path.Combine(Paths.TempLogs) : Path.Combine(Paths.Base, "Logs");
-            string timestamp = DateTime.UtcNow.ToString("yyyyMMdd'T'HHmmss'Z'");
+            string timestamp = DateTime.UtcNow.ToString("yyyyMMdd'T'HHmmssfff'Z'");
             string filename = $"{App.ProjectName}_{timestamp}.log";
             string location = Path.Combine(directory, filename);
 

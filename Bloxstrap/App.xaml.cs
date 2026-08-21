@@ -364,19 +364,20 @@ namespace Bloxstrap
 
                 Locale.Set(Settings.Prop.Locale);
 
-                if (!ProcessCleanup.TryCleanupRunningInstances())
-                {
-                    Logger.WriteLine(LOG_IDENT, "Startup cancelled after process cleanup prompt");
-                    Terminate(ErrorCode.ERROR_CANCELLED);
-                    return;
-                }
-
                 Logger.Initialize(LaunchSettings.UninstallFlag.Active);
 
                 if (!Logger.Initialized && !Logger.NoWriteMode)
                 {
                     Logger.WriteLine(LOG_IDENT, "Possible duplicate launch detected, terminating.");
                     Terminate();
+                    return;
+                }
+
+                if (!ProcessCleanup.TryCleanupRunningInstances())
+                {
+                    Logger.WriteLine(LOG_IDENT, "Startup cancelled after process cleanup prompt");
+                    Terminate(ErrorCode.ERROR_CANCELLED);
+                    return;
                 }
 
                 Logger.WriteLine(LOG_IDENT, $"Developer mode: {Settings.Prop.DeveloperMode}");
@@ -389,16 +390,28 @@ namespace Bloxstrap
 
                 if (AppUpdater.ShouldCheckForUpdates())
                 {
-                    Logger.WriteLine(LOG_IDENT, "Checking for application updates...");
+                    Logger.WriteLine(LOG_IDENT, "Checking for application updates in background...");
 
-                    if (AppUpdater.CheckAndApplyUpdateAsync(
-                        quiet: LaunchSettings.QuietFlag.Active,
-                        launchArgs: LaunchSettings.Args).GetAwaiter().GetResult())
+                    _ = Task.Run(async () =>
                     {
-                        Logger.WriteLine(LOG_IDENT, "Update started, terminating current process");
-                        Terminate();
-                        return;
-                    }
+                        try
+                        {
+                            if (await AppUpdater.CheckAndApplyUpdateAsync(
+                                quiet: LaunchSettings.QuietFlag.Active,
+                                launchArgs: LaunchSettings.Args))
+                            {
+                                Current.Dispatcher.Invoke(() =>
+                                {
+                                    Logger.WriteLine(LOG_IDENT, "Update started, terminating current process");
+                                    Terminate();
+                                });
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.WriteException(LOG_IDENT, ex);
+                        }
+                    });
                 }
 
                 LaunchHandler.ProcessLaunchArgs();
