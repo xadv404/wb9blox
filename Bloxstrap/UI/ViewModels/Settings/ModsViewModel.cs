@@ -300,22 +300,22 @@ namespace Bloxstrap.UI.ViewModels.Settings
             CursorTypeTask.NewState.Equals(Enums.CursorType.Custom) ? Visibility.Visible : Visibility.Collapsed;
 
         public string? PreviewCustomCursorNear =>
-            File.Exists(App.Settings.Prop.CustomCursorNearPath) ? App.Settings.Prop.CustomCursorNearPath : null;
+            File.Exists(CursorTypeTask.PendingNearPath) ? CursorTypeTask.PendingNearPath : null;
 
         public string? PreviewCustomCursorFar =>
-            File.Exists(App.Settings.Prop.CustomCursorFarPath) ? App.Settings.Prop.CustomCursorFarPath : null;
+            File.Exists(CursorTypeTask.PendingFarPath) ? CursorTypeTask.PendingFarPath : null;
 
         public Visibility ChooseCustomCursorNearVisibility =>
-            String.IsNullOrEmpty(App.Settings.Prop.CustomCursorNearPath) ? Visibility.Visible : Visibility.Collapsed;
+            String.IsNullOrEmpty(CursorTypeTask.PendingNearPath) ? Visibility.Visible : Visibility.Collapsed;
 
         public Visibility DeleteCustomCursorNearVisibility =>
-            String.IsNullOrEmpty(App.Settings.Prop.CustomCursorNearPath) ? Visibility.Collapsed : Visibility.Visible;
+            String.IsNullOrEmpty(CursorTypeTask.PendingNearPath) ? Visibility.Collapsed : Visibility.Visible;
 
         public Visibility ChooseCustomCursorFarVisibility =>
-            String.IsNullOrEmpty(App.Settings.Prop.CustomCursorFarPath) ? Visibility.Visible : Visibility.Collapsed;
+            String.IsNullOrEmpty(CursorTypeTask.PendingFarPath) ? Visibility.Visible : Visibility.Collapsed;
 
         public Visibility DeleteCustomCursorFarVisibility =>
-            String.IsNullOrEmpty(App.Settings.Prop.CustomCursorFarPath) ? Visibility.Collapsed : Visibility.Visible;
+            String.IsNullOrEmpty(CursorTypeTask.PendingFarPath) ? Visibility.Collapsed : Visibility.Visible;
 
         private bool ValidateCursorImage(string path)
         {
@@ -341,9 +341,9 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
         private void ManageCustomCursorNear()
         {
-            if (!String.IsNullOrEmpty(App.Settings.Prop.CustomCursorNearPath))
+            if (!String.IsNullOrEmpty(CursorTypeTask.PendingNearPath))
             {
-                App.Settings.Prop.CustomCursorNearPath = "";
+                CursorTypeTask.PendingNearPath = "";
             }
             else
             {
@@ -355,7 +355,7 @@ namespace Bloxstrap.UI.ViewModels.Settings
                 if (dialog.ShowDialog() != true || !ValidateCursorImage(dialog.FileName))
                     return;
 
-                App.Settings.Prop.CustomCursorNearPath = dialog.FileName;
+                CursorTypeTask.PendingNearPath = dialog.FileName;
             }
 
             RefreshCustomCursorState();
@@ -363,9 +363,9 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
         private void ManageCustomCursorFar()
         {
-            if (!String.IsNullOrEmpty(App.Settings.Prop.CustomCursorFarPath))
+            if (!String.IsNullOrEmpty(CursorTypeTask.PendingFarPath))
             {
-                App.Settings.Prop.CustomCursorFarPath = "";
+                CursorTypeTask.PendingFarPath = "";
             }
             else
             {
@@ -377,7 +377,7 @@ namespace Bloxstrap.UI.ViewModels.Settings
                 if (dialog.ShowDialog() != true || !ValidateCursorImage(dialog.FileName))
                     return;
 
-                App.Settings.Prop.CustomCursorFarPath = dialog.FileName;
+                CursorTypeTask.PendingFarPath = dialog.FileName;
             }
 
             RefreshCustomCursorState();
@@ -385,8 +385,8 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
         private void RefreshCustomCursorState()
         {
-            if (!String.IsNullOrEmpty(App.Settings.Prop.CustomCursorNearPath)
-                && !String.IsNullOrEmpty(App.Settings.Prop.CustomCursorFarPath))
+            if (!String.IsNullOrEmpty(CursorTypeTask.PendingNearPath)
+                && !String.IsNullOrEmpty(CursorTypeTask.PendingFarPath))
             {
                 SelectedCursorType = Enums.CursorType.Custom;
             }

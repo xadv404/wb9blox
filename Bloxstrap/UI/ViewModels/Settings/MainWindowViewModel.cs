@@ -37,12 +37,6 @@ namespace Bloxstrap.UI.ViewModels.Settings
         {
             const string LOG_IDENT = "MainWindowViewModel::SaveSettings";
 
-            App.Settings.Save();
-            App.State.Save();
-            App.FastFlags.Save();
-
-            WindowsStartup.Sync();
-
             foreach (var pair in App.PendingSettingTasks)
             {
                 var task = pair.Value;
@@ -55,6 +49,12 @@ namespace Bloxstrap.UI.ViewModels.Settings
             }
 
             App.PendingSettingTasks.Clear();
+
+            App.Settings.Save();
+            App.State.Save();
+            App.FastFlags.Save();
+
+            WindowsStartup.Sync();
 
             RequestSaveNoticeEvent?.Invoke(this, EventArgs.Empty);
         }
