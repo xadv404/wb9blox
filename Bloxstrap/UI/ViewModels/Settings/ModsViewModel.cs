@@ -221,7 +221,7 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
         public CursorModTask CursorTypeTask { get; } = new();
 
-        public CursorType SelectedCursorType
+        public Enums.CursorType SelectedCursorType
         {
             get => CursorTypeTask.NewState;
             set
