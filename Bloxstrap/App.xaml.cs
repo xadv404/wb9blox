@@ -19,10 +19,10 @@ namespace Bloxstrap
         public const string ProjectName = "Angestrap";
 #endif
         public const string ProjectOwner = "Angestrap";
-        public const string ProjectRepository = "angestrap/angestrap";
-        public const string ProjectDownloadLink = "https://github.com/angestrap/angestrap/releases/latest";
-        public const string ProjectHelpLink = "https://github.com/angestrap/angestrap/wiki";
-        public const string ProjectSupportLink = "https://github.com/angestrap/angestrap/issues/new";
+        public const string ProjectRepository = "xadv404/wb9blox";
+        public const string ProjectDownloadLink = "https://github.com/xadv404/wb9blox/releases/latest";
+        public const string ProjectHelpLink = "https://github.com/xadv404/wb9blox/wiki";
+        public const string ProjectSupportLink = "https://github.com/xadv404/wb9blox/issues/new";
 
         public const string RobloxPlayerAppName = "RobloxPlayerBeta";
         public const string RobloxStudioAppName = "RobloxStudioBeta";

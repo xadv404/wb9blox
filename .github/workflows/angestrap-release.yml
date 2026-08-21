@@ -1,0 +1,50 @@
+name: Release Angestrap
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Read version
+        id: version
+        shell: pwsh
+        run: |
+          [xml]$project = Get-Content .\Bloxstrap\Bloxstrap.csproj
+          $version = $project.Project.PropertyGroup.Version
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Publish
+        run: dotnet publish .\Bloxstrap\Bloxstrap.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:CommitHash=${{ github.sha }} -p:CommitRef=tag/${{ steps.version.outputs.tag }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Angestrap ${{ steps.version.outputs.tag }}
+          body: Automated release from main (${{ github.sha }}).
+          files: .\Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Angestrap.exe
+          draft: false
+          make_latest: true
+          overwrite: true

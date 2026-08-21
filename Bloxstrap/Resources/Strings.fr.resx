@@ -771,7 +771,31 @@ Sélectionner 'Non' ignorera cet avertissement et continuera l'installation.</va
     <value>Type d'emoji préféré</value>
   </data>
   <data name="Menu.Mods.Presets.MouseCursor.Description" xml:space="preserve">
-    <value>Choisissez entre deux styles classiques de curseur Roblox.</value>
+    <value>Choisis un style classique Roblox ou tes propres curseurs PNG.</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Choose" xml:space="preserve">
+    <value>Choisir un PNG...</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Far.Title" xml:space="preserve">
+    <value>Curseur lointain</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Help" xml:space="preserve">
+    <value>Utilise des PNG 64×64. Ils remplacent ArrowCursor (proche) et ArrowFarCursor (lointain).</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Invalid" xml:space="preserve">
+    <value>Le fichier sélectionné n'est pas une image PNG valide.</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Missing" xml:space="preserve">
+    <value>Choisis les deux PNG (proche et lointain) avant d'utiliser un curseur personnalisé.</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Near.Title" xml:space="preserve">
+    <value>Curseur proche</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Remove" xml:space="preserve">
+    <value>Retirer</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.SizeWarning" xml:space="preserve">
+    <value>Ce curseur dépasse 64×64 pixels. Il peut devenir invisible dans Roblox.</value>
   </data>
   <data name="Menu.Mods.Presets.MouseCursor.Title" xml:space="preserve">
     <value>Curseur de la souris</value>

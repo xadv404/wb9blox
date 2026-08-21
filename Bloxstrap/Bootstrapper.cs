@@ -810,7 +810,15 @@ namespace Bloxstrap
 
                 File.Copy(Paths.Process, downloadLocation, true);
 #else
-                var asset = releaseInfo.Assets![0];
+                var asset = releaseInfo.Assets!.FirstOrDefault(x =>
+                    x.Name.Equals($"{App.ProjectName}.exe", StringComparison.OrdinalIgnoreCase))
+                    ?? releaseInfo.Assets!.FirstOrDefault();
+
+                if (asset is null)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Release has no downloadable executable asset");
+                    return false;
+                }
 
                 string downloadLocation = Path.Combine(Paths.TempUpdates, asset.Name);
 
