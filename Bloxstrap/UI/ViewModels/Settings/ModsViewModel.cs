@@ -14,6 +14,9 @@ using Bloxstrap.Models.Entities;
 using Bloxstrap.Models.SettingTasks;
 using Bloxstrap.AppData;
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace Bloxstrap.UI.ViewModels.Settings
 {
     public class ModsViewModel : NotifyPropertyChangedViewModel
@@ -28,6 +31,15 @@ namespace Bloxstrap.UI.ViewModels.Settings
             OnPropertyChanged(nameof(SelectedSkyPack));
             OnPropertyChanged(nameof(SkyPreviewVisibility));
             OnPropertyChanged(nameof(DeleteCustomSkyVisibility));
+
+            OnPropertyChanged(nameof(SelectedCursorType));
+            OnPropertyChanged(nameof(CustomCursorVisibility));
+            OnPropertyChanged(nameof(ChooseCustomCursorNearVisibility));
+            OnPropertyChanged(nameof(DeleteCustomCursorNearVisibility));
+            OnPropertyChanged(nameof(ChooseCustomCursorFarVisibility));
+            OnPropertyChanged(nameof(DeleteCustomCursorFarVisibility));
+            OnPropertyChanged(nameof(PreviewCustomCursorNear));
+            OnPropertyChanged(nameof(PreviewCustomCursorFar));
         }
 
         private void OpenModsFolder() => Process.Start("explorer.exe", Paths.Modifications);
@@ -207,23 +219,131 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
         public EmojiModPresetTask EmojiFontTask { get; } = new();
 
-        public EnumModPresetTask<Enums.CursorType> CursorTypeTask { get; } = new("CursorType", new()
+        public CursorModTask CursorTypeTask { get; } = new();
+
+        public CursorType SelectedCursorType
         {
+            get => CursorTypeTask.NewState;
+            set
             {
-                Enums.CursorType.From2006, new()
-                {
-                    { @"content\textures\Cursors\KeyboardMouse\ArrowCursor.png",    "Cursor.From2006.ArrowCursor.png"    },
-                    { @"content\textures\Cursors\KeyboardMouse\ArrowFarCursor.png", "Cursor.From2006.ArrowFarCursor.png" }
-                }
-            },
-            {
-                Enums.CursorType.From2013, new()
-                {
-                    { @"content\textures\Cursors\KeyboardMouse\ArrowCursor.png",    "Cursor.From2013.ArrowCursor.png"    },
-                    { @"content\textures\Cursors\KeyboardMouse\ArrowFarCursor.png", "Cursor.From2013.ArrowFarCursor.png" }
-                }
+                CursorTypeTask.NewState = value;
+                OnPropertyChanged(nameof(SelectedCursorType));
+                OnPropertyChanged(nameof(CustomCursorVisibility));
             }
-        });
+        }
+
+        public Visibility CustomCursorVisibility =>
+            CursorTypeTask.NewState.Equals(Enums.CursorType.Custom) ? Visibility.Visible : Visibility.Collapsed;
+
+        public string? PreviewCustomCursorNear =>
+            File.Exists(App.Settings.Prop.CustomCursorNearPath) ? App.Settings.Prop.CustomCursorNearPath : null;
+
+        public string? PreviewCustomCursorFar =>
+            File.Exists(App.Settings.Prop.CustomCursorFarPath) ? App.Settings.Prop.CustomCursorFarPath : null;
+
+        public Visibility ChooseCustomCursorNearVisibility =>
+            String.IsNullOrEmpty(App.Settings.Prop.CustomCursorNearPath) ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility DeleteCustomCursorNearVisibility =>
+            String.IsNullOrEmpty(App.Settings.Prop.CustomCursorNearPath) ? Visibility.Collapsed : Visibility.Visible;
+
+        public Visibility ChooseCustomCursorFarVisibility =>
+            String.IsNullOrEmpty(App.Settings.Prop.CustomCursorFarPath) ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility DeleteCustomCursorFarVisibility =>
+            String.IsNullOrEmpty(App.Settings.Prop.CustomCursorFarPath) ? Visibility.Collapsed : Visibility.Visible;
+
+        private bool ValidateCursorImage(string path)
+        {
+            if (!File.Exists(path))
+                return false;
+
+            byte[] header = File.ReadAllBytes(path).Take(8).ToArray();
+            byte[] pngHeader = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+
+            if (!header.SequenceEqual(pngHeader))
+            {
+                Frontend.ShowMessageBox(Strings.Menu_Mods_Presets_MouseCursor_Custom_Invalid, MessageBoxImage.Error);
+                return false;
+            }
+
+            using var image = Image.Load<Rgba32>(path);
+
+            if (image.Width > 64 || image.Height > 64)
+                Frontend.ShowMessageBox(Strings.Menu_Mods_Presets_MouseCursor_Custom_SizeWarning, MessageBoxImage.Warning);
+
+            return true;
+        }
+
+        private void ManageCustomCursorNear()
+        {
+            if (!String.IsNullOrEmpty(App.Settings.Prop.CustomCursorNearPath))
+            {
+                App.Settings.Prop.CustomCursorNearPath = "";
+            }
+            else
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Filter = $"{Strings.Menu_ImageFiles}|*.png"
+                };
+
+                if (dialog.ShowDialog() != true || !ValidateCursorImage(dialog.FileName))
+                    return;
+
+                App.Settings.Prop.CustomCursorNearPath = dialog.FileName;
+            }
+
+            RefreshCustomCursorState();
+        }
+
+        private void ManageCustomCursorFar()
+        {
+            if (!String.IsNullOrEmpty(App.Settings.Prop.CustomCursorFarPath))
+            {
+                App.Settings.Prop.CustomCursorFarPath = "";
+            }
+            else
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Filter = $"{Strings.Menu_ImageFiles}|*.png"
+                };
+
+                if (dialog.ShowDialog() != true || !ValidateCursorImage(dialog.FileName))
+                    return;
+
+                App.Settings.Prop.CustomCursorFarPath = dialog.FileName;
+            }
+
+            RefreshCustomCursorState();
+        }
+
+        private void RefreshCustomCursorState()
+        {
+            if (!String.IsNullOrEmpty(App.Settings.Prop.CustomCursorNearPath)
+                && !String.IsNullOrEmpty(App.Settings.Prop.CustomCursorFarPath))
+            {
+                SelectedCursorType = Enums.CursorType.Custom;
+            }
+            else
+            {
+                OnPropertyChanged(nameof(SelectedCursorType));
+                OnPropertyChanged(nameof(CustomCursorVisibility));
+            }
+
+            OnPropertyChanged(nameof(ChooseCustomCursorNearVisibility));
+            OnPropertyChanged(nameof(DeleteCustomCursorNearVisibility));
+            OnPropertyChanged(nameof(ChooseCustomCursorFarVisibility));
+            OnPropertyChanged(nameof(DeleteCustomCursorFarVisibility));
+            OnPropertyChanged(nameof(PreviewCustomCursorNear));
+            OnPropertyChanged(nameof(PreviewCustomCursorFar));
+            OnPropertyChanged(nameof(CustomCursorVisibility));
+        }
+
+        public ICommand ManageCustomCursorNearCommand => new RelayCommand(ManageCustomCursorNear);
+
+        public ICommand ManageCustomCursorFarCommand => new RelayCommand(ManageCustomCursorFar);
 
         public FontModPresetTask TextFontTask { get; } = new();
 

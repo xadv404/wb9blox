@@ -34,5 +34,8 @@ namespace Bloxstrap.Models.Persistable
         // mod preset configuration
         public bool UseDisableAppPatch { get; set; } = false;
         public string SelectedCustomSkyId { get; set; } = "";
+        public CursorType SelectedCursorType { get; set; } = CursorType.Default;
+        public string CustomCursorNearPath { get; set; } = "";
+        public string CustomCursorFarPath { get; set; } = "";
     }
 }

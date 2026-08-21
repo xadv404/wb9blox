@@ -710,6 +710,54 @@ Sélectionner 'Non' ignorera cet avertissement et continuera l'installation.</va
   <data name="Menu.Mods.Misc.CustomFont.Title" xml:space="preserve">
     <value>Utiliser une police d'écriture customisée</value>
   </data>
+  <data name="Menu.Mods.Misc.CustomSky.Choose" xml:space="preserve">
+    <value>Ciel personnalisé actif</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Description" xml:space="preserve">
+    <value>Remplace le ciel par défaut de Roblox. Importe un dossier contenant les six faces du skybox (PNG/JPG 512×512 recommandé).</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Back" xml:space="preserve">
+    <value>Arrière</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Down" xml:space="preserve">
+    <value>Bas</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Front" xml:space="preserve">
+    <value>Avant</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Left" xml:space="preserve">
+    <value>Gauche</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Right" xml:space="preserve">
+    <value>Droite</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Face.Up" xml:space="preserve">
+    <value>Haut</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Import" xml:space="preserve">
+    <value>Importer un skybox...</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.ImportPrompt" xml:space="preserve">
+    <value>Sélectionne un dossier contenant les six images du skybox.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Invalid" xml:space="preserve">
+    <value>Le dossier doit contenir les six faces du ciel. Nomme-les bk, dn, ft, lf, rt et up (ou back, down, front, left, right, up). PNG, JPG, DDS ou TEX acceptés.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.None" xml:space="preserve">
+    <value>Aucun (ciel Roblox par défaut)</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Preview" xml:space="preserve">
+    <value>Aperçu</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Remove" xml:space="preserve">
+    <value>Supprimer le ciel sélectionné</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.RemoveConfirm" xml:space="preserve">
+    <value>Supprimer le skybox « {0} » ? Cette action est irréversible.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.Title" xml:space="preserve">
+    <value>Ciel personnalisé</value>
+  </data>
   <data name="Menu.Mods.OpenModsFolder.Description" xml:space="preserve">
     <value>Gérez vos mods pour Roblox ici.</value>
   </data>

@@ -3465,6 +3465,60 @@ namespace Bloxstrap.Resources {
             }
         }
         
+        public static string Menu_Mods_Presets_MouseCursor_Custom_Choose {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Presets.MouseCursor.Custom.Choose", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Presets_MouseCursor_Custom_Far_Title {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Presets.MouseCursor.Custom.Far.Title", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Presets_MouseCursor_Custom_Help {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Presets.MouseCursor.Custom.Help", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Presets_MouseCursor_Custom_Invalid {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Presets.MouseCursor.Custom.Invalid", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Presets_MouseCursor_Custom_Missing {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Presets.MouseCursor.Custom.Missing", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Presets_MouseCursor_Custom_Near_Title {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Presets.MouseCursor.Custom.Near.Title", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Presets_MouseCursor_Custom_Remove {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Presets.MouseCursor.Custom.Remove", resourceCulture);
+            }
+        }
+        
+        public static string Menu_Mods_Presets_MouseCursor_Custom_SizeWarning {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Presets.MouseCursor.Custom.SizeWarning", resourceCulture);
+            }
+        }
+        
+        public static string Menu_ImageFiles {
+            get {
+                return ResourceManager.GetString("Menu.ImageFiles", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Bring back the old avatar editor background used in the Roblox app prior to 2020..
         /// </summary>

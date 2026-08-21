@@ -53,13 +53,44 @@
         <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Title}" 
             Description="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Description}">
-            <ComboBox Margin="5,0,0,0" Padding="10,5,10,5" Width="200" ItemsSource="{Binding CursorTypeTask.Selections, Mode=OneTime}" Text="{Binding CursorTypeTask.NewState, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Path=., Converter={StaticResource EnumNameConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <StackPanel>
+                <ComboBox Margin="5,0,0,0" Padding="10,5,10,5" Width="200" ItemsSource="{Binding CursorTypeTask.Selections, Mode=OneTime}" SelectedItem="{Binding SelectedCursorType, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumNameConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <StackPanel Margin="0,12,0,0" Visibility="{Binding CustomCursorVisibility, Mode=OneWay}">
+                    <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Custom_Help}" TextWrapping="Wrap" />
+
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                            <TextBlock FontSize="12" Text="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Custom_Near_Title}" />
+                            <ui:Button Margin="0,4,0,0" Icon="DocumentAdd16" Content="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Custom_Choose}" Command="{Binding ManageCustomCursorNearCommand}" Visibility="{Binding ChooseCustomCursorNearVisibility, Mode=OneWay}" />
+                            <ui:Button Margin="0,4,0,0" Icon="Delete16" Appearance="Danger" Content="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Custom_Remove}" Command="{Binding ManageCustomCursorNearCommand}" Visibility="{Binding DeleteCustomCursorNearVisibility, Mode=OneWay}" />
+                            <Border Margin="0,8,0,0" Padding="8" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}" HorizontalAlignment="Left">
+                                <Image Width="32" Height="32" Stretch="Uniform" Source="{Binding PreviewCustomCursorNear, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="4,0,0,0">
+                            <TextBlock FontSize="12" Text="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Custom_Far_Title}" />
+                            <ui:Button Margin="0,4,0,0" Icon="DocumentAdd16" Content="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Custom_Choose}" Command="{Binding ManageCustomCursorFarCommand}" Visibility="{Binding ChooseCustomCursorFarVisibility, Mode=OneWay}" />
+                            <ui:Button Margin="0,4,0,0" Icon="Delete16" Appearance="Danger" Content="{x:Static resources:Strings.Menu_Mods_Presets_MouseCursor_Custom_Remove}" Command="{Binding ManageCustomCursorFarCommand}" Visibility="{Binding DeleteCustomCursorFarVisibility, Mode=OneWay}" />
+                            <Border Margin="0,8,0,0" Padding="8" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}" HorizontalAlignment="Left">
+                                <Image Width="32" Height="32" Stretch="Uniform" Source="{Binding PreviewCustomCursorFar, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
         </controls:OptionControl>
 
         <controls:OptionControl 

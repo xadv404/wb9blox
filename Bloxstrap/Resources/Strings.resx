@@ -580,6 +580,9 @@ Are you sure you want to continue?</value>
   <data name="Menu.FontFiles" xml:space="preserve">
     <value>Font files</value>
   </data>
+  <data name="Menu.ImageFiles" xml:space="preserve">
+    <value>PNG images</value>
+  </data>
   <data name="Menu.IconFiles" xml:space="preserve">
     <value>Icon files</value>
   </data>
@@ -754,7 +757,31 @@ Selecting 'No' will ignore this warning and continue installation.</value>
     <value>Preferred emoji type</value>
   </data>
   <data name="Menu.Mods.Presets.MouseCursor.Description" xml:space="preserve">
-    <value>Choose between using two classic Roblox cursor styles.</value>
+    <value>Choose a classic Roblox cursor style or use your own PNG cursors.</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Choose" xml:space="preserve">
+    <value>Choose PNG...</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Far.Title" xml:space="preserve">
+    <value>Far cursor</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Help" xml:space="preserve">
+    <value>Use 64×64 PNG files. These replace ArrowCursor (near) and ArrowFarCursor (far).</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Invalid" xml:space="preserve">
+    <value>The selected file is not a valid PNG image.</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Missing" xml:space="preserve">
+    <value>Choose both the near and far cursor PNG files before using a custom cursor.</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Near.Title" xml:space="preserve">
+    <value>Near cursor</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Menu.Mods.Presets.MouseCursor.Custom.SizeWarning" xml:space="preserve">
+    <value>This cursor is larger than 64×64 pixels. It may appear invisible in Roblox.</value>
   </data>
   <data name="Menu.Mods.Presets.MouseCursor.Title" xml:space="preserve">
     <value>Mouse cursor</value>
