@@ -155,14 +155,23 @@ namespace Bloxstrap.Utility
             string extension = Path.GetExtension(sourcePath).ToLowerInvariant();
 
             if (extension is ".tex" or ".dds")
-            {
-                if (ShouldConvertTexToDds(sourcePath, deepScan: false))
-                    return ConvertImageFileToRobloxTex(sourcePath);
-
-                return File.ReadAllBytes(sourcePath);
-            }
+                return ReadTexFileData(sourcePath);
 
             return ConvertImageFileToRobloxTex(sourcePath);
+        }
+
+        static byte[] ReadTexFileData(string sourcePath)
+        {
+            if (ShouldConvertTexToDds(sourcePath, deepScan: true))
+                return ConvertImageFileToRobloxTex(sourcePath);
+
+            if (TryGetDdsOffset(sourcePath, out int offset))
+            {
+                byte[] data = File.ReadAllBytes(sourcePath);
+                return data.AsSpan(offset).ToArray();
+            }
+
+            return File.ReadAllBytes(sourcePath);
         }
 
         static string? GetFaceSourcePath(string facesDirectory, string face)
@@ -315,7 +324,7 @@ namespace Bloxstrap.Utility
                         continue;
                     }
 
-                    File.Copy(pair.Value, destinationTexPath, true);
+                    File.WriteAllBytes(destinationTexPath, ReadTexFileData(pair.Value));
                     continue;
                 }
 
