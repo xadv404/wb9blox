@@ -69,15 +69,11 @@ namespace Bloxstrap.UI.Elements.Settings
                 RootNavigation.Navigate(typeof(Pages.IntegrationsPage));
         }
 
-        private void AboutNavigationItem_Click(object sender, RoutedEventArgs e)
-        {
-            var aboutWindow = new UI.Elements.About.MainWindow
-            {
-                Owner = this
-            };
+        private void AngestrapNavigationItem_Click(object sender, RoutedEventArgs e)
+            => RootNavigation.Navigate(typeof(Pages.BloxstrapPage));
 
-            aboutWindow.ShowDialog();
-        }
+        private void AboutNavigationItem_Click(object sender, RoutedEventArgs e)
+            => ShowAboutWindow(this);
 
         public static void ShowAboutWindow(Window? owner = null)
         {
