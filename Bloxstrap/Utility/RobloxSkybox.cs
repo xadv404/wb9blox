@@ -188,7 +188,7 @@ namespace Bloxstrap.Utility
                 if (!File.Exists(metadataPath) || !Directory.Exists(facesDirectory))
                     continue;
 
-                if (!Faces.All(face => File.Exists(Path.Combine(facesDirectory, $"{face}.png")) || File.Exists(Path.Combine(facesDirectory, $"{face}.tex")))
+                if (!Faces.All(face => File.Exists(Path.Combine(facesDirectory, $"{face}.png")) || File.Exists(Path.Combine(facesDirectory, $"{face}.tex"))))
                     continue;
 
                 CustomSkyPackMetadata? metadata;
