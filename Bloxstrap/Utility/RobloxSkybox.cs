@@ -1,3 +1,4 @@
+using BCnEncoder.Decoder;
 using BCnEncoder.Encoder;
 using BCnEncoder.ImageSharp;
 using BCnEncoder.Shared;
@@ -14,6 +15,12 @@ namespace Bloxstrap.Utility
 
         public static readonly IReadOnlyList<string> Faces = new[] { "bk", "dn", "ft", "lf", "rt", "up" };
 
+        static readonly string[] SkyModRelativeDirectories =
+        {
+            @"PlatformContent\pc\textures\sky",
+            @"content\textures\sky",
+        };
+
         public static readonly IReadOnlyDictionary<string, string[]> FaceAliases = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
         {
             ["bk"] = new[] { "bk", "back", "sky512_bk" },
@@ -24,21 +31,24 @@ namespace Bloxstrap.Utility
             ["up"] = new[] { "up", "top", "sky512_up" },
         };
 
-        static string SkyModDirectory => Path.Combine(Paths.Modifications, @"PlatformContent\pc\textures\sky");
+        public static string GetModFacePath(string face) => GetModFacePath(SkyModRelativeDirectories[0], face);
 
-        public static string GetModFacePath(string face) => Path.Combine(SkyModDirectory, $"sky512_{face}.tex");
+        static string GetModFacePath(string relativeDirectory, string face) =>
+            Path.Combine(Paths.Modifications, relativeDirectory, $"sky512_{face}.tex");
 
         public static void ApplyPack(CustomSkyPack pack)
         {
-            Directory.CreateDirectory(SkyModDirectory);
-
             foreach (string face in Faces)
             {
-                string destinationPath = GetModFacePath(face);
                 byte[] texData = ReadFaceTexData(pack, face);
 
-                Filesystem.AssertReadOnly(destinationPath);
-                File.WriteAllBytes(destinationPath, texData);
+                foreach (string relativeDirectory in SkyModRelativeDirectories)
+                {
+                    string destinationPath = GetModFacePath(relativeDirectory, face);
+                    Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
+                    Filesystem.AssertReadOnly(destinationPath);
+                    File.WriteAllBytes(destinationPath, texData);
+                }
             }
         }
 
@@ -54,9 +64,6 @@ namespace Bloxstrap.Utility
                 string packId = App.Settings.Prop.SelectedCustomSkyId;
 
                 if (String.IsNullOrEmpty(packId))
-                    return;
-
-                if (IsPackApplied())
                     return;
 
                 var pack = ListInstalledPacks().FirstOrDefault(x => x.Id == packId);
@@ -78,7 +85,31 @@ namespace Bloxstrap.Utility
 
         public static bool IsPackApplied()
         {
-            return Faces.All(face => File.Exists(GetModFacePath(face)));
+            return SkyModRelativeDirectories.All(relativeDirectory =>
+                Faces.All(face => File.Exists(GetModFacePath(relativeDirectory, face))));
+        }
+
+        public static string? GetFacePreviewPath(CustomSkyPack pack, string face)
+        {
+            string cachedPreviewPath = Path.Combine(pack.DirectoryPath, "preview", $"{face}.png");
+
+            if (File.Exists(cachedPreviewPath))
+                return cachedPreviewPath;
+
+            string? sourcePath = GetFaceSourcePath(pack.FacesDirectory, face);
+
+            if (sourcePath is null)
+                return null;
+
+            string extension = Path.GetExtension(sourcePath).ToLowerInvariant();
+
+            if (extension is ".png" or ".jpg" or ".jpeg" or ".bmp")
+                return sourcePath;
+
+            if (extension is ".tex" or ".dds" && TryWritePreviewFromTex(sourcePath, cachedPreviewPath))
+                return cachedPreviewPath;
+
+            return null;
         }
 
         static byte[] ReadFaceTexData(CustomSkyPack pack, string face)
@@ -113,18 +144,18 @@ namespace Bloxstrap.Utility
 
         public static void RemoveApplied()
         {
-            if (!Directory.Exists(SkyModDirectory))
-                return;
-
-            foreach (string face in Faces)
+            foreach (string relativeDirectory in SkyModRelativeDirectories)
             {
-                string path = GetModFacePath(face);
+                foreach (string face in Faces)
+                {
+                    string path = GetModFacePath(relativeDirectory, face);
 
-                if (!File.Exists(path))
-                    continue;
+                    if (!File.Exists(path))
+                        continue;
 
-                Filesystem.AssertReadOnly(path);
-                File.Delete(path);
+                    Filesystem.AssertReadOnly(path);
+                    File.Delete(path);
+                }
             }
         }
 
@@ -199,13 +230,24 @@ namespace Bloxstrap.Utility
                 image.SaveAsPng(Path.Combine(facesDirectory, $"{pair.Key}.png"));
             }
 
-            string previewSourcePath = Path.Combine(facesDirectory, "up.png");
+            string previewDirectory = Path.Combine(packDirectory, "preview");
+            Directory.CreateDirectory(previewDirectory);
 
-            if (File.Exists(previewSourcePath))
+            foreach (string face in Faces)
             {
-                using var previewSource = SixLabors.ImageSharp.Image.Load<Rgba32>(previewSourcePath);
-                previewSource.SaveAsPng(Path.Combine(packDirectory, "preview.png"));
+                string? faceSourcePath = GetFaceSourcePath(facesDirectory, face);
+
+                if (faceSourcePath is null)
+                    continue;
+
+                string cachedPreviewPath = Path.Combine(previewDirectory, $"{face}.png");
+                TryWritePreviewFromSource(faceSourcePath, cachedPreviewPath);
             }
+
+            string coverPreviewPath = Path.Combine(previewDirectory, "up.png");
+
+            if (File.Exists(coverPreviewPath))
+                File.Copy(coverPreviewPath, Path.Combine(packDirectory, "preview.png"), true);
 
             var metadata = new CustomSkyPackMetadata
             {
@@ -297,6 +339,43 @@ namespace Bloxstrap.Utility
             }
 
             return null;
+        }
+
+        static bool TryWritePreviewFromSource(string sourcePath, string destinationPath)
+        {
+            string extension = Path.GetExtension(sourcePath).ToLowerInvariant();
+
+            if (extension is ".png" or ".jpg" or ".jpeg" or ".bmp")
+            {
+                using var image = Image.Load<Rgba32>(sourcePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
+                image.SaveAsPng(destinationPath);
+                return true;
+            }
+
+            return TryWritePreviewFromTex(sourcePath, destinationPath);
+        }
+
+        static bool TryWritePreviewFromTex(string sourcePath, string destinationPath)
+        {
+            const string LOG_IDENT = "RobloxSkybox::TryWritePreviewFromTex";
+
+            try
+            {
+                using var input = File.OpenRead(sourcePath);
+                var decoder = new BcDecoder();
+                using var image = decoder.DecodeToImageRgba32(input);
+
+                Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
+                image.SaveAsPng(destinationPath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, $"Could not decode preview for '{sourcePath}'");
+                App.Logger.WriteException(LOG_IDENT, ex);
+                return false;
+            }
         }
 
         class CustomSkyPackMetadata

@@ -12,7 +12,7 @@ namespace Bloxstrap.Models.Entities
 
         public string PreviewImagePath => Path.Combine(DirectoryPath, "preview.png");
 
-        public string GetFaceImagePath(string face) => Path.Combine(FacesDirectory, $"{face}.png");
+        public string GetFaceImagePath(string face) => RobloxSkybox.GetFacePreviewPath(this, face) ?? "";
 
         public override string ToString() => Name;
     }

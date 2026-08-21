@@ -123,12 +123,24 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
         private void UpdateSkyPreviewPaths()
         {
-            PreviewSkyBack = SelectedSkyPack?.GetFaceImagePath("bk");
-            PreviewSkyDown = SelectedSkyPack?.GetFaceImagePath("dn");
-            PreviewSkyFront = SelectedSkyPack?.GetFaceImagePath("ft");
-            PreviewSkyLeft = SelectedSkyPack?.GetFaceImagePath("lf");
-            PreviewSkyRight = SelectedSkyPack?.GetFaceImagePath("rt");
-            PreviewSkyUp = SelectedSkyPack?.GetFaceImagePath("up");
+            if (SelectedSkyPack is null || String.IsNullOrEmpty(SelectedSkyPack.Id))
+            {
+                PreviewSkyBack = null;
+                PreviewSkyDown = null;
+                PreviewSkyFront = null;
+                PreviewSkyLeft = null;
+                PreviewSkyRight = null;
+                PreviewSkyUp = null;
+            }
+            else
+            {
+                PreviewSkyBack = RobloxSkybox.GetFacePreviewPath(SelectedSkyPack, "bk");
+                PreviewSkyDown = RobloxSkybox.GetFacePreviewPath(SelectedSkyPack, "dn");
+                PreviewSkyFront = RobloxSkybox.GetFacePreviewPath(SelectedSkyPack, "ft");
+                PreviewSkyLeft = RobloxSkybox.GetFacePreviewPath(SelectedSkyPack, "lf");
+                PreviewSkyRight = RobloxSkybox.GetFacePreviewPath(SelectedSkyPack, "rt");
+                PreviewSkyUp = RobloxSkybox.GetFacePreviewPath(SelectedSkyPack, "up");
+            }
 
             OnPropertyChanged(nameof(PreviewSkyBack));
             OnPropertyChanged(nameof(PreviewSkyDown));
