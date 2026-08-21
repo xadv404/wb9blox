@@ -63,6 +63,32 @@ namespace Bloxstrap.UI.Elements.Settings
             AlreadyRunningSnackbar.Show();
         }
 
+        private void WpfUiWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (RootFrame.Content is null)
+                RootNavigation.Navigate(typeof(Pages.IntegrationsPage));
+        }
+
+        private void AboutNavigationItem_Click(object sender, RoutedEventArgs e)
+        {
+            var aboutWindow = new UI.Elements.About.MainWindow
+            {
+                Owner = this
+            };
+
+            aboutWindow.ShowDialog();
+        }
+
+        public static void ShowAboutWindow(Window? owner = null)
+        {
+            var aboutWindow = new UI.Elements.About.MainWindow();
+
+            if (owner is not null)
+                aboutWindow.Owner = owner;
+
+            aboutWindow.ShowDialog();
+        }
+
         #region INavigationWindow methods
 
         public Frame GetFrame() => RootFrame;

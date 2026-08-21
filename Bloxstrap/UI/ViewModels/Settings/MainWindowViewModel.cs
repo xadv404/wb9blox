@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using Bloxstrap.UI.Elements.About;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Bloxstrap.UI.ViewModels.Settings
@@ -34,7 +33,7 @@ namespace Bloxstrap.UI.ViewModels.Settings
             }
         }
 
-        private void OpenAbout() => new MainWindow().ShowDialog();
+        private void OpenAbout() => UI.Elements.Settings.MainWindow.ShowAboutWindow(Application.Current.MainWindow as Window);
 
         private void CloseWindow() => RequestCloseWindowEvent?.Invoke(this, EventArgs.Empty);
 

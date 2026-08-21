@@ -17,6 +17,12 @@ namespace Bloxstrap.UI.Elements.About
 
             if (Locale.CurrentCulture.Name.StartsWith("tr"))
                 TranslatorsText.FontSize = 9;
+
+            Loaded += (_, _) =>
+            {
+                if (RootFrame.Content is null)
+                    RootNavigation.Navigate(typeof(Pages.AboutPage));
+            };
         }
 
         #region INavigationWindow methods

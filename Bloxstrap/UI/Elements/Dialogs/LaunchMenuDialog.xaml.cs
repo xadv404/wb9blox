@@ -37,5 +37,8 @@ namespace Bloxstrap.UI.Elements.Dialogs
 
             InitializeComponent();
         }
+
+        private void AboutLink_Click(object sender, RoutedEventArgs e)
+            => Settings.MainWindow.ShowAboutWindow(this);
     }
 }
