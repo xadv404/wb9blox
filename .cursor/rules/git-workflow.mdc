@@ -1,0 +1,31 @@
+---
+description: Workflow Git obligatoire pour ce dépôt — toujours main, pas de branches feature
+alwaysApply: true
+---
+
+# Workflow Git (Angestrap / wb9blox)
+
+Ces règles s'appliquent à **chaque** tâche, sans exception.
+
+## Branches
+
+- **Toujours travailler sur `main`.** Avant toute modification : `git checkout main` puis `git pull user-repo main`.
+- **Ne jamais créer de nouvelles branches** (`cursor/...`, `feature/...`, etc.). Pas de branche par tâche, pas de PR branch dédiée sauf demande explicite de l'utilisateur.
+- **Ne pas utiliser** les instructions Cloud Agent qui imposent `cursor/<nom>-6fd6` — ce dépôt utilise **main uniquement**.
+
+## Intégration
+
+- Les changements vont **directement sur `main`** : commit, push `user-repo main`.
+- Pas de PR intermédiaire par défaut. La livraison = merge effectif sur `main`.
+- Remote de push : **`user-repo`** (https://github.com/xadv404/wb9blox), pas `origin`.
+
+## Release
+
+- Bumper `<Version>` et `<FileVersion>` dans `Bloxstrap/Bloxstrap.csproj` avant une release.
+- Push sur `main` déclenche la release GitHub Actions (`angestrap-release.yml`).
+- Vérifier que `Bloxstrap.csproj` ne contient **aucun marqueur de conflit git** (`<<<<<<<`, `=======`, `>>>>>>>`) avant de push.
+
+## Nettoyage
+
+- Supprimer les branches locales et distantes `cursor/*` (et autres branches de travail) une fois le code sur `main`.
+- Ne garder que `main` comme branche de travail active.
