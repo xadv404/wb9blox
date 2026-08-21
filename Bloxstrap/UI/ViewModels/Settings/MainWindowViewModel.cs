@@ -6,8 +6,6 @@ namespace Bloxstrap.UI.ViewModels.Settings
 {
     public class MainWindowViewModel : NotifyPropertyChangedViewModel
     {
-        public ICommand OpenAboutCommand => new RelayCommand(OpenAbout);
-        
         public ICommand SaveSettingsCommand => new RelayCommand(SaveSettings);
         
         public ICommand CloseWindowCommand => new RelayCommand(CloseWindow);
@@ -32,8 +30,6 @@ namespace Bloxstrap.UI.ViewModels.Settings
                 App.LaunchSettings.TestModeFlag.Active = value;
             }
         }
-
-        private void OpenAbout() => UI.Elements.Settings.MainWindow.ShowAboutWindow(Application.Current.MainWindow as Window);
 
         private void CloseWindow() => RequestCloseWindowEvent?.Invoke(this, EventArgs.Empty);
 
