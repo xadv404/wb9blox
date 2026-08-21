@@ -47,4 +47,4 @@ jobs:
           files: .\Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Angestrap.exe
           draft: false
           make_latest: true
-          overwrite: true
+          overwrite_files: true
