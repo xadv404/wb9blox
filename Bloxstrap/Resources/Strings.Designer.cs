@@ -1361,6 +1361,30 @@ namespace Bloxstrap.Resources {
             }
         }
         
+        public static string Dialog_ProcessCleanup_Angestrap {
+            get {
+                return ResourceManager.GetString("Dialog.ProcessCleanup.Angestrap", resourceCulture);
+            }
+        }
+        
+        public static string Dialog_ProcessCleanup_Message {
+            get {
+                return ResourceManager.GetString("Dialog.ProcessCleanup.Message", resourceCulture);
+            }
+        }
+        
+        public static string Dialog_ProcessCleanup_Roblox {
+            get {
+                return ResourceManager.GetString("Dialog.ProcessCleanup.Roblox", resourceCulture);
+            }
+        }
+        
+        public static string Dialog_ProcessCleanup_Title {
+            get {
+                return ResourceManager.GetString("Dialog.ProcessCleanup.Title", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Bloxstrap was unable to create shortcuts for the Desktop and Start menu. Try creating them later through the settings..
         /// </summary>

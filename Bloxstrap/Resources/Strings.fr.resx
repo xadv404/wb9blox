@@ -1059,6 +1059,22 @@ Si ce n'est pas le cas, veuillez signaler cette exception aux responsables de ce
   <data name="Dialog.AlreadyRunning.Uninstaller" xml:space="preserve">
     <value>Veuillez attendre la fin de la désinstallation.</value>
   </data>
+  <data name="Dialog.ProcessCleanup.Title" xml:space="preserve">
+    <value>Fermer les instances en cours ?</value>
+  </data>
+  <data name="Dialog.ProcessCleanup.Message" xml:space="preserve">
+    <value>Angestrap a détecté d'autres instances encore ouvertes :
+
+{0}
+
+Les fermer et continuer le lancement d'Angestrap ?</value>
+  </data>
+  <data name="Dialog.ProcessCleanup.Angestrap" xml:space="preserve">
+    <value>Angestrap ({0} instance(s) ouverte(s))</value>
+  </data>
+  <data name="Dialog.ProcessCleanup.Roblox" xml:space="preserve">
+    <value>Roblox ({0} instance(s) ouverte(s))</value>
+  </data>
   <data name="About.Title" xml:space="preserve">
     <value>À propos de Angestrap</value>
   </data>

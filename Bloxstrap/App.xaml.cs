@@ -352,14 +352,6 @@ namespace Bloxstrap
                     File.Copy(Paths.Process, Paths.Application);
                 }
 
-                Logger.Initialize(LaunchSettings.UninstallFlag.Active);
-
-                if (!Logger.Initialized && !Logger.NoWriteMode)
-                {
-                    Logger.WriteLine(LOG_IDENT, "Possible duplicate launch detected, terminating.");
-                    Terminate();
-                }
-
                 Settings.Load();
                 State.Load();
                 FastFlags.Load();
@@ -370,10 +362,25 @@ namespace Bloxstrap
                     Settings.Save();
                 }
 
+                Locale.Set(Settings.Prop.Locale);
+
+                if (!ProcessCleanup.TryCleanupRunningInstances())
+                {
+                    Logger.WriteLine(LOG_IDENT, "Startup cancelled after process cleanup prompt");
+                    Terminate(ErrorCode.ERROR_CANCELLED);
+                    return;
+                }
+
+                Logger.Initialize(LaunchSettings.UninstallFlag.Active);
+
+                if (!Logger.Initialized && !Logger.NoWriteMode)
+                {
+                    Logger.WriteLine(LOG_IDENT, "Possible duplicate launch detected, terminating.");
+                    Terminate();
+                }
+
                 Logger.WriteLine(LOG_IDENT, $"Developer mode: {Settings.Prop.DeveloperMode}");
                 Logger.WriteLine(LOG_IDENT, $"Web environment: {Settings.Prop.WebEnvironment}");
-
-                Locale.Set(Settings.Prop.Locale);
 
                 if (!LaunchSettings.BypassUpdateCheck)
                     Installer.HandleUpgrade();
