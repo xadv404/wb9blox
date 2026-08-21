@@ -1361,6 +1361,12 @@ namespace Bloxstrap.Resources {
             }
         }
         
+        public static string Dialog_AppUpdate_Available {
+            get {
+                return ResourceManager.GetString("Dialog.AppUpdate.Available", resourceCulture);
+            }
+        }
+        
         public static string Dialog_ProcessCleanup_Angestrap {
             get {
                 return ResourceManager.GetString("Dialog.ProcessCleanup.Angestrap", resourceCulture);

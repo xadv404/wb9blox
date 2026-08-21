@@ -8,8 +8,8 @@
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Angestrap.ico</ApplicationIcon>
     <AssemblyName>Angestrap</AssemblyName>
-    <Version>1.0.11</Version>
-    <FileVersion>1.0.11</FileVersion>
+    <Version>1.0.12</Version>
+    <FileVersion>1.0.12</FileVersion>
     <StartupObject>Bloxstrap.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

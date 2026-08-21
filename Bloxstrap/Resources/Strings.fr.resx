@@ -487,7 +487,7 @@ Si ce n'est pas le cas, veuillez signaler cette exception via un [problème GitH
     <value>Apparence</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>Angestrap vérifiera et se mettra automatiquement à jour lors du lancement de Roblox.</value>
+    <value>Angestrap vérifiera les mises à jour à l'ouverture et demandera confirmation avant de télécharger.</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
     <value>Mettre à jour Angestrap automatiquement</value>
@@ -1061,6 +1061,9 @@ Si ce n'est pas le cas, veuillez signaler cette exception aux responsables de ce
   </data>
   <data name="Dialog.AlreadyRunning.Uninstaller" xml:space="preserve">
     <value>Veuillez attendre la fin de la désinstallation.</value>
+  </data>
+  <data name="Dialog.AppUpdate.Available" xml:space="preserve">
+    <value>Une nouvelle version d'Angestrap est disponible ({1}). Tu utilises actuellement {0}. Mettre à jour maintenant ?</value>
   </data>
   <data name="Dialog.ProcessCleanup.Title" xml:space="preserve">
     <value>Fermer les instances en cours ?</value>

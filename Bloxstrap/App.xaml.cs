@@ -390,28 +390,16 @@ namespace Bloxstrap
 
                 if (AppUpdater.ShouldCheckForUpdates())
                 {
-                    Logger.WriteLine(LOG_IDENT, "Checking for application updates in background...");
+                    Logger.WriteLine(LOG_IDENT, "Checking for application updates...");
 
-                    _ = Task.Run(async () =>
+                    if (AppUpdater.PromptAndApplyUpdateAsync(
+                        quiet: LaunchSettings.QuietFlag.Active,
+                        launchArgs: LaunchSettings.Args).GetAwaiter().GetResult())
                     {
-                        try
-                        {
-                            if (await AppUpdater.CheckAndApplyUpdateAsync(
-                                quiet: LaunchSettings.QuietFlag.Active,
-                                launchArgs: LaunchSettings.Args))
-                            {
-                                Current.Dispatcher.Invoke(() =>
-                                {
-                                    Logger.WriteLine(LOG_IDENT, "Update started, terminating current process");
-                                    Terminate();
-                                });
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.WriteException(LOG_IDENT, ex);
-                        }
-                    });
+                        Logger.WriteLine(LOG_IDENT, "Update started, terminating current process");
+                        Terminate();
+                        return;
+                    }
                 }
 
                 LaunchHandler.ProcessLaunchArgs();

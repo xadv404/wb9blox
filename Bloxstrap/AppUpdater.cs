@@ -27,6 +27,71 @@ namespace Bloxstrap
             return true;
         }
 
+        public static async Task<GithubRelease?> GetAvailableUpdateAsync()
+        {
+            const string LOG_IDENT = "AppUpdater::GetAvailableUpdate";
+
+#if DEBUG_UPDATER
+            return null;
+#else
+            var releaseInfo = await App.GetLatestRelease();
+
+            if (releaseInfo is null || String.IsNullOrWhiteSpace(releaseInfo.TagName) || releaseInfo.Assets is null)
+                return null;
+
+            var versionComparison = Utilities.CompareVersions(App.Version, releaseInfo.TagName);
+
+            if (versionComparison == VersionComparison.GreaterThan)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Local version is newer than release");
+                return null;
+            }
+
+            if (versionComparison == VersionComparison.Equal && App.IsProductionBuild)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "No updates found");
+                return null;
+            }
+
+            return releaseInfo;
+#endif
+        }
+
+        public static async Task<bool> PromptAndApplyUpdateAsync(bool quiet, string[]? launchArgs = null)
+        {
+            const string LOG_IDENT = "AppUpdater::PromptAndApplyUpdate";
+
+            if (Process.GetProcessesByName(App.ProjectName).Length > 1)
+            {
+                App.Logger.WriteLine(LOG_IDENT, $"More than one {App.ProjectName} instance running, aborting update check");
+                return false;
+            }
+
+            App.Logger.WriteLine(LOG_IDENT, "Checking for updates...");
+
+            var releaseInfo = await GetAvailableUpdateAsync();
+
+            if (releaseInfo is null)
+                return false;
+
+            if (quiet)
+                return false;
+
+            var result = Frontend.ShowMessageBox(
+                String.Format(Strings.Dialog_AppUpdate_Available, App.Version, releaseInfo.TagName),
+                MessageBoxImage.Information,
+                MessageBoxButton.YesNo,
+                MessageBoxResult.No);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "User declined update");
+                return false;
+            }
+
+            return await ApplyUpdateAsync(releaseInfo, quiet: false, launchArgs: launchArgs);
+        }
+
         public static async Task<bool> CheckAndApplyUpdateAsync(
             bool quiet,
             Action<string>? setStatus = null,
@@ -44,33 +109,32 @@ namespace Bloxstrap
 
             App.Logger.WriteLine(LOG_IDENT, "Checking for updates...");
 
-#if !DEBUG_UPDATER
-            var releaseInfo = await App.GetLatestRelease();
+            var releaseInfo = await GetAvailableUpdateAsync();
 
-            if (releaseInfo is null || String.IsNullOrWhiteSpace(releaseInfo.TagName) || releaseInfo.Assets is null)
+            if (releaseInfo is null)
                 return false;
-
-            var versionComparison = Utilities.CompareVersions(App.Version, releaseInfo.TagName);
-
-            if (versionComparison == VersionComparison.GreaterThan)
-            {
-                App.Logger.WriteLine(LOG_IDENT, "Local version is newer than release");
-                return false;
-            }
-
-            if (versionComparison == VersionComparison.Equal && App.IsProductionBuild)
-            {
-                App.Logger.WriteLine(LOG_IDENT, "No updates found");
-                return false;
-            }
 
             if (dialog is not null)
                 dialog.CancelEnabled = false;
 
+            return await ApplyUpdateAsync(
+                releaseInfo,
+                quiet,
+                launchArgs,
+                launchMode,
+                setStatus);
+        }
+
+        static async Task<bool> ApplyUpdateAsync(
+            GithubRelease releaseInfo,
+            bool quiet,
+            string[]? launchArgs = null,
+            LaunchMode launchMode = LaunchMode.None,
+            Action<string>? setStatus = null)
+        {
+            const string LOG_IDENT = "AppUpdater::ApplyUpdate";
+
             string version = releaseInfo.TagName;
-#else
-            string version = App.Version;
-#endif
 
             setStatus?.Invoke(Strings.Bootstrapper_Status_UpgradingBloxstrap);
 
