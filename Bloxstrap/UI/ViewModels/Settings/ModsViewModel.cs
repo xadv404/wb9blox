@@ -94,7 +94,6 @@ namespace Bloxstrap.UI.ViewModels.Settings
             {
                 _selectedSkyPack = value;
                 CustomSkyTask.NewState = value?.Id ?? "";
-                App.Settings.Prop.SelectedCustomSkyId = CustomSkyTask.NewState;
                 UpdateSkyPreviewPaths();
                 OnPropertyChanged(nameof(SelectedSkyPack));
                 OnPropertyChanged(nameof(SkyPreviewVisibility));
@@ -163,6 +162,16 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
             ReloadSkyPacks();
             SelectedSkyPack = SkyPacks.FirstOrDefault(x => x.Id == pack!.Id);
+
+            try
+            {
+                RobloxSkybox.ApplyPack(pack!);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("ModsViewModel::ImportCustomSky", ex);
+                Frontend.ShowMessageBox(ex.Message, MessageBoxImage.Error);
+            }
         }
 
         private void RemoveSelectedCustomSky()

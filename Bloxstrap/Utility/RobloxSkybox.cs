@@ -34,28 +34,66 @@ namespace Bloxstrap.Utility
 
             foreach (string face in Faces)
             {
-                string texSourcePath = Path.Combine(pack.FacesDirectory, $"{face}.tex");
-                string pngSourcePath = pack.GetFaceImagePath(face);
                 string destinationPath = GetModFacePath(face);
-                byte[] texData;
-
-                if (File.Exists(texSourcePath))
-                {
-                    texData = File.ReadAllBytes(texSourcePath);
-                }
-                else if (File.Exists(pngSourcePath))
-                {
-                    texData = ConvertImageFileToRobloxTex(pngSourcePath);
-                }
-                else
-                {
-                    throw new FileNotFoundException($"Missing sky face '{face}'", pngSourcePath);
-                }
+                byte[] texData = ReadFaceTexData(pack, face);
 
                 Filesystem.AssertReadOnly(destinationPath);
                 File.WriteAllBytes(destinationPath, texData);
             }
         }
+
+        public static void EnsureAppliedFromSettings()
+        {
+            string packId = App.Settings.Prop.SelectedCustomSkyId;
+
+            if (String.IsNullOrEmpty(packId))
+                return;
+
+            if (IsPackApplied())
+                return;
+
+            var pack = ListInstalledPacks().FirstOrDefault(x => x.Id == packId);
+
+            if (pack is null)
+                return;
+
+            ApplyPack(pack);
+        }
+
+        public static bool IsPackApplied()
+        {
+            return Faces.All(face => File.Exists(GetModFacePath(face)));
+        }
+
+        static byte[] ReadFaceTexData(CustomSkyPack pack, string face)
+        {
+            string? sourcePath = GetFaceSourcePath(pack.FacesDirectory, face);
+
+            if (sourcePath is null)
+                throw new FileNotFoundException($"Missing sky face '{face}'", Path.Combine(pack.FacesDirectory, face));
+
+            string extension = Path.GetExtension(sourcePath).ToLowerInvariant();
+
+            if (extension is ".tex" or ".dds")
+                return File.ReadAllBytes(sourcePath);
+
+            return ConvertImageFileToRobloxTex(sourcePath);
+        }
+
+        static string? GetFaceSourcePath(string facesDirectory, string face)
+        {
+            foreach (string extension in new[] { ".tex", ".dds", ".png", ".jpg", ".jpeg", ".bmp" })
+            {
+                string path = Path.Combine(facesDirectory, $"{face}{extension}");
+
+                if (File.Exists(path))
+                    return path;
+            }
+
+            return null;
+        }
+
+        static bool HasFaceFile(string facesDirectory, string face) => GetFaceSourcePath(facesDirectory, face) is not null;
 
         public static void RemoveApplied()
         {
@@ -188,7 +226,7 @@ namespace Bloxstrap.Utility
                 if (!File.Exists(metadataPath) || !Directory.Exists(facesDirectory))
                     continue;
 
-                if (!Faces.All(face => File.Exists(Path.Combine(facesDirectory, $"{face}.png")) || File.Exists(Path.Combine(facesDirectory, $"{face}.tex"))))
+                if (!Faces.All(face => HasFaceFile(facesDirectory, face)))
                     continue;
 
                 CustomSkyPackMetadata? metadata;

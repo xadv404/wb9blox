@@ -1176,6 +1176,8 @@ namespace Bloxstrap
 
             Directory.CreateDirectory(Paths.Modifications);
 
+            RobloxSkybox.EnsureAppliedFromSettings();
+
             // check custom font mod
             // instead of replacing the fonts themselves, we'll just alter the font family manifests
 
