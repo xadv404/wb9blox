@@ -285,7 +285,6 @@ namespace Bloxstrap.Utility
             foreach (var pair in resolvedFaces)
             {
                 string extension = Path.GetExtension(pair.Value).ToLowerInvariant();
-                string destinationPath = Path.Combine(facesDirectory, $"sky512_{pair.Key}{extension}");
 
                 if (extension is ".tex" or ".dds")
                 {
