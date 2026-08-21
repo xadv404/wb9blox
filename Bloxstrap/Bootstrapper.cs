@@ -192,7 +192,7 @@ namespace Bloxstrap
                 HandleConnectionError(connectionResult);
             
 #if (!DEBUG || DEBUG_UPDATER) && !QA_BUILD
-            if (App.Settings.Prop.CheckForUpdates && !App.LaunchSettings.UpgradeFlag.Active)
+            if (AppUpdater.ShouldCheckForUpdates())
             {
                 bool updatePresent = await CheckForUpdates();
                 

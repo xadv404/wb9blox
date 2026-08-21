@@ -6,6 +6,23 @@ namespace Bloxstrap
 {
     static class AppUpdater
     {
+        public static bool ShouldCheckForUpdates()
+        {
+            if (!App.Settings.Prop.CheckForUpdates)
+                return false;
+
+            if (App.LaunchSettings.UpgradeFlag.Active)
+                return false;
+
+            if (App.LaunchSettings.BypassUpdateCheck)
+                return false;
+
+            if (App.LaunchSettings.BackgroundUpdaterFlag.Active)
+                return false;
+
+            return true;
+        }
+
         public static async Task<bool> CheckAndApplyUpdateAsync(
             bool quiet,
             Action<string>? setStatus = null,
@@ -31,7 +48,13 @@ namespace Bloxstrap
 
             var versionComparison = Utilities.CompareVersions(App.Version, releaseInfo.TagName);
 
-            if (App.IsProductionBuild && versionComparison == VersionComparison.Equal || versionComparison == VersionComparison.GreaterThan)
+            if (versionComparison == VersionComparison.GreaterThan)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Local version is newer than release");
+                return false;
+            }
+
+            if (versionComparison == VersionComparison.Equal && App.IsProductionBuild)
             {
                 App.Logger.WriteLine(LOG_IDENT, "No updates found");
                 return false;
@@ -67,19 +90,18 @@ namespace Bloxstrap
                     return false;
                 }
 
-                string downloadLocation = Path.Combine(Paths.TempUpdates, asset.Name);
+                string downloadDirectory = Path.Combine(Paths.TempUpdates, releaseInfo.TagName);
+                string downloadLocation = Path.Combine(downloadDirectory, asset.Name);
 
-                Directory.CreateDirectory(Paths.TempUpdates);
+                Directory.CreateDirectory(downloadDirectory);
 
-                App.Logger.WriteLine(LOG_IDENT, $"Downloading {releaseInfo.TagName}...");
+                App.Logger.WriteLine(LOG_IDENT, $"Downloading {releaseInfo.TagName} to {downloadLocation}...");
 
-                if (!File.Exists(downloadLocation))
-                {
-                    var response = await App.HttpClient.GetAsync(asset.BrowserDownloadUrl);
+                var response = await App.HttpClient.GetAsync(asset.BrowserDownloadUrl);
+                response.EnsureSuccessStatusCode();
 
-                    await using var fileStream = new FileStream(downloadLocation, FileMode.OpenOrCreate, FileAccess.Write);
+                await using (var fileStream = new FileStream(downloadLocation, FileMode.Create, FileAccess.Write))
                     await response.Content.CopyToAsync(fileStream);
-                }
 #endif
 
                 App.Logger.WriteLine(LOG_IDENT, $"Starting {version}...");
@@ -108,8 +130,6 @@ namespace Bloxstrap
                     startInfo.ArgumentList.Add("-studio");
 
                 App.Settings.Save();
-
-                new InterProcessLock("AutoUpdater");
 
                 Process.Start(startInfo);
 
