@@ -3372,6 +3372,12 @@ namespace Bloxstrap.Resources {
             }
         }
         
+        public static string Menu_Mods_Misc_CustomSky_InvalidTex {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.InvalidTex", resourceCulture);
+            }
+        }
+        
         public static string Menu_Mods_Misc_CustomSky_None {
             get {
                 return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.None", resourceCulture);

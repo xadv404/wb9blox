@@ -1,3 +1,5 @@
+using System.Text;
+
 using BCnEncoder.Decoder;
 using BCnEncoder.Encoder;
 using BCnEncoder.ImageSharp;
@@ -13,12 +15,15 @@ namespace Bloxstrap.Utility
     {
         public const int FaceSize = 512;
 
+        static readonly byte[] DdsMagic = Encoding.ASCII.GetBytes("DDS ");
+
         public static readonly IReadOnlyList<string> Faces = new[] { "bk", "dn", "ft", "lf", "rt", "up" };
 
         static readonly string[] SkyModRelativeDirectories =
         {
             @"PlatformContent\pc\textures\sky",
             @"content\textures\sky",
+            @"content\sky",
         };
 
         public static readonly IReadOnlyDictionary<string, string[]> FaceAliases = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
@@ -64,7 +69,10 @@ namespace Bloxstrap.Utility
                 string packId = App.Settings.Prop.SelectedCustomSkyId;
 
                 if (String.IsNullOrEmpty(packId))
+                {
+                    RemoveApplied();
                     return;
+                }
 
                 var pack = ListInstalledPacks().FirstOrDefault(x => x.Id == packId);
 
@@ -83,10 +91,10 @@ namespace Bloxstrap.Utility
             }
         }
 
-        public static bool IsPackApplied()
+        public static void EnsurePreviewCache(CustomSkyPack pack)
         {
-            return SkyModRelativeDirectories.All(relativeDirectory =>
-                Faces.All(face => File.Exists(GetModFacePath(relativeDirectory, face))));
+            foreach (string face in Faces)
+                GetFacePreviewPath(pack, face);
         }
 
         public static string? GetFacePreviewPath(CustomSkyPack pack, string face)
@@ -122,19 +130,27 @@ namespace Bloxstrap.Utility
             string extension = Path.GetExtension(sourcePath).ToLowerInvariant();
 
             if (extension is ".tex" or ".dds")
+            {
+                if (!TryGetDdsOffset(sourcePath, out _))
+                    throw new InvalidDataException($"Sky face '{face}' is not a valid DDS-based .tex file");
+
                 return File.ReadAllBytes(sourcePath);
+            }
 
             return ConvertImageFileToRobloxTex(sourcePath);
         }
 
         static string? GetFaceSourcePath(string facesDirectory, string face)
         {
-            foreach (string extension in new[] { ".tex", ".dds", ".png", ".jpg", ".jpeg", ".bmp" })
+            foreach (string baseName in new[] { $"sky512_{face}", face })
             {
-                string path = Path.Combine(facesDirectory, $"{face}{extension}");
+                foreach (string extension in new[] { ".tex", ".dds", ".png", ".jpg", ".jpeg", ".bmp" })
+                {
+                    string path = Path.Combine(facesDirectory, $"{baseName}{extension}");
 
-                if (File.Exists(path))
-                    return path;
+                    if (File.Exists(path))
+                        return path;
+                }
             }
 
             return null;
@@ -172,7 +188,7 @@ namespace Bloxstrap.Utility
                 {
                     Format = CompressionFormat.Bc1,
                     FileFormat = OutputFileFormat.Dds,
-                    GenerateMipMaps = false,
+                    GenerateMipMaps = true,
                     Quality = CompressionQuality.Balanced
                 }
             };
@@ -206,6 +222,16 @@ namespace Bloxstrap.Utility
                     return false;
                 }
 
+                string extension = Path.GetExtension(match).ToLowerInvariant();
+
+                if (extension is ".tex" or ".dds" && !TryGetDdsOffset(match, out _))
+                {
+                    errorMessage = String.Format(
+                        Strings.Menu_Mods_Misc_CustomSky_InvalidTex,
+                        Path.GetFileName(match));
+                    return false;
+                }
+
                 resolvedFaces[pair.Key] = match;
             }
 
@@ -218,33 +244,28 @@ namespace Bloxstrap.Utility
             foreach (var pair in resolvedFaces)
             {
                 string extension = Path.GetExtension(pair.Value).ToLowerInvariant();
+                string destinationPath = Path.Combine(facesDirectory, $"sky512_{pair.Key}{extension}");
 
                 if (extension is ".tex" or ".dds")
                 {
-                    File.Copy(pair.Value, Path.Combine(facesDirectory, $"{pair.Key}{extension}"), true);
+                    File.Copy(pair.Value, destinationPath, true);
                     continue;
                 }
 
-                using var image = SixLabors.ImageSharp.Image.Load<Rgba32>(pair.Value);
+                using var image = Image.Load<Rgba32>(pair.Value);
                 image.Mutate(x => x.Resize(FaceSize, FaceSize));
                 image.SaveAsPng(Path.Combine(facesDirectory, $"{pair.Key}.png"));
             }
 
-            string previewDirectory = Path.Combine(packDirectory, "preview");
-            Directory.CreateDirectory(previewDirectory);
-
-            foreach (string face in Faces)
+            pack = new CustomSkyPack
             {
-                string? faceSourcePath = GetFaceSourcePath(facesDirectory, face);
+                Id = id,
+                Name = displayName
+            };
 
-                if (faceSourcePath is null)
-                    continue;
+            EnsurePreviewCache(pack!);
 
-                string cachedPreviewPath = Path.Combine(previewDirectory, $"{face}.png");
-                TryWritePreviewFromSource(faceSourcePath, cachedPreviewPath);
-            }
-
-            string coverPreviewPath = Path.Combine(previewDirectory, "up.png");
+            string coverPreviewPath = Path.Combine(packDirectory, "preview", "up.png");
 
             if (File.Exists(coverPreviewPath))
                 File.Copy(coverPreviewPath, Path.Combine(packDirectory, "preview.png"), true);
@@ -259,12 +280,6 @@ namespace Bloxstrap.Utility
                 Path.Combine(packDirectory, "metadata.json"),
                 JsonSerializer.Serialize(metadata, new JsonSerializerOptions { WriteIndented = true })
             );
-
-            pack = new CustomSkyPack
-            {
-                Id = id,
-                Name = displayName
-            };
 
             return true;
         }
@@ -341,19 +356,27 @@ namespace Bloxstrap.Utility
             return null;
         }
 
-        static bool TryWritePreviewFromSource(string sourcePath, string destinationPath)
+        static bool TryGetDdsOffset(string sourcePath, out int offset)
         {
-            string extension = Path.GetExtension(sourcePath).ToLowerInvariant();
+            offset = 0;
 
-            if (extension is ".png" or ".jpg" or ".jpeg" or ".bmp")
-            {
-                using var image = Image.Load<Rgba32>(sourcePath);
-                Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
-                image.SaveAsPng(destinationPath);
+            byte[] data = File.ReadAllBytes(sourcePath);
+
+            if (data.Length >= DdsMagic.Length && data.AsSpan(0, DdsMagic.Length).SequenceEqual(DdsMagic))
                 return true;
+
+            int searchLimit = Math.Min(data.Length, 4096);
+
+            for (int i = 1; i <= searchLimit - DdsMagic.Length; i++)
+            {
+                if (data.AsSpan(i, DdsMagic.Length).SequenceEqual(DdsMagic))
+                {
+                    offset = i;
+                    return true;
+                }
             }
 
-            return TryWritePreviewFromTex(sourcePath, destinationPath);
+            return false;
         }
 
         static bool TryWritePreviewFromTex(string sourcePath, string destinationPath)
@@ -362,7 +385,12 @@ namespace Bloxstrap.Utility
 
             try
             {
+                if (!TryGetDdsOffset(sourcePath, out int offset))
+                    return false;
+
                 using var input = File.OpenRead(sourcePath);
+                input.Seek(offset, SeekOrigin.Begin);
+
                 var decoder = new BcDecoder();
                 using var image = decoder.DecodeToImageRgba32(input);
 

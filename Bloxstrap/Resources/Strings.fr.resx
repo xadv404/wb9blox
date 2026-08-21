@@ -743,6 +743,9 @@ Sélectionner 'Non' ignorera cet avertissement et continuera l'installation.</va
   <data name="Menu.Mods.Misc.CustomSky.Invalid" xml:space="preserve">
     <value>Le dossier doit contenir les six faces du ciel. Nomme-les bk, dn, ft, lf, rt et up (ou back, down, front, left, right, up). PNG, JPG, DDS ou TEX acceptés.</value>
   </data>
+  <data name="Menu.Mods.Misc.CustomSky.InvalidTex" xml:space="preserve">
+    <value>{0} n'est pas une texture de ciel Roblox valide. Les fichiers TEX doivent être des images DDS (BC1/DXT1) renommées en .tex — pas des PNG renommés en .tex.</value>
+  </data>
   <data name="Menu.Mods.Misc.CustomSky.None" xml:space="preserve">
     <value>Aucun (ciel Roblox par défaut)</value>
   </data>
