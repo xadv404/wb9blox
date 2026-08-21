@@ -279,7 +279,10 @@ namespace Bloxstrap
 
                 if (_cancelTokenSource.IsCancellationRequested)
                     return;
+            }
 
+            if (!_noConnection || CanApplyModificationsOffline())
+            {
                 // we require deployment details for applying modifications for a worst case scenario,
                 // where we'd need to restore files from a package that isn't present on disk and needs to be redownloaded
                 allModificationsApplied = await ApplyModifications();
@@ -1148,6 +1151,58 @@ namespace Bloxstrap
             Process.Start(Paths.Process, $"-backgroundupdater {_launchMode}");
         }
 
+        private bool CanApplyModificationsOffline()
+        {
+            if (String.IsNullOrEmpty(AppData.DistributionState.VersionGuid))
+                return false;
+
+            return Directory.Exists(AppData.Directory);
+        }
+
+        private IEnumerable<string> GetModificationTargetDirectories()
+        {
+            var directories = new List<string>();
+
+            if (!String.IsNullOrEmpty(AppData.DistributionState.VersionGuid) && Directory.Exists(AppData.Directory))
+                directories.Add(AppData.Directory);
+
+            if (!String.IsNullOrEmpty(_latestVersionDirectory)
+                && Directory.Exists(_latestVersionDirectory)
+                && !directories.Contains(_latestVersionDirectory, StringComparer.OrdinalIgnoreCase))
+            {
+                directories.Add(_latestVersionDirectory);
+            }
+
+            if (directories.Count == 0 && !String.IsNullOrEmpty(_latestVersionDirectory))
+                directories.Add(_latestVersionDirectory);
+
+            return directories;
+        }
+
+        private static bool IsSkyModFile(string relativeFile) =>
+            relativeFile.Contains(@"\sky\sky512_", StringComparison.OrdinalIgnoreCase);
+
+        private static readonly byte[] SkyDdsMagic = { 0x44, 0x44, 0x53, 0x20 };
+
+        private static bool ShouldCopyModFile(string fileModFolder, string fileVersionFolder, string relativeFile)
+        {
+            if (!File.Exists(fileVersionFolder))
+                return true;
+
+            if (IsSkyModFile(relativeFile))
+            {
+                Span<byte> header = stackalloc byte[4];
+
+                using (var destination = File.OpenRead(fileVersionFolder))
+                {
+                    if (destination.Read(header) < header.Length || !header.SequenceEqual(SkyDdsMagic))
+                        return true;
+                }
+            }
+
+            return MD5Hash.FromFile(fileModFolder) != MD5Hash.FromFile(fileVersionFolder);
+        }
+
         private async Task<bool> ApplyModifications()
         {
             const string LOG_IDENT = "Bootstrapper::ApplyModifications";
@@ -1168,6 +1223,12 @@ namespace Bloxstrap
 
             RobloxSkybox.EnsureAppliedFromSettings();
 
+            var modificationTargetDirectories = GetModificationTargetDirectories().ToList();
+
+            App.Logger.WriteLine(LOG_IDENT, $"Applying modifications to {String.Join(", ", modificationTargetDirectories)}");
+
+            string primaryVersionDirectory = modificationTargetDirectories.FirstOrDefault() ?? _latestVersionDirectory;
+
             // check custom font mod
             // instead of replacing the fonts themselves, we'll just alter the font family manifests
 
@@ -1182,7 +1243,7 @@ namespace Bloxstrap
                 const string path = "rbxasset://fonts/CustomFont.ttf";
 
                 // lets make sure the content/fonts/families path exists in the version directory
-                string contentFolder = Path.Combine(_latestVersionDirectory, "content");
+                string contentFolder = Path.Combine(primaryVersionDirectory, "content");
                 Directory.CreateDirectory(contentFolder);
 
                 string fontsFolder = Path.Combine(contentFolder, "fonts");
@@ -1252,28 +1313,32 @@ namespace Bloxstrap
                 modFolderFiles.Add(relativeFile);
 
                 string fileModFolder = Path.Combine(Paths.Modifications, relativeFile);
-                string fileVersionFolder = Path.Combine(_latestVersionDirectory, relativeFile);
 
-                if (File.Exists(fileVersionFolder) && MD5Hash.FromFile(fileModFolder) == MD5Hash.FromFile(fileVersionFolder))
+                foreach (string targetDirectory in modificationTargetDirectories)
                 {
-                    App.Logger.WriteLine(LOG_IDENT, $"{relativeFile} already exists in the version folder, and is a match");
-                    continue;
-                }
+                    string fileVersionFolder = Path.Combine(targetDirectory, relativeFile);
 
-                Directory.CreateDirectory(Path.GetDirectoryName(fileVersionFolder)!);
+                    if (!ShouldCopyModFile(fileModFolder, fileVersionFolder, relativeFile))
+                    {
+                        App.Logger.WriteLine(LOG_IDENT, $"{relativeFile} already exists in '{targetDirectory}', and is a match");
+                        continue;
+                    }
 
-                Filesystem.AssertReadOnly(fileVersionFolder);
-                try
-                {
-                    File.Copy(fileModFolder, fileVersionFolder, true);
+                    Directory.CreateDirectory(Path.GetDirectoryName(fileVersionFolder)!);
+
                     Filesystem.AssertReadOnly(fileVersionFolder);
-                    App.Logger.WriteLine(LOG_IDENT, $"{relativeFile} has been copied to the version folder");
-                }
-                catch (Exception ex)
-                {
-                    App.Logger.WriteLine(LOG_IDENT, $"Failed to apply modification ({relativeFile})");
-                    App.Logger.WriteException(LOG_IDENT, ex);
-                    success = false;
+                    try
+                    {
+                        File.Copy(fileModFolder, fileVersionFolder, true);
+                        Filesystem.AssertReadOnly(fileVersionFolder);
+                        App.Logger.WriteLine(LOG_IDENT, $"{relativeFile} has been copied to '{targetDirectory}'");
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Logger.WriteLine(LOG_IDENT, $"Failed to apply modification ({relativeFile}) to '{targetDirectory}'");
+                        App.Logger.WriteException(LOG_IDENT, ex);
+                        success = false;
+                    }
                 }
             }
 
@@ -1296,10 +1361,13 @@ namespace Bloxstrap
                 {
                     App.Logger.WriteLine(LOG_IDENT, $"{fileLocation} was removed as a mod but does not belong to a package");
 
-                    string versionFileLocation = Path.Combine(_latestVersionDirectory, fileLocation);
+                    foreach (string targetDirectory in modificationTargetDirectories)
+                    {
+                        string versionFileLocation = Path.Combine(targetDirectory, fileLocation);
 
-                    if (File.Exists(versionFileLocation))
-                        File.Delete(versionFileLocation);
+                        if (File.Exists(versionFileLocation))
+                            File.Delete(versionFileLocation);
+                    }
 
                     continue;
                 }

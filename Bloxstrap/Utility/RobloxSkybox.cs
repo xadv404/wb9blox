@@ -65,22 +65,20 @@ namespace Bloxstrap.Utility
         {
             Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
 
-            if (File.Exists(destinationPath))
+            if (File.Exists(destinationPath) && HasRawDdsMagic(texData))
             {
-                var existingInfo = new FileInfo(destinationPath);
+                byte[] existingData = File.ReadAllBytes(destinationPath);
 
-                if (existingInfo.Length == texData.Length)
-                {
-                    byte[] existingData = File.ReadAllBytes(destinationPath);
-
-                    if (existingData.AsSpan().SequenceEqual(texData))
-                        return;
-                }
+                if (HasRawDdsMagic(existingData) && existingData.AsSpan().SequenceEqual(texData))
+                    return;
             }
 
             Filesystem.AssertReadOnly(destinationPath);
             File.WriteAllBytes(destinationPath, texData);
         }
+
+        static bool HasRawDdsMagic(byte[] data) =>
+            data.Length >= DdsMagic.Length && data.AsSpan(0, DdsMagic.Length).SequenceEqual(DdsMagic);
 
         public static void EnsureAppliedFromSettings()
         {
@@ -166,12 +164,33 @@ namespace Bloxstrap.Utility
                 return ConvertImageFileToRobloxTex(sourcePath);
 
             if (TryGetDdsOffset(sourcePath, out int offset))
+                return NormalizeDdsToRobloxTex(sourcePath, offset);
+
+            return File.ReadAllBytes(sourcePath);
+        }
+
+        static byte[] NormalizeDdsToRobloxTex(string sourcePath, int offset)
+        {
+            const string LOG_IDENT = "RobloxSkybox::NormalizeDdsToRobloxTex";
+
+            try
             {
+                using var input = File.OpenRead(sourcePath);
+                input.Seek(offset, SeekOrigin.Begin);
+
+                var decoder = new BcDecoder();
+                using var image = decoder.DecodeToImageRgba32(input);
+
+                return EncodeImageToRobloxTex(image);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, $"Could not re-encode '{sourcePath}', using stripped DDS bytes");
+                App.Logger.WriteException(LOG_IDENT, ex);
+
                 byte[] data = File.ReadAllBytes(sourcePath);
                 return data.AsSpan(offset).ToArray();
             }
-
-            return File.ReadAllBytes(sourcePath);
         }
 
         static string? GetFaceSourcePath(string facesDirectory, string face)
@@ -212,7 +231,11 @@ namespace Bloxstrap.Utility
         public static byte[] ConvertImageFileToRobloxTex(string imagePath)
         {
             using var image = Image.Load<Rgba32>(imagePath);
+            return EncodeImageToRobloxTex(image);
+        }
 
+        static byte[] EncodeImageToRobloxTex(Image<Rgba32> image)
+        {
             if (image.Width != FaceSize || image.Height != FaceSize)
                 image.Mutate(x => x.Resize(FaceSize, FaceSize));
 
