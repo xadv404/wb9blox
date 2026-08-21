@@ -49,10 +49,15 @@ namespace Bloxstrap.Extensions
                     }
                 }
 
-                return customIcon ?? Properties.Resources.IconAngestrap;
+                Icon? fallbackIcon = Properties.Resources.IconAngestrap;
+
+                if (fallbackIcon is null)
+                    throw new InvalidOperationException("Default bootstrapper icon resource is missing");
+
+                return customIcon ?? fallbackIcon;
             }
 
-            return icon switch
+            Icon? resolvedIcon = icon switch
             {
                 BootstrapperIcon.IconAngestrap => Properties.Resources.IconAngestrap,
                 BootstrapperIcon.Icon2008 => Properties.Resources.Icon2008,
@@ -65,6 +70,14 @@ namespace Bloxstrap.Extensions
                 BootstrapperIcon.IconAngestrapClassic => Properties.Resources.IconAngestrapClassic,
                 _ => Properties.Resources.IconAngestrap
             };
+
+            if (resolvedIcon is null)
+            {
+                App.Logger.WriteLine(LOG_IDENT, $"Icon resource for {icon} was missing, using default");
+                resolvedIcon = Properties.Resources.IconAngestrap;
+            }
+
+            return resolvedIcon ?? throw new InvalidOperationException("Default bootstrapper icon resource is missing");
         }
     }
 }

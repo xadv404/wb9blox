@@ -1326,6 +1326,12 @@ namespace Bloxstrap
 
             foreach (var entry in fileRestoreMap)
             {
+                if (_versionPackageManifest is null)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Package manifest is unavailable, skipping mod file restore");
+                    break;
+                }
+
                 var package = _versionPackageManifest.Find(x => x.Name == entry.Key);
 
                 if (package is not null)

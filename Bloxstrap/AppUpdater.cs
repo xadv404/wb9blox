@@ -26,7 +26,7 @@ namespace Bloxstrap
 #if !DEBUG_UPDATER
             var releaseInfo = await App.GetLatestRelease();
 
-            if (releaseInfo is null)
+            if (releaseInfo is null || String.IsNullOrWhiteSpace(releaseInfo.TagName) || releaseInfo.Assets is null)
                 return false;
 
             var versionComparison = Utilities.CompareVersions(App.Version, releaseInfo.TagName);
@@ -56,9 +56,10 @@ namespace Bloxstrap
 
                 File.Copy(Paths.Process, downloadLocation, true);
 #else
-                var asset = releaseInfo.Assets!.FirstOrDefault(x =>
-                    x.Name.Equals($"{App.ProjectName}.exe", StringComparison.OrdinalIgnoreCase))
-                    ?? releaseInfo.Assets!.FirstOrDefault();
+                var asset = releaseInfo.Assets.FirstOrDefault(x =>
+                    !String.IsNullOrEmpty(x.Name)
+                    && x.Name.Equals($"{App.ProjectName}.exe", StringComparison.OrdinalIgnoreCase))
+                    ?? releaseInfo.Assets.FirstOrDefault(x => !String.IsNullOrEmpty(x.Name));
 
                 if (asset is null)
                 {

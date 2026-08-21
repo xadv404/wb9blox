@@ -44,20 +44,36 @@ namespace Bloxstrap.Utility
 
         public static void EnsureAppliedFromSettings()
         {
-            string packId = App.Settings.Prop.SelectedCustomSkyId;
+            const string LOG_IDENT = "RobloxSkybox::EnsureAppliedFromSettings";
 
-            if (String.IsNullOrEmpty(packId))
-                return;
+            try
+            {
+                if (!Paths.Initialized)
+                    return;
 
-            if (IsPackApplied())
-                return;
+                string packId = App.Settings.Prop.SelectedCustomSkyId;
 
-            var pack = ListInstalledPacks().FirstOrDefault(x => x.Id == packId);
+                if (String.IsNullOrEmpty(packId))
+                    return;
 
-            if (pack is null)
-                return;
+                if (IsPackApplied())
+                    return;
 
-            ApplyPack(pack);
+                var pack = ListInstalledPacks().FirstOrDefault(x => x.Id == packId);
+
+                if (pack is null)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, $"Custom sky pack '{packId}' is selected but was not found");
+                    return;
+                }
+
+                ApplyPack(pack);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Failed to apply custom sky from settings");
+                App.Logger.WriteException(LOG_IDENT, ex);
+            }
         }
 
         public static bool IsPackApplied()

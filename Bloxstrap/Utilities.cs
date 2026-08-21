@@ -32,6 +32,9 @@ namespace Bloxstrap
 
         public static Version GetVersionFromString(string version)
         {
+            if (String.IsNullOrWhiteSpace(version))
+                throw new ArgumentNullException(nameof(version));
+
             if (version.StartsWith('v'))
                 version = version[1..];
 

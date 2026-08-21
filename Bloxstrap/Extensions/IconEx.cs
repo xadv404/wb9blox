@@ -11,6 +11,9 @@ namespace Bloxstrap.Extensions
 
         public static ImageSource GetImageSource(this Icon icon, bool handleException = true)
         {
+            if (icon is null)
+                throw new ArgumentNullException(nameof(icon));
+
             using MemoryStream stream = new();
             icon.Save(stream);
             stream.Seek(0, SeekOrigin.Begin);
