@@ -10,7 +10,8 @@ namespace Bloxstrap
             bool quiet,
             Action<string>? setStatus = null,
             IBootstrapperDialog? dialog = null,
-            LaunchMode launchMode = LaunchMode.None)
+            LaunchMode launchMode = LaunchMode.None,
+            string[]? launchArgs = null)
         {
             const string LOG_IDENT = "AppUpdater::CheckAndApplyUpdate";
 
@@ -92,7 +93,7 @@ namespace Bloxstrap
                 if (quiet)
                     startInfo.ArgumentList.Add("-quiet");
 
-                foreach (string arg in App.LaunchSettings.Args)
+                foreach (string arg in launchArgs ?? App.LaunchSettings.Args)
                 {
                     if (IsInternalLaunchArg(arg))
                         continue;

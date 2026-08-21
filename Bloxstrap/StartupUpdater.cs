@@ -48,11 +48,10 @@ namespace Bloxstrap
                 Thread.Sleep(StartupDelayMs);
 
                 App.Logger.Initialize();
-                App.LaunchSettings = new LaunchSettings(args);
                 AppUpdater.ConfigureHttpClient();
                 App.Settings.Load(false);
 
-                bool updateStarted = AppUpdater.CheckAndApplyUpdateAsync(quiet: true).GetAwaiter().GetResult();
+                bool updateStarted = AppUpdater.CheckAndApplyUpdateAsync(quiet: true, launchArgs: args).GetAwaiter().GetResult();
 
                 return updateStarted ? 0 : 0;
             }
