@@ -388,20 +388,6 @@ namespace Bloxstrap
 
                 WindowsStartup.Sync();
 
-                if (AppUpdater.ShouldCheckForUpdates())
-                {
-                    Logger.WriteLine(LOG_IDENT, "Checking for application updates...");
-
-                    if (AppUpdater.PromptAndApplyUpdateAsync(
-                        quiet: LaunchSettings.QuietFlag.Active,
-                        launchArgs: LaunchSettings.Args).GetAwaiter().GetResult())
-                    {
-                        Logger.WriteLine(LOG_IDENT, "Update started, terminating current process");
-                        Terminate();
-                        return;
-                    }
-                }
-
                 LaunchHandler.ProcessLaunchArgs();
             }
 

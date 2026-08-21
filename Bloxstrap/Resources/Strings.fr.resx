@@ -383,6 +383,9 @@ Si ce n'est pas le cas, veuillez signaler cette exception via un [problème GitH
   <data name="InstallChecker.VersionDifferentThanInstalled" xml:space="preserve">
     <value>La version de Angestrap que vous venez de lancer est différente de celle qui est actuellement installée. Voulez-vous mettre à jour la version actuellement installée ?</value>
   </data>
+  <data name="Menu.About.CheckForUpdates" xml:space="preserve">
+    <value>Vérifier les mises à jour</value>
+  </data>
   <data name="Menu.About.Contributors" xml:space="preserve">
     <value>Contributeurs</value>
   </data>
@@ -487,7 +490,7 @@ Si ce n'est pas le cas, veuillez signaler cette exception via un [problème GitH
     <value>Apparence</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>Angestrap vérifiera les mises à jour à l'ouverture et demandera confirmation avant de télécharger.</value>
+    <value>Angestrap vérifiera les mises à jour au lancement de Roblox et demandera confirmation avant de télécharger.</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
     <value>Mettre à jour Angestrap automatiquement</value>
@@ -1064,6 +1067,9 @@ Si ce n'est pas le cas, veuillez signaler cette exception aux responsables de ce
   </data>
   <data name="Dialog.AppUpdate.Available" xml:space="preserve">
     <value>Une nouvelle version d'Angestrap est disponible ({1}). Tu utilises actuellement {0}. Mettre à jour maintenant ?</value>
+  </data>
+  <data name="Dialog.AppUpdate.None" xml:space="preserve">
+    <value>Tu utilises déjà la dernière version ({0}).</value>
   </data>
   <data name="Dialog.ProcessCleanup.Title" xml:space="preserve">
     <value>Fermer les instances en cours ?</value>

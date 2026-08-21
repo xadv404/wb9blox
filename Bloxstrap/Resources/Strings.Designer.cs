@@ -1367,6 +1367,12 @@ namespace Bloxstrap.Resources {
             }
         }
         
+        public static string Dialog_AppUpdate_None {
+            get {
+                return ResourceManager.GetString("Dialog.AppUpdate.None", resourceCulture);
+            }
+        }
+        
         public static string Dialog_ProcessCleanup_Angestrap {
             get {
                 return ResourceManager.GetString("Dialog.ProcessCleanup.Angestrap", resourceCulture);
@@ -2173,6 +2179,12 @@ namespace Bloxstrap.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Contributors.
         /// </summary>
+        public static string Menu_About_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("Menu.About.CheckForUpdates", resourceCulture);
+            }
+        }
+        
         public static string Menu_About_Contributors {
             get {
                 return ResourceManager.GetString("Menu.About.Contributors", resourceCulture);

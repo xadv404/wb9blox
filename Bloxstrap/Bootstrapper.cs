@@ -227,6 +227,18 @@ namespace Bloxstrap
 
             _mutex = mutex;
 
+            if (AppUpdater.ShouldCheckOnRobloxLaunch())
+            {
+                if (await AppUpdater.PromptAndApplyUpdateAsync(
+                    quiet: App.LaunchSettings.QuietFlag.Active,
+                    launchArgs: App.LaunchSettings.Args,
+                    launchMode: _launchMode))
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Angestrap update started, stopping bootstrapper");
+                    return;
+                }
+            }
+
             // reload our configs since they've likely changed by now
             if (mutexExists)
             {

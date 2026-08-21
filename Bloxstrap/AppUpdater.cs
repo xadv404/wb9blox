@@ -6,7 +6,7 @@ namespace Bloxstrap
 {
     static class AppUpdater
     {
-        public static bool ShouldCheckForUpdates()
+        public static bool ShouldCheckOnRobloxLaunch()
         {
             if (!App.Settings.Prop.CheckForUpdates)
                 return false;
@@ -18,10 +18,6 @@ namespace Bloxstrap
                 return false;
 
             if (App.LaunchSettings.BackgroundUpdaterFlag.Active)
-                return false;
-
-            // Never block Roblox game launches on GitHub API / download.
-            if (App.LaunchSettings.RobloxLaunchMode != LaunchMode.None)
                 return false;
 
             return true;
@@ -57,7 +53,49 @@ namespace Bloxstrap
 #endif
         }
 
-        public static async Task<bool> PromptAndApplyUpdateAsync(bool quiet, string[]? launchArgs = null)
+        public static async Task CheckForUpdatesFromAboutAsync()
+        {
+            const string LOG_IDENT = "AppUpdater::CheckForUpdatesFromAbout";
+
+            if (Process.GetProcessesByName(App.ProjectName).Length > 1)
+            {
+                App.Logger.WriteLine(LOG_IDENT, $"More than one {App.ProjectName} instance running, aborting update check");
+                Frontend.ShowMessageBox(Strings.Menu_AlreadyRunning_Title, MessageBoxImage.Warning);
+                return;
+            }
+
+            App.Logger.WriteLine(LOG_IDENT, "Checking for updates...");
+
+            var releaseInfo = await GetAvailableUpdateAsync();
+
+            if (releaseInfo is null)
+            {
+                Frontend.ShowMessageBox(
+                    String.Format(Strings.Dialog_AppUpdate_None, App.Version),
+                    MessageBoxImage.Information);
+                return;
+            }
+
+            var result = Frontend.ShowMessageBox(
+                String.Format(Strings.Dialog_AppUpdate_Available, App.Version, releaseInfo.TagName),
+                MessageBoxImage.Information,
+                MessageBoxButton.YesNo,
+                MessageBoxResult.No);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "User declined update");
+                return;
+            }
+
+            if (await ApplyUpdateAsync(releaseInfo, quiet: false))
+                App.SoftTerminate();
+        }
+
+        public static async Task<bool> PromptAndApplyUpdateAsync(
+            bool quiet,
+            string[]? launchArgs = null,
+            LaunchMode launchMode = LaunchMode.None)
         {
             const string LOG_IDENT = "AppUpdater::PromptAndApplyUpdate";
 
@@ -89,7 +127,7 @@ namespace Bloxstrap
                 return false;
             }
 
-            return await ApplyUpdateAsync(releaseInfo, quiet: false, launchArgs: launchArgs);
+            return await ApplyUpdateAsync(releaseInfo, quiet: false, launchArgs: launchArgs, launchMode: launchMode);
         }
 
         public static async Task<bool> CheckAndApplyUpdateAsync(
@@ -125,7 +163,7 @@ namespace Bloxstrap
                 setStatus);
         }
 
-        static async Task<bool> ApplyUpdateAsync(
+        public static async Task<bool> ApplyUpdateAsync(
             GithubRelease releaseInfo,
             bool quiet,
             string[]? launchArgs = null,

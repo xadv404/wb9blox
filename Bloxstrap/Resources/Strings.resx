@@ -369,7 +369,9 @@ If it's not, then please report this exception through a [GitHub issue]({1}) alo
     <value>The version of Angestrap you've launched is different to the version you currently have installed.
 Would you like to upgrade your currently installed version?</value>
   </data>
-  <data name="Menu.About.Contributors" xml:space="preserve">
+  <data name="Menu.About.CheckForUpdates" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
     <value>Contributors</value>
   </data>
   <data name="Menu.About.Contributors.Code" xml:space="preserve">
@@ -473,7 +475,7 @@ Would you like to upgrade your currently installed version?</value>
     <value>Appearance</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>Angestrap will check for updates when you open it and ask before downloading.</value>
+    <value>Angestrap will check for updates when launching Roblox and ask before downloading.</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
     <value>Automatically update Angestrap</value>
@@ -1047,6 +1049,9 @@ If not, then please report this exception to the maintainers of this fork. Do no
   </data>
   <data name="Dialog.AppUpdate.Available" xml:space="preserve">
     <value>A new version of Angestrap is available ({1}). You are currently on {0}. Would you like to update now?</value>
+  </data>
+  <data name="Dialog.AppUpdate.None" xml:space="preserve">
+    <value>You are already using the latest version ({0}).</value>
   </data>
   <data name="Dialog.ProcessCleanup.Title" xml:space="preserve">
     <value>Close running instances?</value>

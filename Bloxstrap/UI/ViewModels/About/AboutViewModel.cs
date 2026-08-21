@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bloxstrap.UI.ViewModels.About
 {
@@ -13,5 +15,9 @@ namespace Bloxstrap.UI.ViewModels.About
 
         public Visibility BuildInformationVisibility => App.IsProductionBuild ? Visibility.Collapsed : Visibility.Visible;
         public Visibility BuildCommitVisibility => App.IsActionBuild ? Visibility.Visible : Visibility.Collapsed;
+
+        public ICommand CheckForUpdatesCommand => new RelayCommand(CheckForUpdates);
+
+        async void CheckForUpdates() => await AppUpdater.CheckForUpdatesFromAboutAsync();
     }
 }
