@@ -8,8 +8,8 @@
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Angestrap.ico</ApplicationIcon>
     <AssemblyName>Angestrap</AssemblyName>
-    <Version>1.0.1</Version>
-    <FileVersion>1.0.1</FileVersion>
+    <Version>1.0.2</Version>
+    <FileVersion>1.0.2</FileVersion>
     <StartupObject>Bloxstrap.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -41,6 +41,7 @@
     <EmbeddedResource Include="Resources\Icon2019.ico" />
     <EmbeddedResource Include="Resources\Icon2022.ico" />
     <EmbeddedResource Include="Resources\IconAngestrap.ico" />
+    <EmbeddedResource Include="Resources\IconAngestrapClassic.ico" />
     <EmbeddedResource Include="Resources\IconEarly2015.ico" />
     <EmbeddedResource Include="Resources\IconLate2015.ico" />
     <EmbeddedResource Include="Resources\Mods\Cursor\From2006\ArrowCursor.png" />
