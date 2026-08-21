@@ -1,0 +1,167 @@
+using System.Windows;
+
+using Bloxstrap.Utility;
+
+namespace Bloxstrap
+{
+    static class AppUpdater
+    {
+        public static async Task<bool> CheckAndApplyUpdateAsync(
+            bool quiet,
+            Action<string>? setStatus = null,
+            IBootstrapperDialog? dialog = null,
+            LaunchMode launchMode = LaunchMode.None)
+        {
+            const string LOG_IDENT = "AppUpdater::CheckAndApplyUpdate";
+
+            if (Process.GetProcessesByName(App.ProjectName).Length > 1)
+            {
+                App.Logger.WriteLine(LOG_IDENT, $"More than one {App.ProjectName} instance running, aborting update check");
+                return false;
+            }
+
+            App.Logger.WriteLine(LOG_IDENT, "Checking for updates...");
+
+#if !DEBUG_UPDATER
+            var releaseInfo = await App.GetLatestRelease();
+
+            if (releaseInfo is null)
+                return false;
+
+            var versionComparison = Utilities.CompareVersions(App.Version, releaseInfo.TagName);
+
+            if (App.IsProductionBuild && versionComparison == VersionComparison.Equal || versionComparison == VersionComparison.GreaterThan)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "No updates found");
+                return false;
+            }
+
+            if (dialog is not null)
+                dialog.CancelEnabled = false;
+
+            string version = releaseInfo.TagName;
+#else
+            string version = App.Version;
+#endif
+
+            setStatus?.Invoke(Strings.Bootstrapper_Status_UpgradingBloxstrap);
+
+            try
+            {
+#if DEBUG_UPDATER
+                string downloadLocation = Path.Combine(Paths.TempUpdates, $"{App.ProjectName}.exe");
+
+                Directory.CreateDirectory(Paths.TempUpdates);
+
+                File.Copy(Paths.Process, downloadLocation, true);
+#else
+                var asset = releaseInfo.Assets!.FirstOrDefault(x =>
+                    x.Name.Equals($"{App.ProjectName}.exe", StringComparison.OrdinalIgnoreCase))
+                    ?? releaseInfo.Assets!.FirstOrDefault();
+
+                if (asset is null)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Release has no downloadable executable asset");
+                    return false;
+                }
+
+                string downloadLocation = Path.Combine(Paths.TempUpdates, asset.Name);
+
+                Directory.CreateDirectory(Paths.TempUpdates);
+
+                App.Logger.WriteLine(LOG_IDENT, $"Downloading {releaseInfo.TagName}...");
+
+                if (!File.Exists(downloadLocation))
+                {
+                    var response = await App.HttpClient.GetAsync(asset.BrowserDownloadUrl);
+
+                    await using var fileStream = new FileStream(downloadLocation, FileMode.OpenOrCreate, FileAccess.Write);
+                    await response.Content.CopyToAsync(fileStream);
+                }
+#endif
+
+                App.Logger.WriteLine(LOG_IDENT, $"Starting {version}...");
+
+                ProcessStartInfo startInfo = new()
+                {
+                    FileName = downloadLocation,
+                };
+
+                startInfo.ArgumentList.Add("-upgrade");
+
+                if (quiet)
+                    startInfo.ArgumentList.Add("-quiet");
+
+                foreach (string arg in App.LaunchSettings.Args)
+                {
+                    if (IsInternalLaunchArg(arg))
+                        continue;
+
+                    startInfo.ArgumentList.Add(arg);
+                }
+
+                if (launchMode == LaunchMode.Player && !startInfo.ArgumentList.Contains("-player"))
+                    startInfo.ArgumentList.Add("-player");
+                else if (launchMode == LaunchMode.Studio && !startInfo.ArgumentList.Contains("-studio"))
+                    startInfo.ArgumentList.Add("-studio");
+
+                App.Settings.Save();
+
+                new InterProcessLock("AutoUpdater");
+
+                Process.Start(startInfo);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "An exception occurred when running the auto-updater");
+                App.Logger.WriteException(LOG_IDENT, ex);
+
+                if (!quiet)
+                {
+                    Frontend.ShowMessageBox(
+                        string.Format(Strings.Bootstrapper_AutoUpdateFailed, version),
+                        MessageBoxImage.Information
+                    );
+
+                    Utilities.ShellExecute(App.ProjectDownloadLink);
+                }
+            }
+
+            return false;
+        }
+
+        static bool IsInternalLaunchArg(string arg)
+        {
+            if (!arg.StartsWith('-'))
+                return false;
+
+            string identifier = arg[1..];
+
+            return identifier.Equals("startupupdate", StringComparison.OrdinalIgnoreCase)
+                || identifier.Equals("quiet", StringComparison.OrdinalIgnoreCase)
+                || identifier.Equals("upgrade", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static void ConfigureHttpClient()
+        {
+            App.HttpClient.Timeout = TimeSpan.FromSeconds(30);
+
+            if (App.HttpClient.DefaultRequestHeaders.UserAgent.Count == 0)
+            {
+                string userAgent = $"{App.ProjectName}/{App.Version}";
+
+                if (App.IsActionBuild)
+                {
+                    if (App.IsProductionBuild)
+                        userAgent += " (Production)";
+                    else
+                        userAgent += $" (Artifact {App.BuildMetadata.CommitHash}, {App.BuildMetadata.CommitRef})";
+                }
+
+                App.HttpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
+            }
+        }
+    }
+}

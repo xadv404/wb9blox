@@ -106,6 +106,8 @@ namespace Bloxstrap
 
             App.Settings.Save();
 
+            WindowsStartup.Sync();
+
             App.Logger.WriteLine(LOG_IDENT, "Installation finished");
 
             if (!IsImplicitInstall)
@@ -323,6 +325,7 @@ namespace Bloxstrap
                 cleanupSequence.Add(() => Directory.Delete(robloxFolder, true));
 
             cleanupSequence.Add(() => Registry.CurrentUser.DeleteSubKey(App.UninstallKey));
+            cleanupSequence.Add(WindowsStartup.Unregister);
 
             foreach (var process in cleanupSequence)
             {
@@ -606,6 +609,8 @@ namespace Bloxstrap
                 return;
 
             App.SendStat("installAction", "upgrade");
+
+            WindowsStartup.Sync();
 
             if (isAutoUpgrade)
             {

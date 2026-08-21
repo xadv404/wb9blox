@@ -46,6 +46,8 @@ namespace Bloxstrap.UI.ViewModels.Settings
             App.State.Save();
             App.FastFlags.Save();
 
+            WindowsStartup.Sync();
+
             foreach (var pair in App.PendingSettingTasks)
             {
                 var task = pair.Value;

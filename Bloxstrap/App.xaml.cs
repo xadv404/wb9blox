@@ -246,26 +246,13 @@ namespace Bloxstrap
 
             Logger.WriteLine(LOG_IDENT, $"Starting {ProjectName} v{Version}");
 
-            string userAgent = $"{ProjectName}/{Version}";
-
             if (IsActionBuild)
             {
                 Logger.WriteLine(LOG_IDENT, $"Compiled {BuildMetadata.Timestamp.ToFriendlyString()} from commit {BuildMetadata.CommitHash} ({BuildMetadata.CommitRef})");
-
-                if (IsProductionBuild)
-                    userAgent += $" (Production)";
-                else
-                    userAgent += $" (Artifact {BuildMetadata.CommitHash}, {BuildMetadata.CommitRef})";
             }
             else
             {
                 Logger.WriteLine(LOG_IDENT, $"Compiled {BuildMetadata.Timestamp.ToFriendlyString()} from {BuildMetadata.Machine}");
-
-#if QA_BUILD
-                userAgent += " (QA)";
-#else
-                userAgent += $" (Build {Convert.ToBase64String(Encoding.UTF8.GetBytes(BuildMetadata.Machine))})";
-#endif
             }
 
             Logger.WriteLine(LOG_IDENT, $"OSVersion: {Environment.OSVersion}");
@@ -279,7 +266,7 @@ namespace Bloxstrap
             ApplicationConfiguration.Initialize();
 
             HttpClient.Timeout = TimeSpan.FromSeconds(30);
-            HttpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
+            AppUpdater.ConfigureHttpClient();
 
             LaunchSettings = new LaunchSettings(e.Args);
 
@@ -390,6 +377,8 @@ namespace Bloxstrap
 
                 if (!LaunchSettings.BypassUpdateCheck)
                     Installer.HandleUpgrade();
+
+                WindowsStartup.Sync();
 
                 LaunchHandler.ProcessLaunchArgs();
             }
