@@ -3402,6 +3402,12 @@ namespace Bloxstrap.Resources {
             }
         }
         
+        public static string Menu_Mods_Misc_CustomSky_UnrecognizedTex {
+            get {
+                return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.UnrecognizedTex", resourceCulture);
+            }
+        }
+        
         public static string Menu_Mods_Misc_CustomSky_None {
             get {
                 return ResourceManager.GetString("Menu.Mods.Misc.CustomSky.None", resourceCulture);

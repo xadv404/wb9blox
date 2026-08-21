@@ -17,6 +17,12 @@ namespace Bloxstrap.Utility
 
         static readonly byte[] DdsMagic = Encoding.ASCII.GetBytes("DDS ");
 
+        static readonly byte[] PngMagic = { 0x89, 0x50, 0x4E, 0x47 };
+
+        static readonly byte[] JpegMagic = { 0xFF, 0xD8, 0xFF };
+
+        const int MaxDdsSearchBytes = 10 * 1024 * 1024;
+
         public static readonly IReadOnlyList<string> Faces = new[] { "bk", "dn", "ft", "lf", "rt", "up" };
 
         static readonly string[] SkyModRelativeDirectories =
@@ -131,8 +137,8 @@ namespace Bloxstrap.Utility
 
             if (extension is ".tex" or ".dds")
             {
-                if (!TryGetDdsOffset(sourcePath, out _))
-                    throw new InvalidDataException($"Sky face '{face}' is not a valid DDS-based .tex file");
+                if (ShouldConvertTexToDds(sourcePath))
+                    return ConvertImageFileToRobloxTex(sourcePath);
 
                 return File.ReadAllBytes(sourcePath);
             }
@@ -199,14 +205,59 @@ namespace Bloxstrap.Utility
             return output.ToArray();
         }
 
+        public static bool TryGetImportIssues(string sourceDirectory, out string? blockingError, out string? confirmMessage)
+        {
+            blockingError = null;
+            confirmMessage = null;
+
+            if (!Directory.Exists(sourceDirectory))
+            {
+                blockingError = Strings.Menu_Mods_Misc_CustomSky_Invalid;
+                return false;
+            }
+
+            var unrecognizedTexFiles = new List<string>();
+
+            foreach (var pair in FaceAliases)
+            {
+                string? match = FindFaceFile(sourceDirectory, pair.Value);
+
+                if (match is null)
+                {
+                    blockingError = Strings.Menu_Mods_Misc_CustomSky_Invalid;
+                    return false;
+                }
+
+                string extension = Path.GetExtension(match).ToLowerInvariant();
+
+                if (extension is not (".tex" or ".dds"))
+                    continue;
+
+                if (ShouldConvertTexToDds(match))
+                    continue;
+
+                if (!TryGetDdsOffset(match, out _))
+                    unrecognizedTexFiles.Add(Path.GetFileName(match));
+            }
+
+            if (unrecognizedTexFiles.Count > 0)
+            {
+                confirmMessage = String.Format(
+                    Strings.Menu_Mods_Misc_CustomSky_UnrecognizedTex,
+                    String.Join(", ", unrecognizedTexFiles));
+            }
+
+            return true;
+        }
+
         public static bool TryImportSkyPack(string sourceDirectory, string displayName, out CustomSkyPack? pack, out string? errorMessage)
         {
             pack = null;
             errorMessage = null;
 
-            if (!Directory.Exists(sourceDirectory))
+            if (!TryGetImportIssues(sourceDirectory, out string? blockingError, out _))
             {
-                errorMessage = Strings.Menu_Mods_Misc_CustomSky_Invalid;
+                errorMessage = blockingError;
                 return false;
             }
 
@@ -219,16 +270,6 @@ namespace Bloxstrap.Utility
                 if (match is null)
                 {
                     errorMessage = Strings.Menu_Mods_Misc_CustomSky_Invalid;
-                    return false;
-                }
-
-                string extension = Path.GetExtension(match).ToLowerInvariant();
-
-                if (extension is ".tex" or ".dds" && !TryGetDdsOffset(match, out _))
-                {
-                    errorMessage = String.Format(
-                        Strings.Menu_Mods_Misc_CustomSky_InvalidTex,
-                        Path.GetFileName(match));
                     return false;
                 }
 
@@ -248,7 +289,15 @@ namespace Bloxstrap.Utility
 
                 if (extension is ".tex" or ".dds")
                 {
-                    File.Copy(pair.Value, destinationPath, true);
+                    string destinationTexPath = Path.Combine(facesDirectory, $"sky512_{pair.Key}.tex");
+
+                    if (ShouldConvertTexToDds(pair.Value))
+                    {
+                        File.WriteAllBytes(destinationTexPath, ConvertImageFileToRobloxTex(pair.Value));
+                        continue;
+                    }
+
+                    File.Copy(pair.Value, destinationTexPath, true);
                     continue;
                 }
 
@@ -356,18 +405,53 @@ namespace Bloxstrap.Utility
             return null;
         }
 
+        static bool ShouldConvertTexToDds(string sourcePath)
+        {
+            if (TryGetDdsOffset(sourcePath, out _))
+                return false;
+
+            if (IsDisguisedImageFile(sourcePath))
+                return true;
+
+            try
+            {
+                return Image.Identify(sourcePath) is not null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        static bool IsDisguisedImageFile(string sourcePath)
+        {
+            Span<byte> header = stackalloc byte[8];
+
+            using var input = File.OpenRead(sourcePath);
+
+            if (input.Read(header) < PngMagic.Length)
+                return false;
+
+            if (header[..PngMagic.Length].SequenceEqual(PngMagic))
+                return true;
+
+            if (header[..JpegMagic.Length].SequenceEqual(JpegMagic))
+                return true;
+
+            return false;
+        }
+
         static bool TryGetDdsOffset(string sourcePath, out int offset)
         {
             offset = 0;
 
             byte[] data = File.ReadAllBytes(sourcePath);
+            int searchLimit = Math.Min(data.Length, MaxDdsSearchBytes);
 
-            if (data.Length >= DdsMagic.Length && data.AsSpan(0, DdsMagic.Length).SequenceEqual(DdsMagic))
-                return true;
+            if (searchLimit < DdsMagic.Length)
+                return false;
 
-            int searchLimit = Math.Min(data.Length, 4096);
-
-            for (int i = 1; i <= searchLimit - DdsMagic.Length; i++)
+            for (int i = 0; i <= searchLimit - DdsMagic.Length; i++)
             {
                 if (data.AsSpan(i, DdsMagic.Length).SequenceEqual(DdsMagic))
                 {

@@ -730,7 +730,10 @@ Selecting 'No' will ignore this warning and continue installation.</value>
     <value>The selected folder must contain all six sky faces. Name them bk, dn, ft, lf, rt and up (or back, down, front, left, right, up). PNG, JPG, DDS or TEX files are supported.</value>
   </data>
   <data name="Menu.Mods.Misc.CustomSky.InvalidTex" xml:space="preserve">
-    <value>{0} is not a valid Roblox sky texture. TEX files must be DDS images (BC1/DXT1) renamed to .tex — not PNG files renamed to .tex.</value>
+    <value>{0} is not a valid Roblox sky texture. TEX files must be DDS images (BC1/DXT1) renamed to .tex — not PNG or JPG files renamed to .tex.</value>
+  </data>
+  <data name="Menu.Mods.Misc.CustomSky.UnrecognizedTex" xml:space="preserve">
+    <value>{0} does not contain a recognizable DDS header. These files may still work in Roblox if they are valid client textures. Import anyway?</value>
   </data>
   <data name="Menu.Mods.Misc.CustomSky.None" xml:space="preserve">
     <value>None (default Roblox sky)</value>

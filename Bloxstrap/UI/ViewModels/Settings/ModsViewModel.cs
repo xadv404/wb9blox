@@ -201,6 +201,24 @@ namespace Bloxstrap.UI.ViewModels.Settings
             if (String.IsNullOrWhiteSpace(name))
                 name = "Custom Sky";
 
+            if (!RobloxSkybox.TryGetImportIssues(folderDialog.SelectedPath, out string? blockingError, out string? confirmMessage))
+            {
+                Frontend.ShowMessageBox(blockingError ?? Strings.Menu_Mods_Misc_CustomSky_Invalid, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!String.IsNullOrEmpty(confirmMessage))
+            {
+                var confirmResult = Frontend.ShowMessageBox(
+                    confirmMessage,
+                    MessageBoxImage.Warning,
+                    MessageBoxButton.YesNo,
+                    MessageBoxResult.No);
+
+                if (confirmResult != MessageBoxResult.Yes)
+                    return;
+            }
+
             if (!RobloxSkybox.TryImportSkyPack(folderDialog.SelectedPath, name, out CustomSkyPack? pack, out string? errorMessage))
             {
                 Frontend.ShowMessageBox(errorMessage ?? Strings.Menu_Mods_Misc_CustomSky_Invalid, MessageBoxImage.Error);
