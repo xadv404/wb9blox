@@ -190,16 +190,6 @@ namespace Bloxstrap
 
             if (connectionResult is not null)
                 HandleConnectionError(connectionResult);
-            
-#if (!DEBUG || DEBUG_UPDATER) && !QA_BUILD
-            if (AppUpdater.ShouldCheckForUpdates())
-            {
-                bool updatePresent = await CheckForUpdates();
-                
-                if (updatePresent)
-                    return;
-            }
-#endif
 
             App.AssertWindowsOSVersion();
 
@@ -758,18 +748,6 @@ namespace Bloxstrap
             Dialog?.CloseBootstrapper();
 
             App.SoftTerminate(ErrorCode.ERROR_CANCELLED);
-        }
-#endregion
-
-        #region App Install
-        private async Task<bool> CheckForUpdates()
-        {
-            return await AppUpdater.CheckAndApplyUpdateAsync(
-                quiet: App.LaunchSettings.QuietFlag.Active,
-                setStatus: SetStatus,
-                dialog: Dialog,
-                launchMode: _launchMode
-            );
         }
         #endregion
 
