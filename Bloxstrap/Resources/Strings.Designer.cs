@@ -2109,7 +2109,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string LaunchMenu_BloxstrapWiki {
             get {
-                return ResourceManager.GetString("LaunchMenu.BloxstrapWiki", resourceCulture);
+                return ResourceManager.GetString("LaunchMenu.AngestrapWiki", resourceCulture);
             }
         }
         
@@ -2637,7 +2637,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_Analytics_Description {
             get {
-                return ResourceManager.GetString("Menu.Bloxstrap.Analytics.Description", resourceCulture);
+                return ResourceManager.GetString("Menu.Angestrap.Analytics.Description", resourceCulture);
             }
         }
         
@@ -2646,7 +2646,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_Analytics_Title {
             get {
-                return ResourceManager.GetString("Menu.Bloxstrap.Analytics.Title", resourceCulture);
+                return ResourceManager.GetString("Menu.Angestrap.Analytics.Title", resourceCulture);
             }
         }
         
@@ -2655,7 +2655,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_Description {
             get {
-                return ResourceManager.GetString("Menu.Bloxstrap.Description", resourceCulture);
+                return ResourceManager.GetString("Menu.Angestrap.Description", resourceCulture);
             }
         }
         
@@ -2664,7 +2664,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_ExportData_Description {
             get {
-                return ResourceManager.GetString("Menu.Bloxstrap.ExportData.Description", resourceCulture);
+                return ResourceManager.GetString("Menu.Angestrap.ExportData.Description", resourceCulture);
             }
         }
         
@@ -2673,7 +2673,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_ExportData_ExportConfig {
             get {
-                return ResourceManager.GetString("Menu.Bloxstrap.ExportData.ExportConfig", resourceCulture);
+                return ResourceManager.GetString("Menu.Angestrap.ExportData.ExportConfig", resourceCulture);
             }
         }
         
@@ -2682,7 +2682,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_ExportData_ExportLogs {
             get {
-                return ResourceManager.GetString("Menu.Bloxstrap.ExportData.ExportLogs", resourceCulture);
+                return ResourceManager.GetString("Menu.Angestrap.ExportData.ExportLogs", resourceCulture);
             }
         }
         
@@ -2691,7 +2691,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_ExportData_Title {
             get {
-                return ResourceManager.GetString("Menu.Bloxstrap.ExportData.Title", resourceCulture);
+                return ResourceManager.GetString("Menu.Angestrap.ExportData.Title", resourceCulture);
             }
         }
         

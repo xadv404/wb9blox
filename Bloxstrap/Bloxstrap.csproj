@@ -8,8 +8,13 @@
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Angestrap.ico</ApplicationIcon>
     <AssemblyName>Angestrap</AssemblyName>
+<<<<<<< HEAD
     <Version>1.0.15</Version>
     <FileVersion>1.0.15</FileVersion>
+=======
+    <Version>1.0.16</Version>
+    <FileVersion>1.0.16</FileVersion>
+>>>>>>> user-repo/cursor/fix-angestrap-menu-6fd6
     <StartupObject>Bloxstrap.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
