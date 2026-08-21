@@ -521,7 +521,7 @@ namespace Bloxstrap
                     }
 
                     string oldDesktopPath = Path.Combine(Paths.Desktop, "Play Roblox.lnk");
-                    string oldStartPath = Path.Combine(Paths.WindowsStartMenu, "Bloxstrap");
+                    string oldStartPath = Path.Combine(Paths.WindowsStartMenu, App.ProjectName);
 
                     if (File.Exists(oldDesktopPath))
                         File.Move(oldDesktopPath, DesktopShortcut, true);

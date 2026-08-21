@@ -9,9 +9,10 @@
         xmlns:dmodels="clr-namespace:Bloxstrap.UI.ViewModels.Dialogs"
         xmlns:resources="clr-namespace:Bloxstrap.Resources"
         xmlns:controls="clr-namespace:Bloxstrap.UI.Elements.Controls"
+        xmlns:app="clr-namespace:Bloxstrap"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance dmodels:UninstallerViewModel, IsDesignTimeCreatable=True}"
-        Title="Bloxstrap"
+        Title="{x:Static app:App.ProjectName}"
         MinWidth="0"
         MinHeight="0"
         Width="480"
@@ -27,7 +28,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ui:TitleBar Grid.Row="0" Grid.ColumnSpan="2" Padding="8" Title="Bloxstrap" ShowMinimize="False" ShowMaximize="False" CanMaximize="False" KeyboardNavigation.TabNavigation="None" Icon="pack://application:,,,/Bloxstrap.ico" />
+        <ui:TitleBar Grid.Row="0" Grid.ColumnSpan="2" Padding="8" Title="{x:Static app:App.ProjectName}" ShowMinimize="False" ShowMaximize="False" CanMaximize="False" KeyboardNavigation.TabNavigation="None" Icon="pack://application:,,,/Bloxstrap.ico" />
 
         <StackPanel Grid.Row="1" Margin="12">
             <TextBlock FontSize="20" FontWeight="SemiBold" Text="{x:Static resources:Strings.Uninstaller_Title}" />
