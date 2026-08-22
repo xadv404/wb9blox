@@ -1,5 +1,3 @@
-using System.Windows;
-
 namespace Bloxstrap.Utility
 {
     static class ProcessCleanup
