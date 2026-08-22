@@ -10,30 +10,40 @@ namespace Bloxstrap.Extensions
         public static Icon GetSized(this Icon icon, int width, int height) => new(icon, new Size(width, height));
 
         public static ImageSource GetImageSource(this Icon icon, bool handleException = true)
+            => GetImageSource(icon, 0, handleException);
+
+        public static ImageSource GetImageSource(this Icon icon, int pixelSize, bool handleException = true)
         {
             if (icon is null)
                 throw new ArgumentNullException(nameof(icon));
 
-            using MemoryStream stream = new();
-            icon.Save(stream);
-            stream.Seek(0, SeekOrigin.Begin);
+            Icon? sizedIcon = null;
 
-            if (handleException)
+            try
             {
-                try
+                Icon iconToSave = icon;
+
+                if (pixelSize > 0)
                 {
-                    return BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                    sizedIcon = new Icon(icon, pixelSize, pixelSize);
+                    iconToSave = sizedIcon;
                 }
-                catch (Exception ex)
-                {
-                    App.Logger.WriteException("IconEx::GetImageSource", ex);
-                    Frontend.ShowMessageBox(string.Format(Strings.Dialog_IconLoadFailed, ex.Message));
-                    return BootstrapperIcon.IconAngestrap.GetIcon().GetImageSource(false);
-                }
-            }
-            else
-            {
+
+                using MemoryStream stream = new();
+                iconToSave.Save(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
                 return BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            }
+            catch (Exception ex) when (handleException)
+            {
+                App.Logger.WriteException("IconEx::GetImageSource", ex);
+                Frontend.ShowMessageBox(string.Format(Strings.Dialog_IconLoadFailed, ex.Message));
+                return BootstrapperIcon.IconAngestrap.GetIcon().GetImageSource(pixelSize, false);
+            }
+            finally
+            {
+                sizedIcon?.Dispose();
             }
         }
     }

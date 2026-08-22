@@ -8,8 +8,8 @@
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Angestrap.ico</ApplicationIcon>
     <AssemblyName>Angestrap</AssemblyName>
-    <Version>1.0.21</Version>
-    <FileVersion>1.0.21</FileVersion>
+    <Version>1.0.22</Version>
+    <FileVersion>1.0.22</FileVersion>
     <StartupObject>Bloxstrap.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -18,6 +18,7 @@
     
   <ItemGroup>
     <Resource Include="Angestrap.ico" />
+    <Resource Include="Angestrap.png" />
     <Resource Include="Resources\Fonts\NotoSansThai-VariableFont_wdth,wght.ttf" />
     <Resource Include="Resources\Fonts\Rubik-VariableFont_wght.ttf" />
     <Resource Include="Resources\BootstrapperStyles\ByfronDialog\ByfronLogoDark.jpg" />

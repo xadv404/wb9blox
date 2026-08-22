@@ -20,6 +20,8 @@ namespace Bloxstrap.UI.ViewModels.Bootstrapper
 
         public FluentDialogViewModel(IBootstrapperDialog dialog, bool aero) : base(dialog)
         {
+            Icon = App.Settings.Prop.BootstrapperIcon.GetIcon().GetImageSource(128);
+
             const int alpha = 128;
 
             WindowBackdropType = aero ? BackgroundType.Aero : BackgroundType.Mica;

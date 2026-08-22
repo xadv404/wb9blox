@@ -14,7 +14,7 @@ namespace Bloxstrap.UI.ViewModels.Bootstrapper
         public ICommand CancelInstallCommand => new RelayCommand(CancelInstall);
 
         public string Title => App.Settings.Prop.BootstrapperTitle;
-        public ImageSource Icon { get; set; } = App.Settings.Prop.BootstrapperIcon.GetIcon().GetImageSource();
+        public ImageSource Icon { get; set; } = App.Settings.Prop.BootstrapperIcon.GetIcon().GetImageSource(128);
         public string Message { get; set; } = "Please wait...";
         public bool ProgressIndeterminate { get; set; } = true;
         public int ProgressMaximum { get; set; } = 0;
