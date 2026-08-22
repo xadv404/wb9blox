@@ -1,0 +1,49 @@
+---
+description: Checklist obligatoire en fin de session — publier une release GitHub Actions
+alwaysApply: true
+---
+
+# Fin de session : release GitHub obligatoire
+
+À lire et appliquer **à chaque fin de session**, dès que la demande de l'utilisateur est terminée et que des changements ont été faits dans le dépôt (code, assets, workflow, règles `.cursor`, etc.).
+
+## Quand déclencher une release
+
+- **Oui** : correctifs, nouvelles fonctions, assets (logo, icônes), bump de version, ou tout commit poussé sur `main` qui doit être livré aux utilisateurs.
+- **Non** : question/réponse sans modification du repo, ou l'utilisateur demande explicitement de ne pas publier.
+
+## Procédure (dans l'ordre)
+
+1. **Être sur `main`** et à jour : `git checkout main` puis `git pull user-repo main`.
+2. **Bumper la version** dans `Bloxstrap/Bloxstrap.csproj` :
+   - `<Version>` et `<FileVersion>` doivent être identiques.
+   - Incrémenter le patch (ex. `1.0.22` → `1.0.23`) si la version actuelle est déjà publiée sur GitHub.
+3. **Vérifier** qu'il n'y a aucun marqueur de conflit git dans `Bloxstrap.csproj`.
+4. **Commit** avec un message clair, puis **push** :
+   ```bash
+   git push -u user-repo main
+   ```
+   Le push sur `main` déclenche automatiquement le workflow **Release Angestrap** (`.github/workflows/angestrap-release.yml`).
+5. **Vérifier que la release a réussi** (ne pas terminer la session sans contrôle) :
+   ```bash
+   gh run list --repo xadv404/wb9blox --workflow "Release Angestrap" --limit 1
+   gh run watch --repo xadv404/wb9blox --exit-status
+   ```
+   Si le run est `skipped` ou échoue parce que le tag existe déjà : bumper la version, commit, push, revérifier.
+6. **Si le workflow n'a pas démarré** (push déjà fait sans nouveau tag) : relancer manuellement :
+   ```bash
+   gh workflow run "Release Angestrap" --repo xadv404/wb9blox --ref main
+   gh run watch --repo xadv404/wb9blox --exit-status
+   ```
+7. **Confirmer la release** :
+   ```bash
+   gh release list --repo xadv404/wb9blox --limit 1
+   ```
+8. **Informer l'utilisateur** avec la version et le lien : `https://github.com/xadv404/wb9blox/releases/latest`
+
+## Rappels
+
+- Remote de push : **`user-repo`** (pas `origin`).
+- Pas de branche `cursor/*` : tout sur `main` (voir `git-workflow.mdc`).
+- Les notes de release sont générées automatiquement à partir des commits depuis la dernière version `v1.0.*`.
+- Ne pas laisser une session « terminée » sans release quand des changements utilisateur ont été poussés sur `main`.

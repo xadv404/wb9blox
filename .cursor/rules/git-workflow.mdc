@@ -23,6 +23,7 @@ Ces règles s'appliquent à **chaque** tâche, sans exception.
 
 - Bumper `<Version>` et `<FileVersion>` dans `Bloxstrap/Bloxstrap.csproj` avant une release.
 - Push sur `main` déclenche la release GitHub Actions (`angestrap-release.yml`).
+- **En fin de session** : suivre la checklist complète dans `release-session-end.mdc` (vérifier le workflow, confirmer la release sur GitHub).
 - Vérifier que `Bloxstrap.csproj` ne contient **aucun marqueur de conflit git** (`<<<<<<<`, `=======`, `>>>>>>>`) avant de push.
 
 ## Nettoyage
