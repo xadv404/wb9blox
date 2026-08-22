@@ -9,7 +9,7 @@ Brand identity:
 - **Name:** Catstrap
 - **Color:** dark rose / pink gradient (#E875A8 → #8B2056)
 - **App icon:** `Images/Catstrap.png` — pink squircle + white slim cat
-- **Wordmarks (customizable logos):** `Images/Catstrap-Dark.png` (white cat + text, transparent bg), `Images/Catstrap-Light.png` (dark cat + text, transparent bg). Cat silhouette only (no pink square), Inter SemiBold, text height matches logo height (~72px).
+- **Wordmarks (customizable logos):** `Images/Catstrap-Dark.png` (pink icon + white text), `Images/Catstrap-Light.png` (pink icon + dark text). Full app icon (rose squircle + white cat) + Inter SemiBold wordmark, transparent bg, text height matches icon (~72px).
 
 When invoked:
 1. Identify where the icon is shown (bootstrapper dialogs, tray, title bar, WPF Image, WinForms PictureBox, .exe icon).
