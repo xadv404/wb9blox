@@ -39,8 +39,8 @@ jobs:
         run: |
           $tag = "${{ steps.version.outputs.tag }}"
           git fetch --tags --force
-          $existingTag = (git tag -l $tag).Trim()
-          if ($existingTag) {
+          $existingTag = [string](git tag -l $tag)
+          if (-not [string]::IsNullOrWhiteSpace($existingTag)) {
             "skip=true" >> $env:GITHUB_OUTPUT
             Write-Host "Tag $tag already exists - skipping release (bump Version in Bloxstrap.csproj to publish)."
           } else {
