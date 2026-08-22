@@ -4,12 +4,6 @@ namespace Bloxstrap.Utility
 {
     static class ProcessCleanup
     {
-        static readonly string[] RobloxProcessNames =
-        {
-            App.RobloxPlayerAppName,
-            App.RobloxStudioAppName,
-        };
-
         public static bool TryCleanupRunningInstances()
         {
             const string LOG_IDENT = "ProcessCleanup::TryCleanupRunningInstances";
@@ -18,23 +12,10 @@ namespace Bloxstrap.Utility
                 return true;
 
             var angestrapProcesses = GetOtherAngestrapProcesses();
-            var robloxProcesses = GetRobloxProcesses();
 
             if (angestrapProcesses.Count > 0)
                 CloseProcesses(angestrapProcesses, LOG_IDENT);
 
-            if (robloxProcesses.Count == 0)
-                return true;
-
-            if (!ConfirmCleanup(robloxProcesses.Count))
-            {
-                App.Logger.WriteLine(LOG_IDENT, "User cancelled process cleanup");
-                return false;
-            }
-
-            CloseProcesses(robloxProcesses, LOG_IDENT);
-
-            Thread.Sleep(200);
             return true;
         }
 
@@ -55,7 +36,6 @@ namespace Bloxstrap.Utility
             if (App.LaunchSettings.UninstallFlag.Active)
                 return false;
 
-            // Only prompt when opening Angestrap itself — not when joining a game via protocol handler.
             if (App.LaunchSettings.RobloxLaunchMode != LaunchMode.None)
                 return false;
 
@@ -66,31 +46,6 @@ namespace Bloxstrap.Utility
             Process.GetProcessesByName(App.ProjectName)
                 .Where(process => process.Id != Environment.ProcessId)
                 .ToList();
-
-        static List<Process> GetRobloxProcesses()
-        {
-            var processes = new List<Process>();
-
-            foreach (string processName in RobloxProcessNames)
-                processes.AddRange(Process.GetProcessesByName(processName));
-
-            return processes;
-        }
-
-        static bool ConfirmCleanup(int robloxCount)
-        {
-            string message = String.Format(
-                Strings.Dialog_ProcessCleanup_Message,
-                String.Format(Strings.Dialog_ProcessCleanup_Roblox, robloxCount));
-
-            var result = Frontend.ShowMessageBox(
-                message,
-                MessageBoxImage.Warning,
-                MessageBoxButton.YesNo,
-                MessageBoxResult.No);
-
-            return result == MessageBoxResult.Yes;
-        }
 
         static void CloseProcesses(IEnumerable<Process> processes, string logIdent)
         {
