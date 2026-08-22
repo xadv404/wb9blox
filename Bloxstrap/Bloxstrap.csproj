@@ -8,8 +8,8 @@
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Catstrap.ico</ApplicationIcon>
     <AssemblyName>Catstrap</AssemblyName>
-    <Version>2.0.7</Version>
-    <FileVersion>2.0.7</FileVersion>
+    <Version>2.0.8</Version>
+    <FileVersion>2.0.8</FileVersion>
     <StartupObject>Bloxstrap.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
