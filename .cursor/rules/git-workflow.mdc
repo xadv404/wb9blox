@@ -3,7 +3,7 @@ description: Workflow Git obligatoire pour ce dépôt — toujours main, pas de 
 alwaysApply: true
 ---
 
-# Workflow Git (Angestrap / wb9blox)
+# Workflow Git (Catstrap / wb9blox)
 
 Ces règles s'appliquent à **chaque** tâche, sans exception.
 
@@ -22,7 +22,7 @@ Ces règles s'appliquent à **chaque** tâche, sans exception.
 ## Release
 
 - Bumper `<Version>` et `<FileVersion>` dans `Bloxstrap/Bloxstrap.csproj` avant une release.
-- Push sur `main` déclenche la release GitHub Actions (`angestrap-release.yml`).
+- Push sur `main` déclenche la release GitHub Actions (`catstrap-release.yml`).
 - **En fin de session** : suivre la checklist complète dans `release-session-end.mdc` (vérifier le workflow, confirmer la release sur GitHub).
 - Vérifier que `Bloxstrap.csproj` ne contient **aucun marqueur de conflit git** (`<<<<<<<`, `=======`, `>>>>>>>`) avant de push.
 

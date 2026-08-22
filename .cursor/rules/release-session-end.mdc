@@ -23,16 +23,16 @@ alwaysApply: true
    ```bash
    git push -u user-repo main
    ```
-   Le push sur `main` déclenche automatiquement le workflow **Release Angestrap** (`.github/workflows/angestrap-release.yml`).
+   Le push sur `main` déclenche automatiquement le workflow **Release Catstrap** (`.github/workflows/catstrap-release.yml`).
 5. **Vérifier que la release a réussi** (ne pas terminer la session sans contrôle) :
    ```bash
-   gh run list --repo xadv404/wb9blox --workflow "Release Angestrap" --limit 1
+   gh run list --repo xadv404/wb9blox --workflow "Release Catstrap" --limit 1
    gh run watch --repo xadv404/wb9blox --exit-status
    ```
    Si le run est `skipped` ou échoue parce que le tag existe déjà : bumper la version, commit, push, revérifier.
 6. **Si le workflow n'a pas démarré** (push déjà fait sans nouveau tag) : relancer manuellement :
    ```bash
-   gh workflow run "Release Angestrap" --repo xadv404/wb9blox --ref main
+   gh workflow run "Release Catstrap" --repo xadv404/wb9blox --ref main
    gh run watch --repo xadv404/wb9blox --exit-status
    ```
 7. **Confirmer la release** :
@@ -45,5 +45,5 @@ alwaysApply: true
 
 - Remote de push : **`user-repo`** (pas `origin`).
 - Pas de branche `cursor/*` : tout sur `main` (voir `git-workflow.mdc`).
-- Les notes de release sont générées automatiquement à partir des commits depuis la dernière version `v1.0.*`.
+- Les notes de release sont générées automatiquement à partir des commits depuis la dernière version taguée.
 - Ne pas laisser une session « terminée » sans release quand des changements utilisateur ont été poussés sur `main`.

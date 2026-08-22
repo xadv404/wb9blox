@@ -9,10 +9,10 @@ namespace Bloxstrap.Utility
             if (!ShouldRun())
                 return true;
 
-            var angestrapProcesses = GetOtherAngestrapProcesses();
+            var catstrapProcesses = GetOtherCatstrapProcesses();
 
-            if (angestrapProcesses.Count > 0)
-                CloseProcesses(angestrapProcesses, LOG_IDENT);
+            if (catstrapProcesses.Count > 0)
+                CloseProcesses(catstrapProcesses, LOG_IDENT);
 
             return true;
         }
@@ -40,7 +40,7 @@ namespace Bloxstrap.Utility
             return true;
         }
 
-        static List<Process> GetOtherAngestrapProcesses() =>
+        static List<Process> GetOtherCatstrapProcesses() =>
             Process.GetProcessesByName(App.ProjectName)
                 .Where(process => process.Id != Environment.ProcessId)
                 .ToList();

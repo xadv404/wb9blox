@@ -6,10 +6,10 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
-    <ApplicationIcon>Angestrap.ico</ApplicationIcon>
-    <AssemblyName>Angestrap</AssemblyName>
-    <Version>1.0.27</Version>
-    <FileVersion>1.0.27</FileVersion>
+    <ApplicationIcon>Catstrap.ico</ApplicationIcon>
+    <AssemblyName>Catstrap</AssemblyName>
+    <Version>2.0.0</Version>
+    <FileVersion>2.0.0</FileVersion>
     <StartupObject>Bloxstrap.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -17,8 +17,8 @@
   </PropertyGroup>
     
   <ItemGroup>
-    <Resource Include="Angestrap.ico" />
-    <Resource Include="Angestrap.png" />
+    <Resource Include="Catstrap.ico" />
+    <Resource Include="Catstrap.png" />
     <Resource Include="Resources\Fonts\NotoSansThai-VariableFont_wdth,wght.ttf" />
     <Resource Include="Resources\Fonts\Rubik-VariableFont_wght.ttf" />
     <Resource Include="Resources\BootstrapperStyles\ByfronDialog\ByfronLogoDark.jpg" />
@@ -41,8 +41,8 @@
     <EmbeddedResource Include="Resources\Icon2017.ico" />
     <EmbeddedResource Include="Resources\Icon2019.ico" />
     <EmbeddedResource Include="Resources\Icon2022.ico" />
-    <EmbeddedResource Include="Resources\IconAngestrap.ico" />
-    <EmbeddedResource Include="Resources\IconAngestrapClassic.ico" />
+    <EmbeddedResource Include="Resources\IconCatstrap.ico" />
+    <EmbeddedResource Include="Resources\IconCatstrapClassic.ico" />
     <EmbeddedResource Include="Resources\IconEarly2015.ico" />
     <EmbeddedResource Include="Resources\IconLate2015.ico" />
     <EmbeddedResource Include="Resources\Mods\Cursor\From2006\ArrowCursor.png" />

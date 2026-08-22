@@ -69,7 +69,7 @@ namespace Bloxstrap.UI.Elements.Settings
                 RootNavigation.Navigate(typeof(Pages.IntegrationsPage));
         }
 
-        private void AngestrapNavigationItem_Click(object sender, RoutedEventArgs e)
+        private void CatstrapNavigationItem_Click(object sender, RoutedEventArgs e)
             => RootNavigation.Navigate(typeof(Pages.BloxstrapPage));
 
         private void AboutNavigationItem_Click(object sender, RoutedEventArgs e)

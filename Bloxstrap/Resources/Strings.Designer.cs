@@ -327,9 +327,9 @@ namespace Bloxstrap.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Getting the latest Bloxstrap....
         /// </summary>
-        public static string Bootstrapper_Status_UpgradingBloxstrap {
+        public static string Bootstrapper_Status_UpgradingCatstrap {
             get {
-                return ResourceManager.GetString("Bootstrapper.Status.UpgradingBloxstrap", resourceCulture);
+                return ResourceManager.GetString("Bootstrapper.Status.UpgradingCatstrap", resourceCulture);
             }
         }
         
@@ -1373,9 +1373,9 @@ namespace Bloxstrap.Resources {
             }
         }
         
-        public static string Dialog_ProcessCleanup_Angestrap {
+        public static string Dialog_ProcessCleanup_Catstrap {
             get {
-                return ResourceManager.GetString("Dialog.ProcessCleanup.Angestrap", resourceCulture);
+                return ResourceManager.GetString("Dialog.ProcessCleanup.Catstrap", resourceCulture);
             }
         }
         
@@ -2109,7 +2109,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string LaunchMenu_BloxstrapWiki {
             get {
-                return ResourceManager.GetString("LaunchMenu.AngestrapWiki", resourceCulture);
+                return ResourceManager.GetString("LaunchMenu.CatstrapWiki", resourceCulture);
             }
         }
         
@@ -2637,7 +2637,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_Analytics_Description {
             get {
-                return ResourceManager.GetString("Menu.Angestrap.Analytics.Description", resourceCulture);
+                return ResourceManager.GetString("Menu.Catstrap.Analytics.Description", resourceCulture);
             }
         }
         
@@ -2646,7 +2646,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_Analytics_Title {
             get {
-                return ResourceManager.GetString("Menu.Angestrap.Analytics.Title", resourceCulture);
+                return ResourceManager.GetString("Menu.Catstrap.Analytics.Title", resourceCulture);
             }
         }
         
@@ -2655,7 +2655,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_Description {
             get {
-                return ResourceManager.GetString("Menu.Angestrap.Description", resourceCulture);
+                return ResourceManager.GetString("Menu.Catstrap.Description", resourceCulture);
             }
         }
         
@@ -2664,7 +2664,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_ExportData_Description {
             get {
-                return ResourceManager.GetString("Menu.Angestrap.ExportData.Description", resourceCulture);
+                return ResourceManager.GetString("Menu.Catstrap.ExportData.Description", resourceCulture);
             }
         }
         
@@ -2673,7 +2673,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_ExportData_ExportConfig {
             get {
-                return ResourceManager.GetString("Menu.Angestrap.ExportData.ExportConfig", resourceCulture);
+                return ResourceManager.GetString("Menu.Catstrap.ExportData.ExportConfig", resourceCulture);
             }
         }
         
@@ -2682,7 +2682,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_ExportData_ExportLogs {
             get {
-                return ResourceManager.GetString("Menu.Angestrap.ExportData.ExportLogs", resourceCulture);
+                return ResourceManager.GetString("Menu.Catstrap.ExportData.ExportLogs", resourceCulture);
             }
         }
         
@@ -2691,7 +2691,7 @@ namespace Bloxstrap.Resources {
         /// </summary>
         public static string Menu_Bloxstrap_ExportData_Title {
             get {
-                return ResourceManager.GetString("Menu.Angestrap.ExportData.Title", resourceCulture);
+                return ResourceManager.GetString("Menu.Catstrap.ExportData.Title", resourceCulture);
             }
         }
         

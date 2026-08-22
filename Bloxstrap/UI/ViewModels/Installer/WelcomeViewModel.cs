@@ -5,8 +5,8 @@
         // formatting is done here instead of in xaml, it's just a bit easier
         public string MainText => String.Format(
             Strings.Installer_Welcome_MainText,
-            "[github.com/angestrap/angestrap](https://github.com/angestrap/angestrap)",
-            "[github.com/angestrap/angestrap/releases](https://github.com/angestrap/angestrap/releases/latest)"
+            $"[github.com/{App.ProjectRepository}](https://github.com/{App.ProjectRepository})",
+            $"[github.com/{App.ProjectRepository}/releases](https://github.com/{App.ProjectRepository}/releases/latest)"
         );
 
         public string VersionNotice { get; private set; } = "";

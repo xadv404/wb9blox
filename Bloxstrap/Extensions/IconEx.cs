@@ -39,7 +39,7 @@ namespace Bloxstrap.Extensions
             {
                 App.Logger.WriteException("IconEx::GetImageSource", ex);
                 Frontend.ShowMessageBox(string.Format(Strings.Dialog_IconLoadFailed, ex.Message));
-                return BootstrapperIcon.IconAngestrap.GetIcon().GetImageSource(pixelSize, false);
+                return BootstrapperIcon.IconCatstrap.GetIcon().GetImageSource(pixelSize, false);
             }
             finally
             {

@@ -1,4 +1,4 @@
-name: Release Angestrap
+name: Release Catstrap
 
 on:
   push:
@@ -56,7 +56,7 @@ jobs:
           $tag = "${{ steps.version.outputs.tag }}"
           $version = "${{ steps.version.outputs.version }}"
 
-          $prevTag = git tag -l 'v1.0.*' --sort=-v:refname |
+          $prevTag = git tag -l 'v*' --sort=-v:refname |
             Where-Object { $_ -ne $tag } |
             Select-Object -First 1
 
@@ -82,7 +82,7 @@ jobs:
           }
 
           $body = @(
-            "## Angestrap v$version",
+            "## Catstrap v$version",
             "",
             "### Modifications",
             "",
@@ -111,9 +111,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
-          name: Angestrap ${{ steps.version.outputs.tag }}
+          name: Catstrap ${{ steps.version.outputs.tag }}
           body_path: release-notes.md
-          files: .\Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Angestrap.exe
+          files: .\Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Catstrap.exe
           draft: false
           make_latest: true
           overwrite_files: true

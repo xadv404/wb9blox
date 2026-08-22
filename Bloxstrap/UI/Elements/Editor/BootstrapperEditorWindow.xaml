@@ -33,7 +33,7 @@
             Grid.Row="0"
             Padding="8"
             ForceShutdown="False"
-            Icon="pack://application:,,,/Angestrap.ico"
+            Icon="pack://application:,,,/Catstrap.ico"
             MinimizeToTray="False"
             UseSnapLayout="True" />
 

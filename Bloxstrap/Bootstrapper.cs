@@ -234,7 +234,7 @@ namespace Bloxstrap
                     launchArgs: App.LaunchSettings.Args,
                     launchMode: _launchMode))
                 {
-                    App.Logger.WriteLine(LOG_IDENT, "Angestrap update started, stopping bootstrapper");
+                    App.Logger.WriteLine(LOG_IDENT, "Catstrap update started, stopping bootstrapper");
                     return;
                 }
             }

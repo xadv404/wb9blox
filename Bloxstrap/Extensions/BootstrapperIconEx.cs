@@ -6,7 +6,7 @@ namespace Bloxstrap.Extensions
     {
         public static IReadOnlyCollection<BootstrapperIcon> Selections => new BootstrapperIcon[]
         {
-            BootstrapperIcon.IconAngestrap,
+            BootstrapperIcon.IconCatstrap,
             BootstrapperIcon.Icon2022,
             BootstrapperIcon.Icon2019,
             BootstrapperIcon.Icon2017,
@@ -14,7 +14,7 @@ namespace Bloxstrap.Extensions
             BootstrapperIcon.IconEarly2015,
             BootstrapperIcon.Icon2011,
             BootstrapperIcon.Icon2008,
-            BootstrapperIcon.IconAngestrapClassic,
+            BootstrapperIcon.IconCatstrapClassic,
             BootstrapperIcon.IconCustom
         };
 
@@ -49,7 +49,7 @@ namespace Bloxstrap.Extensions
                     }
                 }
 
-                Icon? fallbackIcon = Properties.Resources.IconAngestrap;
+                Icon? fallbackIcon = Properties.Resources.IconCatstrap;
 
                 if (fallbackIcon is null)
                     throw new InvalidOperationException("Default bootstrapper icon resource is missing");
@@ -59,7 +59,7 @@ namespace Bloxstrap.Extensions
 
             Icon? resolvedIcon = icon switch
             {
-                BootstrapperIcon.IconAngestrap => Properties.Resources.IconAngestrap,
+                BootstrapperIcon.IconCatstrap => Properties.Resources.IconCatstrap,
                 BootstrapperIcon.Icon2008 => Properties.Resources.Icon2008,
                 BootstrapperIcon.Icon2011 => Properties.Resources.Icon2011,
                 BootstrapperIcon.IconEarly2015 => Properties.Resources.IconEarly2015,
@@ -67,14 +67,14 @@ namespace Bloxstrap.Extensions
                 BootstrapperIcon.Icon2017 => Properties.Resources.Icon2017,
                 BootstrapperIcon.Icon2019 => Properties.Resources.Icon2019,
                 BootstrapperIcon.Icon2022 => Properties.Resources.Icon2022,
-                BootstrapperIcon.IconAngestrapClassic => Properties.Resources.IconAngestrapClassic,
-                _ => Properties.Resources.IconAngestrap
+                BootstrapperIcon.IconCatstrapClassic => Properties.Resources.IconCatstrapClassic,
+                _ => Properties.Resources.IconCatstrap
             };
 
             if (resolvedIcon is null)
             {
                 App.Logger.WriteLine(LOG_IDENT, $"Icon resource for {icon} was missing, using default");
-                resolvedIcon = Properties.Resources.IconAngestrap;
+                resolvedIcon = Properties.Resources.IconCatstrap;
             }
 
             return resolvedIcon ?? throw new InvalidOperationException("Default bootstrapper icon resource is missing");

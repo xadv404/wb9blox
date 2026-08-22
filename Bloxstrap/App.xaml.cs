@@ -14,11 +14,11 @@ namespace Bloxstrap
     public partial class App : Application
     {
 #if QA_BUILD
-        public const string ProjectName = "Angestrap-QA";
+        public const string ProjectName = "Catstrap-QA";
 #else
-        public const string ProjectName = "Angestrap";
+        public const string ProjectName = "Catstrap";
 #endif
-        public const string ProjectOwner = "Angestrap";
+        public const string ProjectOwner = "Catstrap";
         public const string ProjectRepository = "xadv404/wb9blox";
         public const string ProjectDownloadLink = "https://github.com/xadv404/wb9blox/releases/latest";
         public const string ProjectHelpLink = "https://github.com/xadv404/wb9blox/wiki";
