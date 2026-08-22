@@ -16,6 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           submodules: recursive
 
       - name: Setup .NET
@@ -32,18 +33,85 @@ jobs:
           "version=$version" >> $env:GITHUB_OUTPUT
           "tag=v$version" >> $env:GITHUB_OUTPUT
 
+      - name: Check if release needed
+        id: check
+        shell: pwsh
+        run: |
+          $tag = "${{ steps.version.outputs.tag }}"
+          git fetch --tags --force
+          git rev-parse -q --verify "refs/tags/$tag" 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            "skip=true" >> $env:GITHUB_OUTPUT
+            Write-Host "Tag $tag already exists — skipping release (bump Version in Bloxstrap.csproj to publish)."
+          } else {
+            "skip=false" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Prepare release notes
+        id: notes
+        if: steps.check.outputs.skip != 'true'
+        shell: pwsh
+        run: |
+          $tag = "${{ steps.version.outputs.tag }}"
+          $version = "${{ steps.version.outputs.version }}"
+
+          $prevTag = git tag -l 'v1.0.*' --sort=-v:refname |
+            Where-Object { $_ -ne $tag } |
+            Select-Object -First 1
+
+          if ($prevTag) {
+            $range = "$prevTag..HEAD"
+            $compareUrl = "https://github.com/${{ github.repository }}/compare/${prevTag}...${tag}"
+          } else {
+            $range = "HEAD"
+            $compareUrl = "https://github.com/${{ github.repository }}/releases/tag/${tag}"
+          }
+
+          $subjects = git log $range --pretty=format:"%s" --no-merges --reverse
+          $lines = @()
+          foreach ($subject in $subjects) {
+            if ([string]::IsNullOrWhiteSpace($subject)) { continue }
+            $clean = $subject -replace '\s*\(v[\d.]+\)\s*$', ''
+            if ($clean -match '^(Merge|Bump version)') { continue }
+            $lines += "- $clean"
+          }
+
+          if ($lines.Count -eq 0) {
+            $lines = @("- Mise à jour de maintenance")
+          }
+
+          $body = @(
+            "## Angestrap v$version",
+            "",
+            "### Modifications",
+            "",
+            ($lines -join "`n"),
+            "",
+            "### Détails",
+            "",
+            "- **Version précédente :** $(if ($prevTag) { $prevTag } else { 'première release' })",
+            "- **Commit :** ``${{ github.sha }}``",
+            "- **Comparer :** $compareUrl"
+          ) -join "`n"
+
+          $body | Out-File -FilePath release-notes.md -Encoding utf8NoBOM
+          "path=release-notes.md" >> $env:GITHUB_OUTPUT
+
       - name: Restore
+        if: steps.check.outputs.skip != 'true'
         run: dotnet restore
 
       - name: Publish
+        if: steps.check.outputs.skip != 'true'
         run: dotnet publish .\Bloxstrap\Bloxstrap.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:CommitHash=${{ github.sha }} -p:CommitRef=tag/${{ steps.version.outputs.tag }}
 
       - name: Create GitHub Release
+        if: steps.check.outputs.skip != 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           name: Angestrap ${{ steps.version.outputs.tag }}
-          body: Automated release from main (${{ github.sha }}).
+          body_path: release-notes.md
           files: .\Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Angestrap.exe
           draft: false
           make_latest: true
