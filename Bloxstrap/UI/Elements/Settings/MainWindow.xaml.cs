@@ -27,6 +27,8 @@ namespace Bloxstrap.UI.Elements.Settings
             
             InitializeComponent();
 
+            ApplyMenuTransparency(0.75);
+
             App.Logger.WriteLine("MainWindow", "Initializing settings window");
 
             if (showAlreadyRunningWarning)

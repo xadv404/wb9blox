@@ -36,6 +36,8 @@ namespace Bloxstrap.UI.Elements.Dialogs
             DataContext = viewModel;
 
             InitializeComponent();
+
+            ApplyMenuTransparency(0.75);
         }
 
         private void AboutLink_Click(object sender, RoutedEventArgs e)

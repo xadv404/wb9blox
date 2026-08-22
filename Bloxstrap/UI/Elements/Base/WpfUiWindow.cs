@@ -33,6 +33,33 @@ namespace Bloxstrap.UI.Elements.Base
 #endif
         }
 
+        /// <summary>
+        /// Semi-transparent menu background (~75% opacity) with acrylic blur.
+        /// </summary>
+        protected void ApplyMenuTransparency(double opacity = 0.75)
+        {
+            const double minOpacity = 0.70;
+            const double maxOpacity = 0.80;
+            opacity = Math.Clamp(opacity, minOpacity, maxOpacity);
+
+            WindowBackdropType = Wpf.Ui.Appearance.BackgroundType.Acrylic;
+
+            void UpdateBackground()
+            {
+                bool isDark = App.Settings.Prop.Theme.GetFinal() == Enums.Theme.Dark;
+                var baseColor = isDark
+                    ? System.Windows.Media.Color.FromRgb(32, 32, 32)
+                    : System.Windows.Media.Color.FromRgb(243, 243, 243);
+
+                byte alpha = (byte)(255 * opacity);
+                Background = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromArgb(alpha, baseColor.R, baseColor.G, baseColor.B));
+            }
+
+            UpdateBackground();
+            Loaded += (_, _) => UpdateBackground();
+        }
+
         protected override void OnSourceInitialized(EventArgs e)
         {
             if (App.Settings.Prop.WPFSoftwareRender || App.LaunchSettings.NoGPUFlag.Active)
