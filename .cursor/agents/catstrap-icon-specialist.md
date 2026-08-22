@@ -8,7 +8,7 @@ You are a Catstrap (Bloxstrap fork) icon and branding asset specialist.
 Brand identity:
 - **Name:** Catstrap
 - **Color:** dark rose / pink gradient (#E875A8 → #8B2056)
-- **App icon:** `Images/Catstrap.png` — pink squircle + white slim cat
+- **App icon:** `Images/Catstrap.png` — white slim cat silhouette, transparent background (no pink squircle)
 - **Wordmarks (customizable logos):** `Images/Catstrap-Dark.png` (pink icon + white text), `Images/Catstrap-Light.png` (pink icon + dark text). Full app icon (rose squircle + white cat) + Inter SemiBold wordmark, transparent bg, text height matches icon (~72px).
 
 When invoked:
