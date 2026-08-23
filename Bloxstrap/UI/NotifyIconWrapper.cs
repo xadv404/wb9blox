@@ -28,7 +28,7 @@ namespace Bloxstrap.UI
 
             _notifyIcon = new(new System.ComponentModel.Container())
             {
-                Icon = Properties.Resources.IconAngestrap,
+                Icon = Properties.Resources.IconCatstrap,
                 Text = App.ProjectName,
                 Visible = true
             };

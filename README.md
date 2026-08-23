@@ -1,6 +1,8 @@
-# Angestrap
+# Catstrap
 
-Angestrap is a fork of [Bloxstrap](https://github.com/bloxstraplabs/bloxstrap), an alternative bootstrapper for Roblox on Windows.
+Catstrap is a fork of [Bloxstrap](https://github.com/bloxstraplabs/bloxstrap) and [Fishstrap](https://github.com/fishstrap/fishstrap), an alternative bootstrapper for Roblox on Windows.
+
+Brand color: dark rose (`#C2357A`). Logo assets are in [`Images/`](Images/) (same layout as Fishstrap).
 
 ## Download
 
@@ -8,9 +10,9 @@ Latest release: https://github.com/xadv404/wb9blox/releases/latest
 
 ## Auto-updates
 
-Angestrap checks GitHub for updates when you launch Roblox (enabled by default in settings). When a newer release is published on `main`, the next launch downloads and installs it automatically.
+Catstrap checks GitHub for updates when you launch Roblox (enabled by default in settings). When a newer release is published on `main`, the next launch downloads and installs it automatically.
 
-To publish an update, bump the `<Version>` in `Bloxstrap/Bloxstrap.csproj` and push to `main`. GitHub Actions builds `Angestrap.exe` and creates a release.
+To publish an update, bump the `<Version>` in `Bloxstrap/Bloxstrap.csproj` and push to `main`. GitHub Actions builds `Catstrap.exe` and creates a release.
 
 ## Features
 
@@ -30,7 +32,7 @@ cd wb9blox
 dotnet publish .\Bloxstrap\Bloxstrap.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true
 ```
 
-Output: `Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Angestrap.exe`
+Output: `Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Catstrap.exe`
 
 ## License
 

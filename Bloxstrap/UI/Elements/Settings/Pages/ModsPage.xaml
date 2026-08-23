@@ -143,61 +143,67 @@
 
                 <TextBlock Margin="0,16,0,8" FontSize="14" FontWeight="Medium" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Preview}" Visibility="{Binding SkyPreviewVisibility, Mode=OneWay}" />
 
-                <Grid Visibility="{Binding SkyPreviewVisibility, Mode=OneWay}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                <Border Margin="0,0,0,4" Padding="12" CornerRadius="8" BorderThickness="1"
+                        BorderBrush="{DynamicResource ControlElevationBorderBrush}"
+                        Background="{DynamicResource ControlFillColorDefaultBrush}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding SkyPreviewVisibility, Mode=OneWay}">
+                    <Grid Width="456">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="108" />
+                            <ColumnDefinition Width="108" />
+                            <ColumnDefinition Width="108" />
+                            <ColumnDefinition Width="108" />
+                        </Grid.ColumnDefinitions>
 
-                    <Border Grid.Row="0" Grid.Column="1" Margin="4" Padding="4" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}">
-                        <StackPanel>
-                            <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Up}" />
-                            <Image Height="72" Stretch="Uniform" Source="{Binding PreviewSkyUp, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
-                        </StackPanel>
-                    </Border>
+                        <Border Grid.Row="0" Grid.Column="1" Margin="4" Padding="6" CornerRadius="6" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Up}" />
+                                <Image Width="96" Height="96" Stretch="UniformToFill" Source="{Binding PreviewSkyUp, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Border>
 
-                    <Border Grid.Row="1" Grid.Column="0" Margin="4" Padding="4" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}">
-                        <StackPanel>
-                            <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Left}" />
-                            <Image Height="72" Stretch="Uniform" Source="{Binding PreviewSkyLeft, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
-                        </StackPanel>
-                    </Border>
+                        <Border Grid.Row="1" Grid.Column="0" Margin="4" Padding="6" CornerRadius="6" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Left}" />
+                                <Image Width="96" Height="96" Stretch="UniformToFill" Source="{Binding PreviewSkyLeft, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Border>
 
-                    <Border Grid.Row="1" Grid.Column="1" Margin="4" Padding="4" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}">
-                        <StackPanel>
-                            <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Front}" />
-                            <Image Height="72" Stretch="Uniform" Source="{Binding PreviewSkyFront, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
-                        </StackPanel>
-                    </Border>
+                        <Border Grid.Row="1" Grid.Column="1" Margin="4" Padding="6" CornerRadius="6" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Front}" />
+                                <Image Width="96" Height="96" Stretch="UniformToFill" Source="{Binding PreviewSkyFront, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Border>
 
-                    <Border Grid.Row="1" Grid.Column="2" Margin="4" Padding="4" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}">
-                        <StackPanel>
-                            <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Right}" />
-                            <Image Height="72" Stretch="Uniform" Source="{Binding PreviewSkyRight, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
-                        </StackPanel>
-                    </Border>
+                        <Border Grid.Row="1" Grid.Column="2" Margin="4" Padding="6" CornerRadius="6" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Right}" />
+                                <Image Width="96" Height="96" Stretch="UniformToFill" Source="{Binding PreviewSkyRight, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Border>
 
-                    <Border Grid.Row="2" Grid.Column="1" Margin="4" Padding="4" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}">
-                        <StackPanel>
-                            <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Down}" />
-                            <Image Height="72" Stretch="Uniform" Source="{Binding PreviewSkyDown, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
-                        </StackPanel>
-                    </Border>
+                        <Border Grid.Row="1" Grid.Column="3" Margin="4" Padding="6" CornerRadius="6" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Back}" />
+                                <Image Width="96" Height="96" Stretch="UniformToFill" Source="{Binding PreviewSkyBack, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Border>
 
-                    <Border Grid.Row="3" Grid.Column="1" Margin="4" Padding="4" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}">
-                        <StackPanel>
-                            <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Back}" />
-                            <Image Height="72" Stretch="Uniform" Source="{Binding PreviewSkyBack, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
-                        </StackPanel>
-                    </Border>
-                </Grid>
+                        <Border Grid.Row="2" Grid.Column="1" Margin="4" Padding="6" CornerRadius="6" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{x:Static resources:Strings.Menu_Mods_Misc_CustomSky_Face_Down}" />
+                                <Image Width="96" Height="96" Stretch="UniformToFill" Source="{Binding PreviewSkyDown, Converter={StaticResource PathToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
             </StackPanel>
         </controls:OptionControl>
     </StackPanel>
