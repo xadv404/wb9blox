@@ -10,6 +10,7 @@ namespace Bloxstrap.UI.ViewModels.Bootstrapper
 
         public ClassicFluentDialogViewModel(IBootstrapperDialog dialog) : base(dialog)
         {
+            Icon = App.Settings.Prop.BootstrapperIcon.GetIcon().GetImageSource(48);
         }
     }
 }

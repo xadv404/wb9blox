@@ -2,8 +2,8 @@
 {
     public enum BootstrapperIcon
     {
-        [EnumName(StaticName = "Angestrap")]
-        IconAngestrap,
+        [EnumName(StaticName = "Catstrap")]
+        IconCatstrap,
         [EnumName(StaticName = "2008")]
         Icon2008,
         [EnumName(StaticName = "2011")]
@@ -19,6 +19,6 @@
         [EnumName(FromTranslation = "Common.Custom")]
         IconCustom,
         [EnumName(FromTranslation = "Enums.BootstrapperStyle.ClassicFluentDialog")]
-        IconAngestrapClassic
+        IconCatstrapClassic
     }
 }

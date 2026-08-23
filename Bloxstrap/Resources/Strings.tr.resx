@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Bootstrapper.AutoUpdateFailed" xml:space="preserve">
-    <value>Angestrap {0} sürümüne otomatik olarak güncellenemedi. Lütfen Angestrap'ı web sitesinden indirip çalıştırarak manuel olarak güncelleyin.</value>
+    <value>Catstrap {0} sürümüne otomatik olarak güncellenemedi. Lütfen Catstrap'ı web sitesinden indirip çalıştırarak manuel olarak güncelleyin.</value>
   </data>
   <data name="Bootstrapper.ConfirmLaunch" xml:space="preserve">
     <value>Roblox şu anda çalışıyor ve başka bir istemcinin başlatılması onu kapatacaktır. Başlatmak istediğinizden emin misiniz?</value>
@@ -127,13 +127,13 @@
     <value>Roblox'un sunucuları şu an çökmüş olabilir. Daha fazla bilgi için {0} göz atın.</value>
   </data>
   <data name="Dialog.Connectivity.BadConnection" xml:space="preserve">
-    <value>Herhangi bir bağlantı sağlanılamadı, bu da zayıf bir internet bağlantısının veya bir güvenlik duvarı engelinin işareti olabilir. Eğer bağlantınızda bir sorun yoksa, lütfen antivirüs yazılımınızın Angestrap'ı engellemediğinden emin olun.</value>
+    <value>Herhangi bir bağlantı sağlanılamadı, bu da zayıf bir internet bağlantısının veya bir güvenlik duvarı engelinin işareti olabilir. Eğer bağlantınızda bir sorun yoksa, lütfen antivirüs yazılımınızın Catstrap'ı engellemediğinden emin olun.</value>
   </data>
   <data name="Bootstrapper.FirstRunUninstall" xml:space="preserve">
-    <value>Angestrap'i silmek için ilk önce kurmalısınız.</value>
+    <value>Catstrap'i silmek için ilk önce kurmalısınız.</value>
   </data>
   <data name="Bootstrapper.NotEnoughSpace" xml:space="preserve">
-    <value>Angestrap, Roblox'u indirmek ve kurmak için yeterli disk alanına sahip değil. Lütfen biraz disk alanı boşaltın ve tekrar deneyin.</value>
+    <value>Catstrap, Roblox'u indirmek ve kurmak için yeterli disk alanına sahip değil. Lütfen biraz disk alanı boşaltın ve tekrar deneyin.</value>
   </data>
   <data name="Bootstrapper.Status.ApplyingModifications" xml:space="preserve">
     <value>Roblox modifikasyonları uygulanıyor...</value>
@@ -157,8 +157,8 @@
   <data name="Bootstrapper.Status.Upgrading" xml:space="preserve">
     <value>{product} güncelleniyor...</value>
   </data>
-  <data name="Bootstrapper.Status.UpgradingAngestrap" xml:space="preserve">
-    <value>Angestrap'in en yeni sürümü indiriliyor...</value>
+  <data name="Bootstrapper.Status.UpgradingCatstrap" xml:space="preserve">
+    <value>Catstrap'in en yeni sürümü indiriliyor...</value>
   </data>
   <data name="Bootstrapper.Status.WaitingOtherInstances" xml:space="preserve">
     <value>Diğer istemciler için bekleniliyor...</value>
@@ -172,10 +172,10 @@
     <comment>Text for style previews that use text button that says "Cancel"</comment>
   </data>
   <data name="Bootstrapper.SuccessfullyUninstalled" xml:space="preserve">
-    <value>Angestrap başarıyla kaldırıldı</value>
+    <value>Catstrap başarıyla kaldırıldı</value>
   </data>
   <data name="Bootstrapper.Uninstall.RobloxRunning" xml:space="preserve">
-    <value>Roblox şu an çalışıyor, ancak Angestrap'ı kaldırmak için kapalı olması gerekiyor. Roblox'u şimdi kapatmak ister misiniz?</value>
+    <value>Roblox şu an çalışıyor, ancak Catstrap'ı kaldırmak için kapalı olması gerekiyor. Roblox'u şimdi kapatmak ister misiniz?</value>
   </data>
   <data name="Bootstrapper.WMFNotFound" xml:space="preserve">
     <value>Büyük ihtimalle Windows'un N sürümünü kullandığınız için Windows Media Foundation bileşenleri eksik olabilir ve bu yüzden Roblox'u açamıyor olabilirsiniz. Lütfen bu bileşenleri kurun ve ardından Roblox'u tekrar başlatın.</value>
@@ -279,7 +279,7 @@ Daha fazla bilgi için tıklayınız</value>
     <value>Bağlantı hatası</value>
   </data>
   <data name="Dialog.Connectivity.UnableToConnect" xml:space="preserve">
-    <value>Angestrap {0} ile bağlantı kuramıyor</value>
+    <value>Catstrap {0} ile bağlantı kuramıyor</value>
     <comment>{0} is the name of a service (i.e. Roblox, GitHub)</comment>
   </data>
   <data name="Dialog.Exception.CopyLogContents" xml:space="preserve">
@@ -294,7 +294,7 @@ Daha fazla bilgi için tıklayınız</value>
 Eğer ele alınmamışsa, lütfen bu istisnayı [GitHub issue]({1}) aracılığıyla kayıt dosyasıyla birlikte bildirin.</value>
   </data>
   <data name="Dialog.Exception.Title" xml:space="preserve">
-    <value>Angestrap Istisnası</value>
+    <value>Catstrap Istisnası</value>
   </data>
   <data name="Common.Custom" xml:space="preserve">
     <value>Özel</value>
@@ -309,10 +309,10 @@ Eğer ele alınmamışsa, lütfen bu istisnayı [GitHub issue]({1}) aracılığ�
     <value>Sahte Byfron (2023)</value>
   </data>
   <data name="Enums.BootstrapperStyle.ClassicFluentDialog" xml:space="preserve">
-    <value>Angestrap (Klasik)</value>
+    <value>Catstrap (Klasik)</value>
   </data>
   <data name="Enums.BootstrapperStyle.FluentAeroDialog" xml:space="preserve">
-    <value>Angestrap (Cam)</value>
+    <value>Catstrap (Cam)</value>
   </data>
   <data name="Enums.BootstrapperStyle.LegacyDialog2008" xml:space="preserve">
     <value>Eski (2008-2011)</value>
@@ -378,10 +378,10 @@ Eğer ele alınmamışsa, lütfen bu istisnayı [GitHub issue]({1}) aracılığ�
     <value>Aydınlık</value>
   </data>
   <data name="InstallChecker.Updated" xml:space="preserve">
-    <value>Angestrap v{0} sürümüne güncellendi</value>
+    <value>Catstrap v{0} sürümüne güncellendi</value>
   </data>
   <data name="InstallChecker.VersionDifferentThanInstalled" xml:space="preserve">
-    <value>Başlattığınız Angestrap sürümü, şuan ki güncel sürümden farklı. Yeni sürüme güncellemek ister misiniz?</value>
+    <value>Başlattığınız Catstrap sürümü, şuan ki güncel sürümden farklı. Yeni sürüme güncellemek ister misiniz?</value>
   </data>
   <data name="Menu.About.Contributors" xml:space="preserve">
     <value>Katkıda Bulunanlar</value>
@@ -390,7 +390,7 @@ Eğer ele alınmamışsa, lütfen bu istisnayı [GitHub issue]({1}) aracılığ�
     <value>Kod</value>
   </data>
   <data name="Menu.About.Contributors.Description" xml:space="preserve">
-    <value>Bu insanlar Angestrap'e kayda değer katkılarda bulunmuş ve onun bu hale gelmesine yardımcı olmuş kişilerdir.</value>
+    <value>Bu insanlar Catstrap'e kayda değer katkılarda bulunmuş ve onun bu hale gelmesine yardımcı olmuş kişilerdir.</value>
   </data>
   <data name="Menu.About.Contributors.FeatureIdeas" xml:space="preserve">
     <value>Özellik Fikirleri</value>
@@ -436,7 +436,7 @@ Eğer ele alınmamışsa, lütfen bu istisnayı [GitHub issue]({1}) aracılığ�
     <value>Şu anda açık olan tüm Roblox istemcilerini kapatana kadar tüm değişikliklerinizin hemen uygulanmayacağını lütfen unutmayın.</value>
   </data>
   <data name="Menu.AlreadyRunning.Title" xml:space="preserve">
-    <value>Angestrap zaten çalışıyor</value>
+    <value>Catstrap zaten çalışıyor</value>
   </data>
   <data name="Menu.Appearance.Bootstrapper.Description" xml:space="preserve">
     <value>Farklı, retro veya hatta sadece Roblox gibi görünmesini sağlayabilirsiniz.</value>
@@ -463,7 +463,7 @@ Eğer ele alınmamışsa, lütfen bu istisnayı [GitHub issue]({1}) aracılığ�
     <value>Başlık</value>
   </data>
   <data name="Menu.Appearance.Description" xml:space="preserve">
-    <value>Angestrap'in nasıl görünmesi gerektiğini yapılandırın.</value>
+    <value>Catstrap'in nasıl görünmesi gerektiğini yapılandırın.</value>
   </data>
   <data name="Menu.Appearance.Global.Theme.Title" xml:space="preserve">
     <value>Global Tema</value>
@@ -487,10 +487,10 @@ Eğer ele alınmamışsa, lütfen bu istisnayı [GitHub issue]({1}) aracılığ�
     <value>Görünüş</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>Angestrap, Roblox'u başlattığınızda kendini otomatik olarak kontrol edecek ve güncelleyecektir.</value>
+    <value>Catstrap, Roblox'u başlattığınızda kendini otomatik olarak kontrol edecek ve güncelleyecektir.</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
-    <value>Angestrap'i otomatik olarak güncelle</value>
+    <value>Catstrap'i otomatik olarak güncelle</value>
   </data>
   <data name="Menu.Behaviour.ConfirmLaunches.Description" xml:space="preserve">
     <value>Mevcut oyununuzun kapanmasını önlemek için başka bir oyunun yanlışlıkla başlatılmasını engelleyin.</value>
@@ -499,7 +499,7 @@ Eğer ele alınmamışsa, lütfen bu istisnayı [GitHub issue]({1}) aracılığ�
     <value>Başka bir Roblox istemcisi başlatılırken onay iste</value>
   </data>
   <data name="Menu.Behaviour.Description" xml:space="preserve">
-    <value>Angestrap'ın Roblox'u başlatınca yapması gerektiğini yapılandırın.</value>
+    <value>Catstrap'ın Roblox'u başlatınca yapması gerektiğini yapılandırın.</value>
   </data>
   <data name="Menu.Behaviour.ForceRobloxReinstall.Description" xml:space="preserve">
     <value>Roblox, sonraki başlangıçta yeniden kurulacak.</value>
@@ -601,10 +601,10 @@ Devam etmek istediğinizden emin misiniz?</value>
     <value>İkon Dosyaları</value>
   </data>
   <data name="Menu.InstallLocation.CantInstall" xml:space="preserve">
-    <value>Angestrap buraya kurulamaz. Lütfen farklı bir konum seçin veya sıfırla düğmesine tıklayarak varsayılan konumu kullanmaya devam edin.</value>
+    <value>Catstrap buraya kurulamaz. Lütfen farklı bir konum seçin veya sıfırla düğmesine tıklayarak varsayılan konumu kullanmaya devam edin.</value>
   </data>
   <data name="Menu.InstallLocation.NotEmpty" xml:space="preserve">
-    <value>Angestrap'i kurmak için seçtiğiniz klasör zaten var ve boş DEĞİL. Angestrap'in kendi bağımsız klasörüne kurulması şiddetle tavsiye edilir.
+    <value>Catstrap'i kurmak için seçtiğiniz klasör zaten var ve boş DEĞİL. Catstrap'in kendi bağımsız klasörüne kurulması şiddetle tavsiye edilir.
 
 Aşağıdaki konuma değiştirilmesi önerilir:
 {0}
@@ -617,7 +617,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Bir kurulum konumu seçmelisin</value>
   </data>
   <data name="Menu.InstallLocation.NoWritePerms" xml:space="preserve">
-    <value>Angestrap'in seçtiğiniz kurulum konumuna yazma erişimi yok. Lütfen başka bir konum seçin.</value>
+    <value>Catstrap'in seçtiğiniz kurulum konumuna yazma erişimi yok. Lütfen başka bir konum seçin.</value>
   </data>
   <data name="Menu.Integrations.ActivityTracking" xml:space="preserve">
     <value>Etkinlik takibi</value>
@@ -668,7 +668,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Masaüstü uygulamasına çıkma</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Description" xml:space="preserve">
-    <value>Angestrap'in hangi Roblox oyununu oynadığınızı algılamasını sağlar. Bazı özellikler bunu gerektirebilir.</value>
+    <value>Catstrap'in hangi Roblox oyununu oynadığınızı algılamasını sağlar. Bazı özellikler bunu gerektirebilir.</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Title" xml:space="preserve">
     <value>Etkinlik takibini etkinleştirin</value>
@@ -756,7 +756,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Ayarlar kaydedildi!</value>
   </data>
   <data name="Menu.Title" xml:space="preserve">
-    <value>Angestrap Ayarları</value>
+    <value>Catstrap Ayarları</value>
   </data>
   <data name="Dialog.LanguageSelector.Header" xml:space="preserve">
     <value>Tercih edilen dili seçiniz</value>
@@ -777,7 +777,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>İşleme ve Grafikler</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Title" xml:space="preserve">
-    <value>Angestrap'in Fast Flag'ları yönetmesine izin verin</value>
+    <value>Catstrap'in Fast Flag'ları yönetmesine izin verin</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Description" xml:space="preserve">
     <value>Bunun yetkisini almak burada ayarlanan herhangi birşeyin Roblox'a uygulamamasını sağlayacak.</value>
@@ -801,7 +801,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Seviye 3 (En Yükseği)</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownload" xml:space="preserve">
-    <value>Angestrap Roblox'u indiremiyor</value>
+    <value>Catstrap Roblox'u indiremiyor</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownloadReason" xml:space="preserve">
     <value>Roblox şu anda indirilemiyor. Daha fazla bilgi için lütfen yardım sayfasını okuyunuz: {0}</value>
@@ -822,7 +822,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Değerin bir sayı olması gerektiğinden '{0}' girişi geçerli değildir</value>
   </data>
   <data name="Logger.NoWriteMode" xml:space="preserve">
-    <value>Bu başlatma için herhangi bir kayıt dosyası yazılmıyacak çünkü Angestrap '{0}' konumundaki klasöre yazamıyor</value>
+    <value>Bu başlatma için herhangi bir kayıt dosyası yazılmıyacak çünkü Catstrap '{0}' konumundaki klasöre yazamıyor</value>
   </data>
   <data name="Common.Default" xml:space="preserve">
     <value>Varsayılan</value>
@@ -837,7 +837,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Yer filtresi doğru biçimlendirilmediği için '{0}' girişi geçerli değil.</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
-    <value>Angestrap Yükleyicisi</value>
+    <value>Catstrap Yükleyicisi</value>
   </data>
   <data name="Installer.Welcome.Title" xml:space="preserve">
     <value>Hoş geldiniz</value>
@@ -856,18 +856,18 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>İleri</value>
   </data>
   <data name="Installer.Welcome.MainText" xml:space="preserve">
-    <value>Angestrap'ı indirdiğiniz için teşekkürler.
+    <value>Catstrap'ı indirdiğiniz için teşekkürler.
 
-Angestrap'ı indirebileceğiniz tek resmî web siteleri {0} ve {1}'dur, bu yüzden lütfen resmî bir kaynaktan indirdiğinizi doğrulayın.
+Catstrap'ı indirebileceğiniz tek resmî web siteleri {0} ve {1}'dur, bu yüzden lütfen resmî bir kaynaktan indirdiğinizi doğrulayın.
 
-Bu yükleme işlemi hızlı ve basit olacaktır, ve yükleme işlemi bittikten sonra Angestrap'ın her ayarını yapılandırabileceksiniz.</value>
+Bu yükleme işlemi hızlı ve basit olacaktır, ve yükleme işlemi bittikten sonra Catstrap'ın her ayarını yapılandırabileceksiniz.</value>
     <comment>{0} and {1} are URLs</comment>
   </data>
   <data name="Installer.Welcome.NextToContinue" xml:space="preserve">
     <value>Devam etmek için lütfen "İleri" butonuna tıklayın.</value>
   </data>
   <data name="Installer.Welcome.UpdateNotice" xml:space="preserve">
-    <value>Angestrap'ın {0} sürümünü yüklemeye çalışıyorsunuz, fakat mevcut olan en son sürüm {1}. En son sürümü yüklemek ister misiniz?</value>
+    <value>Catstrap'ın {0} sürümünü yüklemeye çalışıyorsunuz, fakat mevcut olan en son sürüm {1}. En son sürümü yüklemek ister misiniz?</value>
   </data>
   <data name="Installer.Install.Location.Title" xml:space="preserve">
     <value>Yüklenecek yeri seç</value>
@@ -888,16 +888,16 @@ Bu yükleme işlemi hızlı ve basit olacaktır, ve yükleme işlemi bittikten s
     <value>Başlat Menü simgesi</value>
   </data>
   <data name="Installer.Completion.Text" xml:space="preserve">
-    <value>Angestrap başarıyla yüklendi.
+    <value>Catstrap başarıyla yüklendi.
 
-Roblox henüz yüklenmedi, Angestrap'ı ilk defa başlattığınızda yüklenecektir. Ancak, bunu yapmadan önce, Angestrap'ın ayarlarını yapılandırmak isteyebilirsiniz.
+Roblox henüz yüklenmedi, Catstrap'ı ilk defa başlattığınızda yüklenecektir. Ancak, bunu yapmadan önce, Catstrap'ın ayarlarını yapılandırmak isteyebilirsiniz.
 
-Ayrıca, Roblox'u başlatmak için "Roblox Player" kısayolunu kullanmaktan sakının, yoksa Angestrap Roblox ile başlatılmayacaktır. Eğer siteden başlattığınızda Angestrap'ı göremezseniz, düzeltmek için Roblox'u Angestrap ile masaüstünden bir kez başlatmanız yeterlidir.
+Ayrıca, Roblox'u başlatmak için "Roblox Player" kısayolunu kullanmaktan sakının, yoksa Catstrap Roblox ile başlatılmayacaktır. Eğer siteden başlattığınızda Catstrap'ı göremezseniz, düzeltmek için Roblox'u Catstrap ile masaüstünden bir kez başlatmanız yeterlidir.
 
 Ne yapmak istersiniz?</value>
   </data>
   <data name="Installer.Completion.Settings.Title" xml:space="preserve">
-    <value>Angestrap'ın ayarlarını yapılandır</value>
+    <value>Catstrap'ın ayarlarını yapılandır</value>
   </data>
   <data name="Installer.Completion.Settings.Description" xml:space="preserve">
     <value>Sunduğu tüm özelliklerle ince ayar yapın</value>
@@ -909,20 +909,20 @@ Ne yapmak istersiniz?</value>
     <value>Her şey bittikten sonra masaüstü uygulamasına bırakılacaksınız</value>
   </data>
   <data name="Uninstaller.Title" xml:space="preserve">
-    <value>Angestrap'ı kaldır</value>
+    <value>Catstrap'ı kaldır</value>
   </data>
   <data name="Uninstaller.Text" xml:space="preserve">
-    <value>Kaldırma işlemi Angestrap'i sisteminizden siler ve hala yüklü ise varsayılan Roblox başlatıcısını otomatik olarak yeniden yapılandırır.
+    <value>Kaldırma işlemi Catstrap'i sisteminizden siler ve hala yüklü ise varsayılan Roblox başlatıcısını otomatik olarak yeniden yapılandırır.
 
-Kaldırma işlemi bazı kalıntılar bırakabilir, bu nedenle Angestrap'in yüklü olduğu yerde kalan dosyaları manuel olarak temizlemeniz gerekebilir.
+Kaldırma işlemi bazı kalıntılar bırakabilir, bu nedenle Catstrap'in yüklü olduğu yerde kalan dosyaları manuel olarak temizlemeniz gerekebilir.
 
-Angestrap “{1}” konumuna yüklenmiştir.</value>
+Catstrap “{1}” konumuna yüklenmiştir.</value>
   </data>
   <data name="Uninstaller.KeepData.Label" xml:space="preserve">
     <value>Ayarlarımı ve modlarımı tut</value>
   </data>
   <data name="Uninstaller.KeepData.Description" xml:space="preserve">
-    <value>Angestrap'ın yüklü olduğu yerde tutulacak, ve bir yeniden yükleme de otomatik olarak geri yüklenecektir.</value>
+    <value>Catstrap'ın yüklü olduğu yerde tutulacak, ve bir yeniden yükleme de otomatik olarak geri yüklenecektir.</value>
   </data>
   <data name="Uninstaller.Uninstall" xml:space="preserve">
     <value>Kaldır</value>
@@ -943,19 +943,19 @@ Angestrap “{1}” konumuna yüklenmiştir.</value>
     <value>Şuan WebView2 runtime sizde yüklü değil. Masaüstü uygulaması gibi bazı Roblox özellikleri WebView2 runtime olmadan düzgün çalışmayacaktır. WebView2 runtime'yi şimdi indirmek ister misiniz?</value>
   </data>
   <data name="Dialog.CannotCreateShortcuts" xml:space="preserve">
-    <value>Angestrap Masaüstü ve Başlat menüsüne kısayollar oluşturamadı. Daha sonra ayarlardan oluşturmayı deneyin.</value>
+    <value>Catstrap Masaüstü ve Başlat menüsüne kısayollar oluşturamadı. Daha sonra ayarlardan oluşturmayı deneyin.</value>
   </data>
   <data name="Dialog.Exception.Info.2.Alt" xml:space="preserve">
-    <value>Öncelikle [Angestrap Wiki]({0}) adresini kontrol ederek bu sorunun daha önce çözülüp çözülmediğini kontrol edin.
+    <value>Öncelikle [Catstrap Wiki]({0}) adresini kontrol ederek bu sorunun daha önce çözülüp çözülmediğini kontrol edin.
 
-Çözülmemişse, lütfen bu istisnayı bu fork'un bakımcılarına bildirin. Bu, resmi olmayan bir yapı olduğundan, bunu Angestrap'ın GitHub sorunlarına bildirmeyin.</value>
+Çözülmemişse, lütfen bu istisnayı bu fork'un bakımcılarına bildirin. Bu, resmi olmayan bir yapı olduğundan, bunu Catstrap'ın GitHub sorunlarına bildirmeyin.</value>
     <comment>"fork" in general means "a variation of" or "a different version of". You can alternatively write the first sentence as "...to the maintainers of this version."</comment>
   </data>
   <data name="Installer.Install.Shortcuts.Description" xml:space="preserve">
     <value>Bunlar, çoktan seçmeli bir başlatma menüsü getiren genel kısayollardır. Belirli fonksiyonlar için kısayollar daha sonra ayarlardan oluşturulabilir.</value>
   </data>
   <data name="Menu.Shortcuts.Description" xml:space="preserve">
-    <value>Angestrap'ın nasıl kolayca başlatılabileceğini yapılandırın.</value>
+    <value>Catstrap'ın nasıl kolayca başlatılabileceğini yapılandırın.</value>
   </data>
   <data name="Menu.Shortcuts.General.Title" xml:space="preserve">
     <value>Genel</value>
@@ -985,7 +985,7 @@ Angestrap “{1}” konumuna yüklenmiştir.</value>
     <value>Lütfen kaldırma işleminin bitmesini bekleyin.</value>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Angestrap Hakkında</value>
+    <value>Catstrap Hakkında</value>
   </data>
   <data name="About.Licenses.Title" xml:space="preserve">
     <value>Lisanslar</value>
@@ -998,12 +998,12 @@ Angestrap “{1}” konumuna yüklenmiştir.</value>
     <value>Kaydedilmemiş değişiklikleriniz var. Kaydetmeden kapatmak istediğinizden emin misiniz?</value>
   </data>
   <data name="InstallChecker.VersionLessThanInstalled" xml:space="preserve">
-    <value>Başlattığınız Angestrap sürümü sizde şu an yüklü olan sürümden daha eski. Sorunlar ortaya çıkabilir ve ayarlarınız değişebilir. Bir yeniden yükleme önerilir. Devam etmek istediğinizden emin misiniz?</value>
+    <value>Başlattığınız Catstrap sürümü sizde şu an yüklü olan sürümden daha eski. Sorunlar ortaya çıkabilir ve ayarlarınız değişebilir. Bir yeniden yükleme önerilir. Devam etmek istediğinizden emin misiniz?</value>
   </data>
   <data name="Dialog.PlayerError.FailedLaunch" xml:space="preserve">
     <value>Roblox başlatılamadı.
 
-Bu, Angestrap ile ilgili bir sorun olabilir veya olmayabilir. Bunu öğrenmek için [bu yardım sayfasına]({0}) bakın.</value>
+Bu, Catstrap ile ilgili bir sorun olabilir veya olmayabilir. Bunu öğrenmek için [bu yardım sayfasına]({0}) bakın.</value>
   </data>
   <data name="Common.NetworkError" xml:space="preserve">
     <value>Bir bağlantı sorunu nedeniyle veri yüklenemedi.</value>
@@ -1015,7 +1015,7 @@ Bu, Angestrap ile ilgili bir sorun olabilir veya olmayabilir. Bunu öğrenmek i�
     <value>Destekçiler</value>
   </data>
   <data name="About.Supporters.Description" xml:space="preserve">
-    <value>Bu kişiler, Angestrap'ı Ko-fi üzerinden desteklemiş kişilerdir. Buradaki herkese çok teşekkürler!
+    <value>Bu kişiler, Catstrap'ı Ko-fi üzerinden desteklemiş kişilerdir. Buradaki herkese çok teşekkürler!
 Buradaki herkes genel vaatlerine göre sıralanmıştır.</value>
   </data>
   <data name="JsonManager.SettingsLoadFailed" xml:space="preserve">
@@ -1046,12 +1046,12 @@ Buradaki herkes genel vaatlerine göre sıralanmıştır.</value>
     <value>Bu başlatma için, Roblox güncellemeler için kontrol edilmeyecek, ve modlara değişiklikler uygulanmayacaktır.</value>
   </data>
   <data name="Dialog.Connectivity.RobloxUpgradeNeeded" xml:space="preserve">
-    <value>Roblox'un yüklenmesi veya yükseltilmesi gerektiği için Angestrap devam edemiyor.</value>
+    <value>Roblox'un yüklenmesi veya yükseltilmesi gerektiği için Catstrap devam edemiyor.</value>
   </data>
   <data name="Installer.Install.CannotOverwrite" xml:space="preserve">
-    <value>Angestrap önceden bu yola yüklendi ve hâlâ burada, fakat yükleyici eski çalıştırılabilirin üzerine yazamıyor.
+    <value>Catstrap önceden bu yola yüklendi ve hâlâ burada, fakat yükleyici eski çalıştırılabilirin üzerine yazamıyor.
 
-Lütfen manuel olarak yükleme yolundan Angestrap.exe'yi silin veya sisteminizi yeniden başlatmayı deneyin, ve sonra yüklemeyi yeniden deneyin.</value>
+Lütfen manuel olarak yükleme yolundan Catstrap.exe'yi silin veya sisteminizi yeniden başlatmayı deneyin, ve sonra yüklemeyi yeniden deneyin.</value>
   </data>
   <data name="Common.NotAvailable" xml:space="preserve">
     <value>Mevcut değil</value>
@@ -1063,7 +1063,7 @@ Lütfen manuel olarak yükleme yolundan Angestrap.exe'yi silin veya sisteminizi 
     <value>DPI ölçeklendirme ve [tam ekran optimizasyonları]({0}) gibi uygulama parametrelerini yapılandırın.</value>
   </data>
   <data name="Common.RobloxNotInstalled" xml:space="preserve">
-    <value>Roblox henüz yüklenmedi. Bu seçeneği kullanmaya çalışmadan önce lütfen Roblox'u Angestrap'ı kullanarak en az bir kere başlatın.</value>
+    <value>Roblox henüz yüklenmedi. Bu seçeneği kullanmaya çalışmadan önce lütfen Roblox'u Catstrap'ı kullanarak en az bir kere başlatın.</value>
   </data>
   <data name="Installer.ShouldCancel" xml:space="preserve">
     <value>Yüklemeyi iptal etmek istediğinizden emin misiniz?</value>
@@ -1081,10 +1081,10 @@ Lütfen manuel olarak yükleme yolundan Angestrap.exe'yi silin veya sisteminizi 
     <value>Roblox simgelerini klasöre çıkar</value>
   </data>
   <data name="Menu.Shortcuts.ExtractIcons.Description" xml:space="preserve">
-    <value>Kısayollarınız için Angestrap'ın çeşitli Roblox simgelerini kullanmanızı sağlar. [Nasıl olduğunu görün.]({0})</value>
+    <value>Kısayollarınız için Catstrap'ın çeşitli Roblox simgelerini kullanmanızı sağlar. [Nasıl olduğunu görün.]({0})</value>
   </data>
   <data name="Dialog.RegistryWriteError" xml:space="preserve">
-    <value>Angestrap Windows Kayıt Defterine yazamıyor. Bir antivirüs yazılımı muhtemelen müdahale ediyor ve sorunlara neden oluyor. Lütfen Angestrap'ın operasyonunu sınırlayan bir şeyin olmadığını kontrol edin.</value>
+    <value>Catstrap Windows Kayıt Defterine yazamıyor. Bir antivirüs yazılımı muhtemelen müdahale ediyor ve sorunlara neden oluyor. Lütfen Catstrap'ın operasyonunu sınırlayan bir şeyin olmadığını kontrol edin.</value>
   </data>
   <data name="About.Supporters.Monthly" xml:space="preserve">
     <value>Aylık</value>
@@ -1092,13 +1092,13 @@ Lütfen manuel olarak yükleme yolundan Angestrap.exe'yi silin veya sisteminizi 
   <data name="About.Supporters.OneOff" xml:space="preserve">
     <value>Tek sefer</value>
   </data>
-  <data name="Menu.Angestrap.Description" xml:space="preserve">
-    <value>Angestrap'ın davranışı ile ilgili ayarları yapılandırın.</value>
+  <data name="Menu.Catstrap.Description" xml:space="preserve">
+    <value>Catstrap'ın davranışı ile ilgili ayarları yapılandırın.</value>
   </data>
-  <data name="Menu.Angestrap.Analytics.Title" xml:space="preserve">
+  <data name="Menu.Catstrap.Analytics.Title" xml:space="preserve">
     <value>Analitikleri göndermeyi etkinleştir</value>
   </data>
-  <data name="Menu.Angestrap.Analytics.Description" xml:space="preserve">
+  <data name="Menu.Catstrap.Analytics.Description" xml:space="preserve">
     <value>Hepsi anonim ve kötü bir şey değil, söz. Ne topladığımız ve neden topladığımız hakkında bilgi için [gizlilik politikamıza]({0}) bakın.</value>
   </data>
   <data name="Common.Analytics" xml:space="preserve">
@@ -1122,7 +1122,7 @@ Etkinken, kapatana kadar bir döngü içerisinde Ayarları kapattıktan sonra ot
 Test modu açmak ister misiniz?</value>
   </data>
   <data name="About.Translators.Description" xml:space="preserve">
-    <value>Angestrap'ın tüm çevirileri [Crowdin]({0}) üzerinden kitle kaynaklıdır. Burada listelenen herkes cömertce Angestrap'ı yerelleştirmek için zamanlarını ve çabalarını harcayan kişilerdir. Buradaki herkese çok teşekkürler!</value>
+    <value>Catstrap'ın tüm çevirileri [Crowdin]({0}) üzerinden kitle kaynaklıdır. Burada listelenen herkes cömertce Catstrap'ı yerelleştirmek için zamanlarını ve çabalarını harcayan kişilerdir. Buradaki herkese çok teşekkürler!</value>
   </data>
   <data name="Common.Navigation.Install" xml:space="preserve">
     <value>Yükle</value>
@@ -1142,7 +1142,7 @@ Test modu açmak ister misiniz?</value>
     <value>Özel</value>
   </data>
   <data name="Bootstrapper.FilesInUse" xml:space="preserve">
-    <value>Angestrap Roblox'u yükseltmeye çalıştı ancak başaramadı çünkü Roblox'un dosyaları hâlâ kullanımda.
+    <value>Catstrap Roblox'u yükseltmeye çalıştı ancak başaramadı çünkü Roblox'un dosyaları hâlâ kullanımda.
 
 Lütfen Roblox'un dosyalarını kullanabiliyor olan uygulamaları kapatın, ve tekrar başlatın.</value>
     <comment>This is *not* for when Roblox is still running when trying to upgrade. This applies to files being open (i.e. image assets)</comment>
@@ -1153,20 +1153,20 @@ Lütfen Roblox'un dosyalarını kullanabiliyor olan uygulamaları kapatın, ve t
   </data>
   <data name="Common.Export" xml:space="preserve">
     <value>Dışa aktar</value>
-    <comment>Currently used under the "Angestrap" settings tab for the button to export diagnostic data</comment>
+    <comment>Currently used under the "Catstrap" settings tab for the button to export diagnostic data</comment>
   </data>
-  <data name="Menu.Angestrap.ExportData.Title" xml:space="preserve">
+  <data name="Menu.Catstrap.ExportData.Title" xml:space="preserve">
     <value>Tanısal veriyi dışarı aktar</value>
   </data>
-  <data name="Menu.Angestrap.ExportData.Description" xml:space="preserve">
+  <data name="Menu.Catstrap.ExportData.Description" xml:space="preserve">
     <value>Yaşadığınız bir sorunu onarmak için çevrim içi yüklenebilen bilgi toplayın.</value>
   </data>
-  <data name="Menu.Angestrap.ExportData.ExportConfig" xml:space="preserve">
-    <value>Angestrap yapılandırması</value>
+  <data name="Menu.Catstrap.ExportData.ExportConfig" xml:space="preserve">
+    <value>Catstrap yapılandırması</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
-  <data name="Menu.Angestrap.ExportData.ExportLogs" xml:space="preserve">
-    <value>Tüm Angestrap kayıtları</value>
+  <data name="Menu.Catstrap.ExportData.ExportLogs" xml:space="preserve">
+    <value>Tüm Catstrap kayıtları</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="App.OSDeprecation.Win7_81" xml:space="preserve">
@@ -1350,7 +1350,7 @@ Lütfen Roblox'un dosyalarını kullanabiliyor olan uygulamaları kapatın, ve t
   <data name="CustomTheme.Errors.SetupFailed" xml:space="preserve">
     <value>Özel bootstrapper kurulamadı: {0}.
 Otomatiklen {1}'e alınılıyor.</value>
-    <comment>{0} is the error reason, {1} is the theme name (e.g. Angestrap (Classic))</comment>
+    <comment>{0} is the error reason, {1} is the theme name (e.g. Catstrap (Classic))</comment>
   </data>
   <data name="Menu.Appearance.CustomThemes.NoneSelected" xml:space="preserve">
     <value>Özel tema seçilmedi.</value>
@@ -1395,8 +1395,8 @@ Otomatiklen {1}'e alınılıyor.</value>
   <data name="Bootstrapper.Status.ShuttingDown" xml:space="preserve">
     <value>{product} kapatılıyor</value>
   </data>
-  <data name="LaunchMenu.AngestrapWiki" xml:space="preserve">
-    <value>Angestrap Wiki</value>
+  <data name="LaunchMenu.CatstrapWiki" xml:space="preserve">
+    <value>Catstrap Wiki</value>
   </data>
   <data name="LaunchMenu.RobloxCommunity" xml:space="preserve">
     <value>Roblox Topluluğu</value>
