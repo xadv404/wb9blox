@@ -103,11 +103,11 @@ namespace Bloxstrap.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon IconAngestrap
+        internal static System.Drawing.Icon IconCatstrap
         {
             get
             {
-                object obj = ResourceManager.GetObject("IconAngestrap", resourceCulture);
+                object obj = ResourceManager.GetObject("IconCatstrap", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -199,11 +199,11 @@ namespace Bloxstrap.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon IconAngestrapClassic
+        internal static System.Drawing.Icon IconCatstrapClassic
         {
             get
             {
-                object obj = ResourceManager.GetObject("IconAngestrapClassic", resourceCulture);
+                object obj = ResourceManager.GetObject("IconCatstrapClassic", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

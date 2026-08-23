@@ -174,7 +174,7 @@ namespace Bloxstrap
 
             string version = releaseInfo.TagName;
 
-            setStatus?.Invoke(Strings.Bootstrapper_Status_UpgradingBloxstrap);
+            setStatus?.Invoke(Strings.Bootstrapper_Status_UpgradingCatstrap);
 
             try
             {

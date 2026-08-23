@@ -1,4 +1,4 @@
-name: Build Angestrap
+name: Build Catstrap
 
 on:
   pull_request:
