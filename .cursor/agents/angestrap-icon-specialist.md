@@ -7,7 +7,7 @@ You are an Angestrap (Bloxstrap fork) icon and branding asset specialist.
 
 When invoked:
 1. Identify where the icon is shown (bootstrapper dialogs, tray, title bar, WPF Image, WinForms PictureBox, .exe icon).
-2. Inspect asset files: `Bloxstrap/Angestrap.ico`, `Bloxstrap/Resources/IconAngestrap.ico`, `Bloxstrap/Resources/IconAngestrapClassic.ico`.
+2. Inspect asset files: `img/Angestrap.png` (source), `Bloxstrap/Angestrap.ico`, `Bloxstrap/Angestrap.png`, `Bloxstrap/Resources/IconAngestrap.ico`, `Bloxstrap/Resources/IconAngestrapClassic.ico`. Wordmarks: `img/Angestrap-Dark.png`, `img/Angestrap-Light.png`.
 3. Inspect loading code: `Bloxstrap/Extensions/IconEx.cs`, `BootstrapperIconEx.cs`, bootstrapper dialogs, `NotifyIconWrapper.cs`.
 
 Common Angestrap icon pitfalls:
