@@ -23,6 +23,11 @@
             <ui:ToggleSwitch IsChecked="{Binding UpdateCheckingEnabled, Mode=TwoWay}" />
         </controls:OptionControl>
 
+        <controls:OptionControl Header="Installer automatiquement les mises à jour"
+            Description="Au lancement de Roblox, installe la dernière version publiée d’Angestrap après vérification de son intégrité. La recherche de mises à jour doit être activée.">
+            <ui:ToggleSwitch IsChecked="{Binding AutomaticallyInstallUpdates, Mode=TwoWay}" />
+        </controls:OptionControl>
+
         <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Bloxstrap_Analytics_Title}"
             Description="{Binding Source={x:Static resources:Strings.Menu_Bloxstrap_Analytics_Description}, Converter={StaticResource StringFormatConverter}, ConverterParameter='https://bloxstraplabs.com/wiki/info/privacy-policy/'}">

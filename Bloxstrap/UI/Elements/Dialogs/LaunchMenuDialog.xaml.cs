@@ -38,6 +38,14 @@ namespace Bloxstrap.UI.Elements.Dialogs
             InitializeComponent();
         }
 
+        private void ServerOptimizer_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new ServerOptimizerDialog { Owner = this };
+            dialog.ShowDialog();
+            if (dialog.Joined)
+                Close();
+        }
+
         private void AboutLink_Click(object sender, RoutedEventArgs e)
             => UI.Elements.Settings.MainWindow.ShowAboutWindow(this);
     }

@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: angestrap-release
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: windows-latest
@@ -19,6 +23,10 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -98,6 +106,20 @@ jobs:
           $body | Out-File -FilePath release-notes.md -Encoding utf8NoBOM
           "path=release-notes.md" >> $env:GITHUB_OUTPUT
 
+      - name: Detect Roblox deployment
+        if: steps.check.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/roblox_update_monitor.py --repo "${{ github.repository }}"
+
+      - name: Regression checks
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          python -m unittest discover -s tests/update_monitor
+          dotnet run --project tests/FeatureTests/FeatureTests.csproj
+          dotnet run --project tests/PackageManifestTests/PackageManifestTests.csproj
+          dotnet run --project tests/VersionCleanupTests/VersionCleanupTests.csproj
+
       - name: Restore
         if: steps.check.outputs.skip != 'true'
         run: dotnet restore
@@ -106,6 +128,10 @@ jobs:
         if: steps.check.outputs.skip != 'true'
         run: dotnet publish .\Bloxstrap\Bloxstrap.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:CommitHash=${{ github.sha }} -p:CommitRef=tag/${{ steps.version.outputs.tag }}
 
+      - name: Generate release metadata
+        if: steps.check.outputs.skip != 'true'
+        run: python tools/write_release_metadata.py --exe Bloxstrap/bin/Release/net6.0-windows/win-x64/publish/Angestrap.exe --version "${{ steps.version.outputs.version }}" --commit "${{ github.sha }}"
+
       - name: Create GitHub Release
         if: steps.check.outputs.skip != 'true'
         uses: softprops/action-gh-release@v2
@@ -113,7 +139,11 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: Angestrap ${{ steps.version.outputs.tag }}
           body_path: release-notes.md
-          files: .\Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Angestrap.exe
+          files: |
+            Bloxstrap/bin/Release/net6.0-windows/win-x64/publish/Angestrap.exe
+            Bloxstrap/bin/Release/net6.0-windows/win-x64/publish/Angestrap.exe.sha256
+            Bloxstrap/bin/Release/net6.0-windows/win-x64/publish/roblox-compatibility.json
+          fail_on_unmatched_files: true
           draft: false
           make_latest: true
           overwrite_files: true

@@ -9,6 +9,14 @@ namespace Bloxstrap.UI.ViewModels.Settings
     public class FastFlagsViewModel : NotifyPropertyChangedViewModel
     {
         private Dictionary<string, object>? _preResetFlags;
+        public IEnumerable<string> ProfileNames => FastFlagProfiles.Profiles.Keys;
+        public string SelectedProfile { get; set; } = "Équilibré";
+        public ICommand ApplyProfileCommand => new RelayCommand(() =>
+        {
+            FastFlagProfiles.Apply(App.FastFlags.Prop, SelectedProfile);
+            App.Settings.Prop.UseFastFlagManager = true;
+            RequestPageReloadEvent?.Invoke(this, EventArgs.Empty);
+        });
 
         public event EventHandler? RequestPageReloadEvent;
         

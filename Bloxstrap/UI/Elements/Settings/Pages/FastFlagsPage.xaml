@@ -23,6 +23,14 @@
 
         <TextBlock Text="{x:Static resources:Strings.Common_Presets}" FontSize="20" FontWeight="Medium" Margin="0,16,0,0" />
 
+        <controls:OptionControl Header="Configurations prédéfinies"
+            Description="Ajoute un profil graphique en conservant tes autres flags. Roblox peut ignorer les flags qui ne sont plus autorisés. Applique puis enregistre les paramètres ; redémarre Roblox pour utiliser le profil.">
+            <StackPanel>
+                <ComboBox Width="200" ItemsSource="{Binding ProfileNames}" SelectedItem="{Binding SelectedProfile, Mode=TwoWay}" />
+                <Button Margin="0,8,0,0" Content="Appliquer le profil" Command="{Binding ApplyProfileCommand}" />
+            </StackPanel>
+        </controls:OptionControl>
+
         <TextBlock Text="{x:Static resources:Strings.Menu_FastFlags_Presets_Categories_Rendering}" FontSize="16" FontWeight="Medium" Margin="0,16,0,0" />
         <controls:MarkdownTextBlock MarkdownText="{Binding Source={x:Static resources:Strings.Menu_FastFlags_Presets_D3DExclusiveFullscreenInfo}, Converter={StaticResource StringFormatConverter}, ConverterParameter='https://bloxstraplabs.com/wiki/features/engine-settings/#exclusive-fullscreen'}"  Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
 

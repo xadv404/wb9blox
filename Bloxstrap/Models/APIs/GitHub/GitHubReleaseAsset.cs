@@ -1,5 +1,8 @@
 ﻿public class GithubReleaseAsset
 {
+    [JsonPropertyName("digest")]
+    public string? Digest { get; set; }
+
     [JsonPropertyName("browser_download_url")]
     public string BrowserDownloadUrl { get; set; } = null!;
 

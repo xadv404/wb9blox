@@ -16,6 +16,12 @@ namespace Bloxstrap.UI.ViewModels.Settings
             set => App.Settings.Prop.CheckForUpdates = value;
         }
 
+        public bool AutomaticallyInstallUpdates
+        {
+            get => App.Settings.Prop.AutomaticallyInstallUpdates;
+            set => App.Settings.Prop.AutomaticallyInstallUpdates = value;
+        }
+
         public bool AnalyticsEnabled
         {
             get => App.Settings.Prop.EnableAnalytics;

@@ -30,9 +30,9 @@ namespace Bloxstrap.Models.Manifest
                     string.IsNullOrEmpty(rawSize))
                     break;
 
-                // ignore launcher
+                // Ignore the legacy launcher without dropping subsequent packages.
                 if (fileName == "RobloxPlayerLauncher.exe")
-                    break;
+                    continue;
 
                 int packedSize = int.Parse(rawPackedSize);
                 int size = int.Parse(rawSize);

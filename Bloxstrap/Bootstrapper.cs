@@ -767,68 +767,131 @@ namespace Bloxstrap
         #endregion
 
         #region Roblox Install
-        private static bool TryDeleteRobloxInDirectory(string dir)
-        {
-            // check if the roblox executable is present in the directory
-            string clientPath = Path.Combine(dir, "RobloxPlayerBeta.exe");
-            if (!File.Exists(clientPath))
-            {
-                clientPath = Path.Combine(dir, "RobloxStudioBeta.exe");
-                if (!File.Exists(clientPath))
-                    return true; // ok???
-            }
-
-            try
-            {
-                File.Delete(clientPath);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         public static void CleanupVersionsFolder()
         {
             const string LOG_IDENT = "Bootstrapper::CleanupVersionsFolder";
 
-            if (App.LaunchSettings.BackgroundUpdaterFlag.Active)
-            {
-                App.Logger.WriteLine(LOG_IDENT, "Background updater tried to cleanup, stopping!");
+            if (App.LaunchSettings.BackgroundUpdaterFlag.Active ||
+                Utilities.DoesMutexExist($"{App.ProjectName}-BackgroundUpdater-{LaunchMode.Player}") ||
+                Utilities.DoesMutexExist($"{App.ProjectName}-BackgroundUpdater-{LaunchMode.Studio}") ||
+                (Utilities.DoesMutexExist($"{App.ProjectName}-Bootstrapper-{LaunchMode.Player}") &&
+                 Utilities.DoesMutexExist($"{App.ProjectName}-Bootstrapper-{LaunchMode.Studio}")))
                 return;
+
+            var retained = new List<string>();
+            foreach (string version in new[] { App.PlayerState.Prop.VersionGuid, App.StudioState.Prop.VersionGuid })
+            {
+                if (!string.IsNullOrEmpty(version))
+                    retained.Add(Path.Combine(Paths.Versions, version));
             }
 
-            if (!Directory.Exists(Paths.Versions))
+            // If a process cannot be inspected, leave all versions intact rather than
+            // risking removal of files belonging to an active client.
+            foreach (string processName in new[] { "RobloxPlayerBeta", "RobloxStudioBeta", "RobloxCrashHandler" })
             {
-                App.Logger.WriteLine(LOG_IDENT, "Versions directory does not exist, skipping cleanup.");
-                return;
-            }
-
-            foreach (string dir in Directory.GetDirectories(Paths.Versions))
-            {
-                string dirName = Path.GetFileName(dir);
-
-                if (dirName != App.PlayerState.Prop.VersionGuid && dirName != App.StudioState.Prop.VersionGuid)
+                try
                 {
-                    // TODO: this is too expensive
-                    //Filesystem.AssertReadOnlyDirectory(dir);
-
-                    // check if it's still being used first
-                    // we dont want to accidentally delete the files of a running roblox instance
-                    if (!TryDeleteRobloxInDirectory(dir))
-                        continue;
-
-                    try
+                    foreach (var process in Process.GetProcessesByName(processName))
                     {
-                        Directory.Delete(dir, true);
-                    }
-                    catch (Exception ex)
-                    {
-                        App.Logger.WriteLine(LOG_IDENT, $"Failed to delete {dir}");
-                        App.Logger.WriteException(LOG_IDENT, ex);
+                        using (process)
+                        {
+                            try
+                            {
+                                string? executable = process.MainModule?.FileName;
+                                if (string.IsNullOrEmpty(executable))
+                                    return;
+                                retained.Add(Path.GetDirectoryName(executable)!);
+                            }
+                            catch (Exception ex)
+                            {
+                                if (process.HasExited)
+                                    continue;
+                                App.Logger.WriteException(LOG_IDENT, ex);
+                                return;
+                            }
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    App.Logger.WriteException(LOG_IDENT, ex);
+                    return;
+                }
+            }
+
+            void LogCleanup(string message, Exception? exception)
+            {
+                App.Logger.WriteLine(LOG_IDENT, message);
+                if (exception is not null)
+                    App.Logger.WriteException(LOG_IDENT, exception);
+            }
+
+            VersionCleanup.Clean(Paths.Versions, retained, LogCleanup);
+            CleanupOfficialVersions(retained, LogCleanup);
+        }
+
+        private static void CleanupOfficialVersions(List<string> retained, Action<string, Exception?> log)
+        {
+            string root = Path.Combine(Paths.LocalAppData, "Roblox", "Versions");
+            if (!Directory.Exists(root) || string.Equals(Path.GetFullPath(root), Path.GetFullPath(Paths.Versions), StringComparison.OrdinalIgnoreCase))
+                return;
+
+            try
+            {
+                // Do not race the stock installer while it prepares a new deployment.
+                foreach (string name in new[] { "RobloxPlayerInstaller", "RobloxStudioInstaller", "RobloxPlayerLauncher", "RobloxStudioLauncherBeta" })
+                {
+                    var processes = Process.GetProcessesByName(name);
+                    bool running = processes.Length != 0;
+                    foreach (var process in processes)
+                        process.Dispose();
+                    if (running)
+                        return;
+                }
+
+                var officialRetained = new List<string>(retained);
+                foreach (var client in new[] {
+                    (Key: "roblox-player", Executable: "RobloxPlayerBeta.exe"),
+                    (Key: "roblox-studio", Executable: "RobloxStudioBeta.exe") })
+                {
+                    bool activeInstallationKnown = false;
+                    foreach (var hive in new[] { RegistryHive.CurrentUser, RegistryHive.LocalMachine })
+                    foreach (var view in new[] { RegistryView.Registry32, RegistryView.Registry64 })
+                    {
+                        using var registry = RegistryKey.OpenBaseKey(hive, view);
+                        using var key = registry.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\" + client.Key);
+                        if (key?.GetValue("InstallLocation") is string location &&
+                            Path.IsPathFullyQualified(location) && File.Exists(Path.Combine(location, client.Executable)))
+                        {
+                            officialRetained.Add(location);
+                            activeInstallationKnown = true;
+                        }
+                    }
+
+                    // Missing registration is not evidence that an installation is unused.
+                    if (!activeInstallationKnown)
+                    {
+                        foreach (string directory in Directory.GetDirectories(root))
+                        {
+                            if (File.Exists(Path.Combine(directory, client.Executable)))
+                                officialRetained.Add(directory);
+                        }
+                    }
+                }
+
+                foreach (string directory in Directory.GetDirectories(root))
+                {
+                    // Preserve incomplete installations and folders whose purpose is unknown.
+                    if (!File.Exists(Path.Combine(directory, "RobloxPlayerBeta.exe")) &&
+                        !File.Exists(Path.Combine(directory, "RobloxStudioBeta.exe")))
+                        officialRetained.Add(directory);
+                }
+
+                VersionCleanup.Clean(root, officialRetained, log);
+            }
+            catch (Exception ex)
+            {
+                log("Could not determine active official Roblox installations; skipping cleanup", ex);
             }
         }
 

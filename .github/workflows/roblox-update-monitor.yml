@@ -1,0 +1,68 @@
+name: Follow Roblox deployments
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: angestrap-release
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Detect Roblox deployment
+        id: monitor
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/roblox_update_monitor.py --repo "${{ github.repository }}"
+      - uses: actions/setup-dotnet@v4
+        if: steps.monitor.outputs.needed == 'true'
+        with:
+          dotnet-version: 6.0.428
+      - name: Regression checks
+        if: steps.monitor.outputs.needed == 'true'
+        run: |
+          python -m unittest discover -s tests/update_monitor
+          dotnet run --project tests/FeatureTests/FeatureTests.csproj
+          dotnet run --project tests/PackageManifestTests/PackageManifestTests.csproj
+          dotnet run --project tests/VersionCleanupTests/VersionCleanupTests.csproj
+      - name: Restore
+        if: steps.monitor.outputs.needed == 'true'
+        run: dotnet restore Bloxstrap/Bloxstrap.csproj -r win-x64
+      - name: Publish Windows executable
+        if: steps.monitor.outputs.needed == 'true'
+        run: dotnet publish Bloxstrap/Bloxstrap.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:Version=${{ steps.monitor.outputs.version }} -p:FileVersion=${{ steps.monitor.outputs.version }} -p:CommitHash=${{ github.sha }} -p:CommitRef=tag/v${{ steps.monitor.outputs.version }} --no-restore
+      - name: Generate release metadata
+        if: steps.monitor.outputs.needed == 'true'
+        run: python tools/write_release_metadata.py --exe Bloxstrap/bin/Release/net6.0-windows/win-x64/publish/Angestrap.exe --version "${{ steps.monitor.outputs.version }}" --commit "${{ github.sha }}"
+      - name: Release tested rebuild
+        if: steps.monitor.outputs.needed == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.monitor.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: Angestrap v${{ steps.monitor.outputs.version }}
+          body: |
+            Rebuild after a new production Roblox deployment.
+            Windows compilation and regression checks passed. Roblox launch and gameplay have not been tested automatically; this release does not assert a code compatibility fix.
+            Deployment and build details: roblox-compatibility.json.
+          files: |
+            Bloxstrap/bin/Release/net6.0-windows/win-x64/publish/Angestrap.exe
+            Bloxstrap/bin/Release/net6.0-windows/win-x64/publish/Angestrap.exe.sha256
+            Bloxstrap/bin/Release/net6.0-windows/win-x64/publish/roblox-compatibility.json
+          fail_on_unmatched_files: true
+          make_latest: true
+          overwrite_files: false

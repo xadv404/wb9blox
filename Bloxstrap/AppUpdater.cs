@@ -112,6 +112,9 @@ namespace Bloxstrap
             if (releaseInfo is null)
                 return false;
 
+            if (App.Settings.Prop.AutomaticallyInstallUpdates)
+                return await ApplyUpdateAsync(releaseInfo, quiet, launchArgs, launchMode);
+
             if (quiet)
                 return false;
 
@@ -185,35 +188,64 @@ namespace Bloxstrap
 
                 File.Copy(Paths.Process, downloadLocation, true);
 #else
-                var asset = releaseInfo.Assets.FirstOrDefault(x =>
-                    !String.IsNullOrEmpty(x.Name)
-                    && x.Name.Equals($"{App.ProjectName}.exe", StringComparison.OrdinalIgnoreCase))
-                    ?? releaseInfo.Assets.FirstOrDefault(x => !String.IsNullOrEmpty(x.Name));
+                if (!Regex.IsMatch(releaseInfo.TagName, @"\Av?\d+\.\d+\.\d+(?:\.\d+)?\z"))
+                    throw new InvalidDataException("Invalid update version.");
 
+                string executableName = $"{App.ProjectName}.exe";
+                var asset = releaseInfo.Assets?.FirstOrDefault(x => x.Name == executableName);
                 if (asset is null)
+                    throw new InvalidDataException("Release has no Angestrap executable.");
+
+                void ValidateAssetUrl(string url)
                 {
-                    App.Logger.WriteLine(LOG_IDENT, "Release has no downloadable executable asset");
-                    return false;
+                    if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || uri.Scheme != "https" ||
+                        uri.Host != "github.com" || !string.IsNullOrEmpty(uri.UserInfo) ||
+                        !uri.AbsolutePath.StartsWith($"/{App.ProjectRepository}/releases/download/", StringComparison.Ordinal))
+                        throw new InvalidDataException("Unexpected update download URL.");
                 }
 
-                string downloadDirectory = Path.Combine(Paths.TempUpdates, releaseInfo.TagName);
-                string downloadLocation = Path.Combine(downloadDirectory, asset.Name);
-
-                Directory.CreateDirectory(downloadDirectory);
-
-                if (!File.Exists(downloadLocation) || new FileInfo(downloadLocation).Length < 1024)
+                ValidateAssetUrl(asset.BrowserDownloadUrl);
+                string expectedHash;
+                if (asset.Digest is string digest && Regex.IsMatch(digest, @"\Asha256:[a-fA-F0-9]{64}\z"))
                 {
-                    App.Logger.WriteLine(LOG_IDENT, $"Downloading {releaseInfo.TagName} to {downloadLocation}...");
-
-                    var response = await App.HttpClient.GetAsync(asset.BrowserDownloadUrl);
-                    response.EnsureSuccessStatusCode();
-
-                    await using (var fileStream = new FileStream(downloadLocation, FileMode.Create, FileAccess.Write))
-                        await response.Content.CopyToAsync(fileStream);
+                    expectedHash = digest[7..];
                 }
                 else
                 {
-                    App.Logger.WriteLine(LOG_IDENT, $"Using cached download at {downloadLocation}");
+                    var checksumAsset = releaseInfo.Assets!.FirstOrDefault(x => x.Name == executableName + ".sha256")
+                        ?? throw new InvalidDataException("Release has no integrity checksum.");
+                    ValidateAssetUrl(checksumAsset.BrowserDownloadUrl);
+                    string checksum = await App.HttpClient.GetStringAsync(checksumAsset.BrowserDownloadUrl);
+                    expectedHash = UpdateIntegrity.ParseChecksum(checksum, executableName);
+                }
+
+                string downloadDirectory = Path.Combine(Paths.TempUpdates, releaseInfo.TagName);
+                string downloadLocation = Path.Combine(downloadDirectory, executableName);
+                Directory.CreateDirectory(downloadDirectory);
+
+                if (File.Exists(downloadLocation))
+                {
+                    try { await UpdateIntegrity.VerifyAsync(downloadLocation, expectedHash); }
+                    catch (InvalidDataException) { File.Delete(downloadLocation); }
+                }
+
+                if (!File.Exists(downloadLocation))
+                {
+                    string temporaryDownload = downloadLocation + ".download";
+                    try
+                    {
+                        using var response = await App.HttpClient.GetAsync(asset.BrowserDownloadUrl, HttpCompletionOption.ResponseHeadersRead);
+                        response.EnsureSuccessStatusCode();
+                        await using (var fileStream = new FileStream(temporaryDownload, FileMode.Create, FileAccess.Write))
+                            await response.Content.CopyToAsync(fileStream);
+                        await UpdateIntegrity.VerifyAsync(temporaryDownload, expectedHash);
+                        File.Move(temporaryDownload, downloadLocation, overwrite: true);
+                    }
+                    finally
+                    {
+                        if (File.Exists(temporaryDownload))
+                            File.Delete(temporaryDownload);
+                    }
                 }
 #endif
 
