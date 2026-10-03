@@ -2,18 +2,62 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:base="clr-namespace:Bloxstrap.UI.Elements.Base"
-    Title="Serveur à faible ping" Width="520" SizeToContent="Height"
-    ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
-    <StackPanel Margin="24">
-        <TextBlock Text="Trouver un serveur à faible ping" FontSize="20" FontWeight="SemiBold" />
-        <TextBlock Margin="0,12,0,8" Text="Colle le lien du jeu Roblox ou son identifiant de lieu." TextWrapping="Wrap" />
-        <TextBox x:Name="PlaceInput" />
-        <TextBlock Margin="0,12,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap"
-            Text="Compare jusqu’à 300 serveurs publics ayant des places libres. Le ping annoncé par Roblox peut différer de celui de ta connexion. Les serveurs privés ne sont pas concernés." />
-        <TextBlock x:Name="StatusText" Margin="0,16,0,0" TextWrapping="Wrap" />
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-            <Button x:Name="SearchButton" Content="Rechercher" Click="Search_Click" Padding="16,8" />
-            <Button x:Name="JoinButton" Content="Rejoindre" Click="Join_Click" IsEnabled="False" Margin="8,0,0,0" Padding="16,8" />
-        </StackPanel>
-    </StackPanel>
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Serveur à faible ping" Width="620" Height="650" MinWidth="520" MinHeight="440"
+    MaxHeight="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"
+    Background="{ui:ThemeResource ApplicationBackgroundBrush}" ExtendsContentIntoTitleBar="True"
+    WindowBackdropType="Mica" WindowStartupLocation="CenterOwner" UseLayoutRounding="True">
+    <Grid>
+        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+        <ui:TitleBar Padding="12,8" Title="Serveur à faible ping" Icon="pack://application:,,,/Angestrap.ico"
+            ShowMinimize="False" ShowMaximize="False" CanMaximize="False" />
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="24,16,24,24">
+                <TextBlock Text="Choisis ton prochain serveur" Style="{StaticResource AngestrapPageTitle}" />
+                <TextBlock Text="Trouve un serveur public disponible avec un ping annoncé faible." Style="{StaticResource AngestrapBody}" Margin="0,8,0,24" />
+                <Border Style="{StaticResource AngestrapSurface}">
+                    <StackPanel>
+                        <Label Content="Lien du jeu ou identifiant de lieu" Target="{Binding ElementName=PlaceInput}" FontSize="14" FontWeight="SemiBold" Padding="0" />
+                        <TextBox x:Name="PlaceInput" Margin="0,12,0,0" Padding="12,10" FontSize="14"
+                            AutomationProperties.Name="Lien du jeu ou identifiant de lieu" ToolTip="Exemple : https://www.roblox.com/games/1818" />
+                        <TextBlock Text="Exemple : https://www.roblox.com/games/1818 ou 1818" Style="{StaticResource AngestrapBody}" FontSize="12" Margin="0,8,0,16" />
+                        <ui:Button x:Name="SearchButton" Content="Rechercher un serveur" Icon="Globe24" Click="Search_Click"
+                            IsDefault="True" Padding="16,10" HorizontalAlignment="Stretch" />
+                        <ProgressBar x:Name="SearchProgress" IsIndeterminate="True" Height="4" Margin="0,14,0,0" Visibility="Collapsed" AutomationProperties.Name="Recherche des serveurs en cours" />
+                    </StackPanel>
+                </Border>
+                <TextBlock x:Name="StatusText" Text="Prêt à rechercher un serveur." Style="{StaticResource AngestrapBody}" Margin="0,16,0,0" AutomationProperties.LiveSetting="Polite" />
+                <Border x:Name="ResultPanel" Style="{StaticResource AngestrapSurface}" Visibility="Collapsed" Margin="0,16,0,0"
+                    Background="{DynamicResource AngestrapAccentTintBrush}" BorderBrush="{DynamicResource AngestrapAccentBorderBrush}">
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="PING ANNONCÉ" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            <TextBlock x:Name="PingText" FontSize="32" FontWeight="SemiBold" Margin="0,6,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="20,0,0,0">
+                            <TextBlock Text="Places du serveur" Style="{StaticResource AngestrapBody}" />
+                            <TextBlock x:Name="PlayersText" FontSize="20" FontWeight="SemiBold" Margin="0,6,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource AngestrapHint}" Margin="0,20,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Symbol="Info24" Margin="0,2,12,0" VerticalAlignment="Top" />
+                        <TextBlock Grid.Column="1" Style="{StaticResource AngestrapBody}"
+                            Text="Compare jusqu’à 300 serveurs publics. Le ping annoncé par Roblox peut différer de celui de ta connexion. Les serveurs privés ne sont pas concernés." />
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+        <Border Grid.Row="2" Padding="24,16" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <ui:Button Content="Fermer" Click="Close_Click" IsCancel="True" Padding="18,10" HorizontalAlignment="Left" />
+                <ui:Button x:Name="JoinButton" Grid.Column="1" Content="Rejoindre le serveur" Icon="ArrowRight24" Click="Join_Click"
+                    Appearance="Primary" IsEnabled="False" Padding="18,10" />
+            </Grid>
+        </Border>
+    </Grid>
 </base:WpfUiWindow>

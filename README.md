@@ -42,11 +42,15 @@ dotnet publish .\Bloxstrap\Bloxstrap.csproj -c Release -r win-x64 --self-contain
 
 Output: `Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\Angestrap.exe`
 
+## Interface
+
+The WPF interface uses shared theme-aware surfaces and typography, a redesigned launch menu, a clearer settings sidebar, and a persistent save action with Ctrl+S. FastFlag profiles include descriptions and save feedback. The manual server finder displays loading state and separate ping/occupancy results. Windows visual verification at different DPI settings remains necessary.
+
 ## Server selection and FastFlag profiles
 
 Open **Serveur à faible ping** from the launch menu, paste a Roblox game link or place ID, then search and join. Angestrap compares up to 300 public, non-full servers with a reported ping. It prefers the lowest ping, then higher server FPS and lower occupancy. Roblox's reported ping is not a measurement from your PC; this tool cannot guarantee a lower personal latency. If the API is unavailable or no ping is supplied, normal Roblox launch remains available.
 
-In FastFlags settings, choose **Roblox par défaut**, **Performances**, **Équilibré**, or **Qualité visuelle**, apply the profile, save settings, and restart Roblox. Profiles adjust only MSAA and texture quality, preserving unrelated custom flags. Roblox may ignore locally configured flags outside its current allowlist. Profiles do not change network traffic or promise a ping/FPS improvement.
+In FastFlags settings, choose **Roblox par défaut**, **Performances**, **Équilibré**, or **Qualité visuelle**, use **Appliquer et enregistrer**, then restart Roblox through Angestrap. Applying a profile saves the current settings, verifies the files, and refreshes the displayed values. Preset flags are visible by default in the flag editor. Profiles adjust only MSAA and texture quality, preserving unrelated custom flags. Roblox may ignore locally configured flags outside its current allowlist. Profiles do not change network traffic or promise a ping/FPS improvement.
 
 ## License
 

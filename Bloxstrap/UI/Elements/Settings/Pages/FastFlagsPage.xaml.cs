@@ -26,7 +26,13 @@ namespace Bloxstrap.UI.Elements.Settings.Pages
             _viewModel = new FastFlagsViewModel();
 
             _viewModel.OpenFlagEditorEvent += OpenFlagEditor;
-            _viewModel.RequestPageReloadEvent += (_, _) => SetupViewModel();
+            _viewModel.RequestSaveSettingsEvent += (_, _) =>
+            {
+                if (Window.GetWindow(this)?.DataContext is MainWindowViewModel settings)
+                    settings.SaveSettingsCommand.Execute(null);
+                else
+                    throw new InvalidOperationException("Settings window is unavailable.");
+            };
 
             DataContext = _viewModel;
         }

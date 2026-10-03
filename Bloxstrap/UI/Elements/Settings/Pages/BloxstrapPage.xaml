@@ -15,19 +15,22 @@
       Scrollable="True">
 
     <StackPanel Margin="0,0,14,14">
-        <TextBlock Margin="0,0,0,8" Text="{x:Static resources:Strings.Menu_Bloxstrap_Description}" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        <TextBlock Text="Angestrap" Style="{StaticResource AngestrapPageTitle}" Margin="0,0,0,8" />
+        <TextBlock Margin="0,0,0,20" Text="{x:Static resources:Strings.Menu_Bloxstrap_Description}" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
 
+        <TextBlock Text="Mises à jour" Style="{StaticResource AngestrapSectionTitle}" Margin="0,8,0,2" />
         <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Behaviour_AutoUpdate_Title}"
             Description="{x:Static resources:Strings.Menu_Behaviour_AutoUpdate_Description}">
             <ui:ToggleSwitch IsChecked="{Binding UpdateCheckingEnabled, Mode=TwoWay}" />
         </controls:OptionControl>
 
-        <controls:OptionControl Header="Installer automatiquement les mises à jour"
+        <controls:OptionControl Header="Installer automatiquement les mises à jour" IsEnabled="{Binding UpdateCheckingEnabled}"
             Description="Au lancement de Roblox, installe la dernière version publiée d’Angestrap après vérification de son intégrité. La recherche de mises à jour doit être activée.">
             <ui:ToggleSwitch IsChecked="{Binding AutomaticallyInstallUpdates, Mode=TwoWay}" />
         </controls:OptionControl>
 
+        <TextBlock Text="Confidentialité" Style="{StaticResource AngestrapSectionTitle}" Margin="0,24,0,2" />
         <controls:OptionControl 
             Header="{x:Static resources:Strings.Menu_Bloxstrap_Analytics_Title}"
             Description="{Binding Source={x:Static resources:Strings.Menu_Bloxstrap_Analytics_Description}, Converter={StaticResource StringFormatConverter}, ConverterParameter='https://bloxstraplabs.com/wiki/info/privacy-policy/'}">

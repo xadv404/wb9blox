@@ -9,17 +9,73 @@ namespace Bloxstrap.UI.ViewModels.Settings
     public class FastFlagsViewModel : NotifyPropertyChangedViewModel
     {
         private Dictionary<string, object>? _preResetFlags;
-        public IEnumerable<string> ProfileNames => FastFlagProfiles.Profiles.Keys;
-        public string SelectedProfile { get; set; } = "Équilibré";
-        public ICommand ApplyProfileCommand => new RelayCommand(() =>
+        public sealed record ProfileChoice(string Name, string Description);
+        public IEnumerable<ProfileChoice> ProfileChoices { get; } = new[]
         {
-            FastFlagProfiles.Apply(App.FastFlags.Prop, SelectedProfile);
-            App.Settings.Prop.UseFastFlagManager = true;
-            RequestPageReloadEvent?.Invoke(this, EventArgs.Empty);
-        });
+            new ProfileChoice("Roblox par défaut", "Laisse Roblox choisir ses réglages graphiques."),
+            new ProfileChoice("Performances", "Textures légères et anticrénelage minimal."),
+            new ProfileChoice("Équilibré", "Un compromis entre détails et charge graphique."),
+            new ProfileChoice("Qualité visuelle", "Textures détaillées et anticrénelage renforcé.")
+        };
+        private string _selectedProfile = "Équilibré";
+        public FastFlagsViewModel()
+        {
+            var keys = FastFlagProfiles.Profiles.Values.SelectMany(profile => profile.Keys).Distinct().ToArray();
+            var matching = FastFlagProfiles.Profiles.FirstOrDefault(profile => keys.All(key =>
+                profile.Value.TryGetValue(key, out string? expected)
+                    ? App.FastFlags.GetValue(key) == expected
+                    : App.FastFlags.GetValue(key) is null));
+            if (matching.Key is not null)
+                _selectedProfile = matching.Key;
+        }
+        public string SelectedProfile
+        {
+            get => _selectedProfile;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || !FastFlagProfiles.Profiles.ContainsKey(value))
+                    return;
+                _selectedProfile = value;
+                OnPropertyChanged(nameof(SelectedProfile));
+                ProfileFeedback = "";
+                OnPropertyChanged(nameof(ProfileFeedback));
+            }
+        }
+        public string ProfileFeedback { get; private set; } = "";
+        public event EventHandler? RequestSaveSettingsEvent;
+        public ICommand ApplyProfileCommand => new RelayCommand(ApplyProfile);
 
-        public event EventHandler? RequestPageReloadEvent;
-        
+        private void ApplyProfile()
+        {
+            try
+            {
+                FastFlagProfiles.Apply(App.FastFlags.Prop, SelectedProfile);
+                App.Settings.Prop.UseFastFlagManager = true;
+                _preResetFlags = null;
+                RequestSaveSettingsEvent?.Invoke(this, EventArgs.Empty);
+                bool saved = App.FastFlags.HasCurrentConfigurationOnDisk() && App.Settings.HasCurrentConfigurationOnDisk();
+                ProfileFeedback = saved
+                    ? $"Profil « {SelectedProfile} » enregistré. Les flags sont visibles dans l’éditeur ; redémarre Roblox via Angestrap pour les utiliser."
+                    : "Les flags ont été ajoutés, mais leur enregistrement a échoué. Vérifie les droits du dossier puis réessaie.";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("FastFlags::ApplyProfile", ex);
+                ProfileFeedback = "Impossible d’appliquer et d’enregistrer ce profil. Consulte les logs et réessaie.";
+            }
+            RefreshControls();
+        }
+
+        private void RefreshControls()
+        {
+            OnPropertyChanged(nameof(UseFastFlagManager));
+            OnPropertyChanged(nameof(SelectedMSAALevel));
+            OnPropertyChanged(nameof(SelectedTextureQuality));
+            OnPropertyChanged(nameof(FixDisplayScaling));
+            OnPropertyChanged(nameof(ResetConfiguration));
+            OnPropertyChanged(nameof(ProfileFeedback));
+        }
+
         public event EventHandler? OpenFlagEditorEvent;
 
         private void OpenFastFlagEditor() => OpenFlagEditorEvent?.Invoke(this, EventArgs.Empty);
@@ -75,13 +131,14 @@ namespace Bloxstrap.UI.ViewModels.Settings
                     _preResetFlags = new(App.FastFlags.Prop);
                     App.FastFlags.Prop.Clear();
                 }
-                else
+                else if (_preResetFlags is not null)
                 {
-                    App.FastFlags.Prop = _preResetFlags!;
+                    App.FastFlags.Prop = _preResetFlags;
                     _preResetFlags = null;
                 }
 
-                RequestPageReloadEvent?.Invoke(this, EventArgs.Empty);
+                ProfileFeedback = "";
+                RefreshControls();
             }
         }
     }

@@ -131,6 +131,21 @@
             App.Logger.WriteLine(LOG_IDENT, "Save complete!");
         }
 
+        public bool HasCurrentConfigurationOnDisk()
+        {
+            try
+            {
+                if (!File.Exists(FileLocation))
+                    return false;
+                var saved = JsonSerializer.Deserialize<T>(File.ReadAllText(FileLocation));
+                return saved is not null && JsonSerializer.Serialize(saved) == JsonSerializer.Serialize(Prop);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
+            {
+                return false;
+            }
+        }
+
         public virtual void Delete()
         {
             string LOG_IDENT = $"{LOG_IDENT_CLASS}::Delete";

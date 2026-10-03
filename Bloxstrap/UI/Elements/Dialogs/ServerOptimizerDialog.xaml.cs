@@ -14,13 +14,28 @@ namespace Bloxstrap.UI.Elements.Dialogs
         {
             InitializeComponent();
             Closed += (_, _) => _cancellation.Cancel();
-            PlaceInput.TextChanged += (_, _) => { _server = null; JoinButton.IsEnabled = false; };
+            Loaded += (_, _) => PlaceInput.Focus();
+            PlaceInput.TextChanged += (_, _) =>
+            {
+                ClearResult();
+                StatusText.Text = "Prêt à rechercher un serveur.";
+            };
         }
 
-        private async void Search_Click(object sender, RoutedEventArgs e)
+        private void ClearResult()
         {
             _server = null;
             JoinButton.IsEnabled = false;
+            JoinButton.IsDefault = false;
+            SearchButton.IsDefault = true;
+            ResultPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e) => Close();
+
+        private async void Search_Click(object sender, RoutedEventArgs e)
+        {
+            ClearResult();
             if (!ServerOptimizer.TryParsePlace(PlaceInput.Text, out _placeId))
             {
                 StatusText.Text = "Saisis un identifiant positif ou un lien https://www.roblox.com/games/…";
@@ -29,13 +44,22 @@ namespace Bloxstrap.UI.Elements.Dialogs
             SearchButton.IsEnabled = false;
             PlaceInput.IsEnabled = false;
             StatusText.Text = "Recherche des serveurs…";
+            SearchProgress.Visibility = Visibility.Visible;
             try
             {
                 _server = await ServerOptimizer.FindBestAsync(App.HttpClient, _placeId, _cancellation.Token);
                 StatusText.Text = _server is null
                     ? "Aucun serveur libre avec un ping disponible. Tu peux lancer le jeu normalement."
-                    : $"Ping annoncé : {_server.Ping:0} ms · Joueurs : {_server.Playing}/{_server.MaxPlayers}";
+                    : "Un serveur disponible a été trouvé.";
                 JoinButton.IsEnabled = _server is not null;
+                if (_server is not null)
+                {
+                    PingText.Text = $"{_server.Ping:0} ms";
+                    PlayersText.Text = $"{_server.Playing} / {_server.MaxPlayers}";
+                    ResultPanel.Visibility = Visibility.Visible;
+                    SearchButton.IsDefault = false;
+                    JoinButton.IsDefault = true;
+                }
             }
             catch (OperationCanceledException) when (_cancellation.IsCancellationRequested) { }
             catch (Exception ex)
@@ -49,6 +73,7 @@ namespace Bloxstrap.UI.Elements.Dialogs
             {
                 SearchButton.IsEnabled = true;
                 PlaceInput.IsEnabled = true;
+                SearchProgress.Visibility = Visibility.Collapsed;
             }
         }
 

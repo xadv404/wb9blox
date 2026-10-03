@@ -13,7 +13,11 @@ namespace Bloxstrap.UI.ViewModels.Settings
         public bool UpdateCheckingEnabled
         {
             get => App.Settings.Prop.CheckForUpdates;
-            set => App.Settings.Prop.CheckForUpdates = value;
+            set
+            {
+                App.Settings.Prop.CheckForUpdates = value;
+                OnPropertyChanged(nameof(UpdateCheckingEnabled));
+            }
         }
 
         public bool AutomaticallyInstallUpdates

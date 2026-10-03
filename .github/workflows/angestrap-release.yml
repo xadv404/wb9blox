@@ -117,6 +117,7 @@ jobs:
         run: |
           python -m unittest discover -s tests/update_monitor
           dotnet run --project tests/FeatureTests/FeatureTests.csproj
+          dotnet run --project tests/FastFlagWorkflowTests/FastFlagWorkflowTests.csproj
           dotnet run --project tests/PackageManifestTests/PackageManifestTests.csproj
           dotnet run --project tests/VersionCleanupTests/VersionCleanupTests.csproj
 

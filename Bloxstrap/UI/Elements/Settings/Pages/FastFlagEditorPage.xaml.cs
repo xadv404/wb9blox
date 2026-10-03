@@ -31,7 +31,7 @@ namespace Bloxstrap.UI.Elements.Settings.Pages
         private readonly Regex _intFilterPattern = new("^([\\d]{1,})?(;[\\d]{1,})+$", RegexOptions.IgnoreCase);
         private readonly Regex _stringFilterPattern = new("^[^;]*(;[\\d]{1,})+$", RegexOptions.IgnoreCase);
 
-        private bool _showPresets = false;
+        private bool _showPresets = true;
         private string _searchFilter = "";
 
         public FastFlagEditorPage()
